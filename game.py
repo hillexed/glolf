@@ -2,6 +2,7 @@ from typing import TypedDict
 import glolfer
 import numpy as np
 import copy
+import random
 
 class SingleHole:
     def __init__(self):
@@ -24,8 +25,15 @@ class SingleHole:
         # place one glolfer on each hole
         self.objects.append(glolfer.Ball(self, position=[5,2]))
         self.objects.append(glolfer.Ball(self, position=[6,9]))
+        self.objects.append(glolfer.Ball(self, position=[9,9]))
         self.objects.append(glolfer.Glolfer(self, position=[1,6]))
         self.objects.append(glolfer.Glolfer(self, position=[9,6]))
+
+        self.debug = False
+
+        self.par=3
+
+        self.message_queue = []
         
 
     def parse_course(self, course_string):
@@ -55,12 +63,7 @@ class SingleHole:
         # one turn
         for obj in self.objects:
             obj.update()
-            
-            if type(obj) == glolfer.Ball:
-                flag = self.get_closest_object(obj, glolfer.Hole)
-                if self.on_same_tile(flag, obj):
-                    # Score!
-                    print("Score!")
+
                     # todo: actually do something, like count par
                 #winning team = glolfball.last_hit_by.team
                 #winning team += glolfball.score
@@ -81,8 +84,9 @@ class SingleHole:
             string += "".join(line)   
             string += '\n'     
 
-        #for obj in self.objects:
-        #    string += f"{obj.type} {obj.position}," #debug output
+        for line in self.message_queue:
+            string += line + '\n'
+        self.message_queue = []
         return string
 
 
@@ -129,5 +133,43 @@ class SingleHole:
             return True
         return False
 
-    def report_hit(self,ball,shot,club,shot_vec):
-        print("The ball is hit! {} {} {} {}".format(ball,shot,club,shot_vec))
+    def send_message(self, message):
+        self.message_queue.append(message)
+
+    def report_hit(self,shooting_player, ball,swing,club,shot_vec):
+        length = "short"
+        if np.linalg.norm(shot_vec) > 2:
+            length = "medium"
+        if np.linalg.norm(shot_vec) > 3:
+            length = "long"
+
+        message = f"{shooting_player.name} hits a {length} {swing.name}!"
+        if self.debug:
+            message += "f{shot_vec}"
+        print(message)
+
+        self.message_queue.append(message)
+
+
+    def score_name(self, strokes,par):
+        if strokes == 1:
+            return "hole in one"
+
+        if strokes-par == -4:
+            return "condor"
+        elif strokes-par == -3:
+            return "albatross"
+        elif strokes-par == -2:
+            return "eagle"
+        elif strokes-par == -1:
+            return "birdie"
+        elif strokes-par == 0:
+            return "par"
+        if strokes-par == 1:
+            return "bogey"
+        elif strokes-par == 2:
+            return "double bogey"
+        elif strokes-par == 3:
+            return "triple bogey"
+        else:
+            return str(strokes-par) + " over par"

@@ -1,60 +1,8 @@
 import numpy as np
 import math
-import collections
 import random
 
-class Entity():
-    displayEmoji = "❓"
-    showOnBoard = True
-    def __init__(self, game, position = [0.0,0.0]):
-        self.position = np.array(position).astype(float)
-        self.game = game
-
-    def update(self):
-        pass
-
-    def tile_coordinates(self):
-        return [int(self.position[0]), int(self.position[1])]
-
-    def attempt_move(self, direction):
-        self.position += direction
-
-
-class Ball(Entity):
-    displayEmoji = "⚪"
-    showOnBoard = True
-    type = "ball"
-    def __init__(self, game, position = [0.0,0.0]):
-        self.position = np.array(position).astype(float)
-        self.game = game
-        self.times_hit = 0
-        self.strokes = 0
-
-
-    def hit(self, vector):
-        self.position += vector
-        self.times_hit += 1
-        self.strokes += 1
-        # todo: model bouncing, rolling, gravity, sand traps, etc
-
-
-class Hole(Entity):
-    displayEmoji = "⛳"
-    type = "hole"
-    showOnBoard = False
-    def __init__(self, game, id, position = [0,0]):
-        self.position = np.array(position)
-        self.game = game
-        self.id = id
-
-
-SwingType = collections.namedtuple("SwingType",[
-    "mean_power", # thwackability, the average number of squares this swing will send a ball
-    "min_power", # the minimum number of squares this swing will send a ball
-    "max_power", # the minimum number of squares this swing will send a ball
-    "power_variance", # the variance in power from this swing
-    "angle_variance", # angle variance, how much a swing's angle will differ from intended
-])
+from entities import *
 
 class Glolfer(Entity):
     type = "player"
@@ -62,7 +10,8 @@ class Glolfer(Entity):
         self.game = game
         self.position = np.array(position).astype(float)
         self.displayEmoji = "🏌️"
-        self.team = "definedun Team"
+        self.name = random.choice(("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri"))
+        self.team = "Undefined Team"
         self.stlats = {
             "stance": random.choice(["Tricky ","Flashy ","Aggro ","Tanky ","Twitchy ","Powerful ","Wibble ","Wobble ","Reverse ","Feint ","Electric ","Spicy ","Pomegranate ","Explosive"]),
             "fav_tea":"Iced",
@@ -142,8 +91,8 @@ class Glolfer(Entity):
 
         # to do: wind and weather
 
-        ball.hit(shot_vec)
-        self.game.report_hit(ball,swing,club,shot_vec) 
+        self.game.report_hit(self, ball,swing,club,shot_vec) 
+        ball.hit(shot_vec,player_to_take_credit=self)
 
     def choose_shot_target_tile():
         return enemy_hole #todo: pathfind
@@ -153,12 +102,10 @@ class Glolfer(Entity):
 
     def choose_swing_type(self, target_vector):
         
-        putt = SwingType(mean_power=1,min_power=0,max_power=2,power_variance=0.5,angle_variance=0.04)
-        chip = SwingType(mean_power=6,min_power=2,max_power=3,power_variance=2,angle_variance=0.1)
         if np.linalg.norm(target_vector) > 3:
-            return chip
+            return SwingTypes["chip"]
         else:
-            return putt
+            return SwingTypes["putt"]
         # drive, pitch, hook (curve), punch,flop
         # also need to add weather
         return putt
