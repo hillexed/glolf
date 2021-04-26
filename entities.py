@@ -1,10 +1,10 @@
-
-import collections, random
+import collections, random, math
 import numpy as np
 
 class Entity():
     displayEmoji = "❓"
     showOnBoard = True
+    isDead = False
     def __init__(self, game, position = [0.0,0.0]):
         self.position = np.array(position).astype(float)
         self.game = game
@@ -66,6 +66,28 @@ class Hole(Entity):
         self.game = game
         self.id = id
 
+
+
+class HittingArrow(Entity):
+    displayEmoji = "X"
+    showOnBoard = True
+    def __init__(self, game, position, velocityVec):
+        self.position = np.array(position)
+        self.game = game
+        self.id = id
+        self.isDead = False
+        self.displayEmoji = self.choose_direction_emoji(velocityVec)
+
+    def update(self):
+        self.isDead = True
+        
+
+    def choose_direction_emoji(self, velocityVector):
+        angle = math.atan2(velocityVector[1],velocityVector[0])
+        emojis = ['➡️','↗️','⬆️','↖️','⬅️','↙️','⬇️','↘️']
+        fraction_of_full_revolution = angle/(2*math.pi) % 1 #an angle of 0 means pointing right
+        emoji_number = round(fraction_of_full_revolution * 8) % 8
+        return emojis[emoji_number]
 
 
 

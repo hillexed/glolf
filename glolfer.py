@@ -27,12 +27,8 @@ class Glolfer(Entity):
 
     def update(self):
         '''
-        if there's a ball close to you:
-            move towards that ball
-        if you're on a ball:
-            self.hit_ball()
-        if the ball's far away and there's a caddy:
-            move towards your caddy
+        Decide what to do each turn!
+        Currently the logic is "Move towards the nearest ball - or if you're on the same tile as a ball, hit that ball"
         '''
         ball = self.game.get_closest_object(self, Ball)
         if self.game.on_same_tile(self, ball):
@@ -41,20 +37,28 @@ class Glolfer(Entity):
             self.move_somewhere()
 
     def move_somewhere(self):
-            target = self.game.get_closest_object(self, Ball)
-            if target is None:
-                target = self.game.get_closest_object(self) #head to whatever's closest
-            target_vec = target.position - self.position #todo: pathfinding
+        '''
+        If this glolfer has decided to move, choose what direction to move in.
+        Todo: imagine if this took terrain into account, and slowed you down on sand or used A* pathfinding
+        ''' 
+        target = self.game.get_closest_object(self, Ball)
+        if target is None:
+            target = self.game.get_closest_object(self) #head to whatever's closest
+        target_vec = target.position - self.position #todo: pathfinding
 
-            move_speed = self.stlats["nyoomability"]
-            move_speed = min(move_speed, np.linalg.norm(target_vec)) #don't overshoot the ball
-            move_vector = target_vec / np.linalg.norm(target_vec) * move_speed
+        move_speed = self.stlats["nyoomability"]
+        move_speed = min(move_speed, np.linalg.norm(target_vec)) #don't overshoot the ball
+        move_vector = target_vec / np.linalg.norm(target_vec) * move_speed
 
-            # here's where various different type of movements would go
+        # here's where various different type of movements would go
 
-            self.attempt_move(move_vector)
+        self.attempt_move(move_vector)
 
     def hit(self, ball):
+        '''
+        Swing at a glolf ball and hit it! Right now they will always hit the blall.
+        '''
+        # aim directly at the closest hole
         target = self.game.get_closest_object(self, Hole)
         target_vector = (target.position - self.position)
 
@@ -87,20 +91,25 @@ class Glolfer(Entity):
         
         shot_direction = np.array([math.cos(shot_angle), math.sin(shot_angle)])
         shot_vec = shot_direction * shot_speed
-        print(shot_direction)
 
         # to do: wind and weather
 
         self.game.report_hit(self, ball,swing,club,shot_vec) 
         ball.hit(shot_vec,player_to_take_credit=self)
+        self.game.objects.insert(0,HittingArrow(self.game, self.position, shot_vec)) #show where you hit
 
     def choose_shot_target_tile():
+        # ideally this would involve fancy A* pathfinding and avoiding hazards
+        # right now it involves aiming directly at the flag instead.
+
+        target = self.game.get_closest_object(self, Hole) #aim directly at the nearest flag
         return enemy_hole #todo: pathfind
 
     def choose_club(self):
         return {"power_boost":0,"angle_variance":0} #todo: implement clubs
 
     def choose_swing_type(self, target_vector):
+        # currently very simple. swing types defined in entities.py
         
         if np.linalg.norm(target_vector) > 3:
             return SwingTypes["chip"]

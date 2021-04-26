@@ -4,6 +4,7 @@ import numpy as np
 import copy
 import random
 
+
 class SingleHole:
     def __init__(self):
         self.objects = []
@@ -64,11 +65,12 @@ class SingleHole:
         for obj in self.objects:
             obj.update()
 
+        self.objects = [x for x in filter(lambda obj:not obj.isDead, self.objects)]
+
                     # todo: actually do something, like count par
                 #winning team = glolfball.last_hit_by.team
                 #winning team += glolfball.score
-        #if no glolf balls left:
-        #    hole over    
+
 
     def printboard(self):
         course = copy.deepcopy(self.course[:])
@@ -79,9 +81,11 @@ class SingleHole:
             if 0 <= tile[0] < len(course) and 0 <= tile[1] <= len(course[0]):
                 course[tile[0]][tile[1]] = obj.displayEmoji
 
+        # board is stored internally as [x][y] but to print it we need to flip that and go [y][x]
         string = ""
-        for line in course:
-            string += "".join(line)   
+        for y in range(self.course_bounds[1]):
+            for x in range(self.course_bounds[0]):
+              string += "".join(course[x][y])   
             string += '\n'     
 
         for line in self.message_queue:
