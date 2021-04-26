@@ -18,7 +18,6 @@ class Entity():
     def attempt_move(self, direction):
         self.position += direction
 
-
 class Ball(Entity):
     displayEmoji = "⚪"
     showOnBoard = True
@@ -28,7 +27,7 @@ class Ball(Entity):
         self.game = game
         self.times_hit = 0
         self.strokes = 0
-        self.last_hit_by = "Nobody"
+        self.last_hit_by = None
         self.displayEmoji = random.choice(("⚪","🔴","⚽","🟣","🟢","🟤","🟡","🔵","🟠"))
 
     
@@ -41,18 +40,25 @@ class Ball(Entity):
         if self.game.on_same_tile(flag, self):
             # Score!
             print("Score!")
+            if self.last_hit_by is not None:
+                self.game.send_message(f"{self.last_hit_by.name} scores! {self.game.score_name(self.strokes,self.game.par)}!")
+                self.game.scores[self.last_hit_by].scored_strokes += self.strokes
+                self.game.scores[self.last_hit_by].balls_scored += 1
+            else:
+                self.game.send_message(f"The ball scores itself! {self.game.score_name(self.strokes,self.game.par)}!")
 
-            self.game.send_message(f"{self.last_hit_by} scores! {self.game.score_name(self.strokes,self.game.par)}!")
             self.times_hit = 0
             self.strokes = 0
-            self.last_hit_by = "Nobody"
+            self.last_hit_by = None
+
+            #make a new ball appear in a random location
             self.position=[random.randrange(1,9),random.randrange(1,9)]
 
     def hit(self, vector, player_to_take_credit=None):
         self.position += vector
         self.times_hit += 1
         self.strokes += 1
-        self.last_hit_by = player_to_take_credit.name
+        self.last_hit_by = player_to_take_credit
         self.check_if_ball_scored()
         # todo: model bouncing, rolling, gravity, sand traps, etc
 

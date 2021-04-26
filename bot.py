@@ -31,12 +31,12 @@ async def newglolfgame(message):
             await asyncio.sleep(3)
             game.update()
             await glolfgame.edit(content=game.printboard())
-    except Exception as e:
+    except (Exception, KeyboardInterrupt) as e:
             await glolfgame.add_reaction('⚠️')
             raise e
 
     
-    await glolfgame.edit(content=game.printboard() + '\n' + "Game over!")
+    await glolfgame.edit(content=game.printboard() + '\n' + f"Game over! {game.compute_winner_name()} wins!")
 
 @client.event
 async def on_message(message):

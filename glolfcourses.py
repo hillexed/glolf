@@ -45,12 +45,6 @@ courses = [
 :green_square::green_square::green_square::green_square::green_square::green_square::green_square::golf::green_square::green_square::green_square:
 :green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
 ''',
-# long rectangle by shorkball
-'''
-:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::yellow_square::green_square::green_square::green_square::yellow_square::yellow_square::yellow_square::green_square::yellow_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
-:golf::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::yellow_square::green_square::green_square::green_square::yellow_square::fish_cake::yellow_square::green_square::yellow_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::golf:
-:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::yellow_square::yellow_square::yellow_square::green_square::yellow_square::yellow_square::yellow_square::green_square::yellow_square::yellow_square::yellow_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
-''',
 
 '''
 :white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::blue_square:

@@ -5,8 +5,15 @@ import copy
 import random
 import glolfcourses
 
+class SingleHoleScoresheet:
+    def __init__(self, player):
+        self.player = player
+        self.scored_strokes = 0
+        self.total_strokes = 0
+        self.balls_scored = 0
+
 class SingleHole:
-    def __init__(self):
+    def __init__(self, debug=False):
         self.objects = []
 
         self.course = self.parse_course(glolfcourses.get_random_course())
@@ -15,12 +22,17 @@ class SingleHole:
         self.objects.append(glolfer.Ball(self, position=[5,2]))
         self.objects.append(glolfer.Ball(self, position=[6,9]))
         self.objects.append(glolfer.Ball(self, position=[9,9]))
-        self.objects.append(glolfer.Glolfer(self, position=[1,6]))
-        self.objects.append(glolfer.Glolfer(self, position=[9,6]))
 
-        self.debug = False
+        glolfer1 = glolfer.Glolfer(self, position=[1,6])
+        self.objects.append(glolfer1)
+        glolfer2 = glolfer.Glolfer(self, position=[9,6])
+        self.objects.append(glolfer2)
+
+        self.debug = debug
 
         self.par=3
+
+        self.scores = {glolfer1: SingleHoleScoresheet(glolfer1), glolfer2: SingleHoleScoresheet(glolfer2)}
 
         self.message_queue = []
         
@@ -39,6 +51,8 @@ class SingleHole:
         for y, line in enumerate(lines):
             #print((repr(y),line))
             for x,terrain in enumerate(line):
+                if x == len(course):
+                    course.append([])
                 course[x].append(terrain)
                 if terrain == "⛳":
                     self.objects.append(glolfer.Hole(self, id=self.num_holes,position=[x,y]))     
@@ -61,12 +75,12 @@ class SingleHole:
 
 
     def printboard(self):
-        course = copy.deepcopy(self.course[:])
+        course = copy.deepcopy(self.course)
         for obj in self.objects:
             if not obj.showOnBoard:
                 continue
             tile = obj.tile_coordinates()
-            if 0 <= tile[0] < len(course) and 0 <= tile[1] <= len(course[0]):
+            if 0 <= tile[0] < len(course) and 0 <= tile[1] < len(course[tile[0]]):
                 course[tile[0]][tile[1]] = obj.displayEmoji
 
         # board is stored internally as [x][y] but to print it we need to flip that and go [y][x]
@@ -76,9 +90,42 @@ class SingleHole:
               string += "".join(course[x][y])   
             string += '\n'     
 
+        string += self.print_score()
+
         for line in self.message_queue:
             string += line + '\n'
         self.message_queue = []
+        return string
+
+    def compute_winner(self):
+        '''
+            The winner is the player who scored the most holes! Otherwise, lowest strokes wins
+        '''
+        winner = None
+        for player in self.scores:
+            if winner is None:
+                player = winner
+                continue
+            if self.scores[player].balls_scored > self.scores[winner].balls_scored:
+                winner = player
+            elif self.scores[player].balls_scored == self.scores[winner].balls_scored:
+                if self.scores[player].total_strokes < self.scores[winner].total_strokes:
+                    winner = player
+        return winner
+
+    def compute_winner_name(self):
+        winner = self.compute_winner()
+        if winner is not None:
+            return winner
+        return "Everybody"
+            
+
+    def print_score(self):
+        string = ""
+        for player in self.scores:
+            scorecard = self.scores[player]
+            string += f"{scorecard.player.name}: {scorecard.balls_scored} holes, {scorecard.total_strokes} strokes \n"
+
         return string
 
 
@@ -139,6 +186,8 @@ class SingleHole:
         if self.debug:
             message += "f{shot_vec}"
         print(message)
+
+        self.scores[shooting_player].total_strokes += 1
 
         self.message_queue.append(message)
 
