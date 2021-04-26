@@ -41,20 +41,23 @@ async def newglolfgame(message):
     await glolfgame.edit(content=game.printboard() + '\n' + f"Game over! {game.compute_winner_name()} wins!")
 
 async def get_glolfer_stats(message):
-    print("stat time")
     try:
         rest = message.content.replace(prefix + "glolfer","").strip()
         if len(rest) == 0:        
-            print("Please add a glolfer's name!")
+            await message.channel.send("Please add a glolfer's name to check their stlats!")
         else:
             newplayer = players.get_player_from_name(rest)
             newmessage = f'''**{newplayer.name}**
 Signature: {newplayer.emoji}
 Stance: **{newplayer.stlats.stance}**
-**Hitting:**
-{newplayer.hitting_rating()}
-**Precision:**
-{newplayer.precision_rating()}'''
+**Driving:**
+{newplayer.driving_rating()}
+**Grip:**
+{newplayer.precision_rating()}
+**Aerodynamics:**
+{newplayer.aerodynamics_rating()}
+**Self-Awareness:**
+{newplayer.self_awareness_rating()}'''
             await message.channel.send(newmessage)
             
         

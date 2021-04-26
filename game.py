@@ -75,6 +75,7 @@ class SingleHole:
 
 
     def printboard(self):
+        # print the board and return a string
         course = copy.deepcopy(self.course)
         for obj in self.objects:
             if not obj.showOnBoard:
@@ -93,6 +94,7 @@ class SingleHole:
 
         string += self.print_score()
 
+        # any status update messages
         for line in self.message_queue:
             string += line + '\n'
         self.message_queue = []
@@ -127,7 +129,7 @@ class SingleHole:
         string = ""
         for player in self.scores:
             scorecard = self.scores[player]
-            string += f"{scorecard.player.name}: {scorecard.balls_scored} holes, {scorecard.total_strokes} strokes \n"
+            string += f"{scorecard.player.displayEmoji} {scorecard.player.name}: {scorecard.balls_scored} holes, {scorecard.total_strokes} strokes \n"
 
         return string
 

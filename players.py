@@ -39,10 +39,11 @@ class PlayerStlats(NamedTuple):
     fav_tea: str = "Iced"
     nyoomability: float = 1.5           # movement speed
 
-    # unused for now
+    # unused for now except for fun
     tofu: int = 4
     wiggle: int = 3
-    aerodynamics: int = 2
+    ritualism: int = 2
+    polkadottedness: int = 0
 
     # shot power stats
     musclitude: float = 1.0             # how hard you swing
@@ -58,12 +59,20 @@ class Player(NamedTuple):
     stlats: PlayerStlats 
     emoji:str = "🏌️"
 
-    def hitting_rating(self):
-        rating_number = (self.stlats.musclitude + self.stlats.finesse)*5/2
+    def driving_rating(self): # "Driving": hitting, and driving a kart
+        rating_number = (self.stlats.musclitude + self.stlats.finesse + self.stlats.tofu)*5/3
         return format_stlat_display(rating_number)
 
     def precision_rating(self):
         rating_number = self.stlats.needlethreadableness * 5 - abs(self.stlats.left_handedness)
+        return format_stlat_display(rating_number)
+
+    def aerodynamics_rating(self):
+        rating_number = self.stlats.ritualism * 5 #unused for now, need more stlats
+        return format_stlat_display(rating_number)
+
+    def self_awareness_rating(self):
+        rating_number = (self.stlats.wiggle + self.stlats.polkadottedness) * 5 #means nothing for now
         return format_stlat_display(rating_number)
 
 
@@ -76,10 +85,11 @@ known_players = {
         nyoomability = 1.5,
         tofu=1, # unused
         wiggle=1, # unused
-        aerodynamics=1, # unused
+        ritualism=1, # unused
         musclitude=1,
         finesse=1,
-        needlethreadableness=1, 
+        needlethreadableness=1,
+        polkadottedness=1,  
         left_handedness= 0),emoji="😅")
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
@@ -127,7 +137,7 @@ def generate_random_stlats_from_name(name="Random Player"):
         nyoomability = max(rng.gauss(0,0.3),1.4),
         tofu=           rng.random(), # unused
         wiggle=         rng.random(), # unused
-        aerodynamics=   rng.random(), # unused
+        ritualism=   rng.random(), # unused
         musclitude=     rng.random(),
         finesse=        rng.random(),
         needlethreadableness=   rng.random(), 

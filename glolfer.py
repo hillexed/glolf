@@ -2,28 +2,28 @@ import numpy as np
 import math
 import random
 
+import players
+
 from entities import *
 
 class Glolfer(Entity):
     type = "player"
-    def __init__(self, game, position = [0,0]):
+    displayEmoji = "🏌️" # will be overwritten
+    def __init__(self, game, position = [0,0], playername=None):
         self.game = game
         self.position = np.array(position).astype(float)
-        self.displayEmoji = "🏌️"
-        self.name = random.choice(("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri"))
+
+        if playername is None:
+            self.name = random.choice(("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri"))
+        else:
+            self.name = playername
+
+        # get stlats
+        self.player_data = players.get_player_from_name(self.name)
+        self.displayEmoji = self.player_data.emoji
+        self.stlats = self.player_data.stlats
+
         self.team = "Undefined Team"
-        self.stlats = {
-            "stance": random.choice(["Tricky ","Flashy ","Aggro ","Tanky ","Twitchy ","Powerful ","Wibble ","Wobble ","Reverse ","Feint ","Electric ","Spicy ","Pomegranate ","Explosive"]),
-            "fav_tea":"Iced",
-            "tofu":4,
-            "wiggle":3,
-            "nyoomability":1.5, # movement speed
-            "aerodynamics":3,
-            "musclitude":1.0, # how hard you hit the ball
-            "finesse": 1.0, # how consistent your shots are hit with power
-            "needlethreadableness":0.8, # how well you thread the needle (multiplier for how much angle variance your shots have)
-            "left-handedness":np.random.normal(0,0.3) #how often shots are biased to the left or right of what you want
-        }
 
     def update(self):
         '''
@@ -46,7 +46,7 @@ class Glolfer(Entity):
             target = self.game.get_closest_object(self) #head to whatever's closest
         target_vec = target.position - self.position #todo: pathfinding
 
-        move_speed = self.stlats["nyoomability"]
+        move_speed = self.stlats.nyoomability
         move_speed = min(move_speed, np.linalg.norm(target_vec)) #don't overshoot the ball
         move_vector = target_vec / np.linalg.norm(target_vec) * move_speed
 
@@ -70,8 +70,8 @@ class Glolfer(Entity):
         swing = self.choose_swing_type(target_vector)
 
         #how far the shot goes
-        min_speed = club["power_boost"] + swing.min_power + self.stlats["musclitude"]
-        strength_variance = swing.power_variance / self.stlats["finesse"]
+        min_speed = club["power_boost"] + swing.min_power + self.stlats.musclitude
+        strength_variance = swing.power_variance / self.stlats.finesse
         attempted_shot_power = swing.mean_power
         whack_strength = np.random.normal(attempted_shot_power,strength_variance)
         whack_strength = max(0, whack_strength) #can't have negative power
@@ -84,8 +84,8 @@ class Glolfer(Entity):
 
 
         # shot angle
-        target_angle -= self.stlats["left-handedness"]
-        angle_variance = swing.angle_variance*self.stlats["needlethreadableness"]
+        target_angle -= self.stlats.left_handedness
+        angle_variance = swing.angle_variance*self.stlats.needlethreadableness
         angle_variance = max(0, angle_variance) 
         shot_angle = np.random.normal(target_angle, angle_variance)   
         
