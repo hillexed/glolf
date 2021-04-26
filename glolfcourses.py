@@ -113,6 +113,27 @@ courses = [
 :green_square::green_square::green_square::green_square::blue_square::blue_square::blue_square::green_square::green_square::green_square::green_square:
 :green_square::evergreen_tree::green_square::green_square::green_square::green_square::green_square::green_square::green_square::golf::green_square:
 :green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
+''',
+# park by syl
+# it would be cool if the terrain could move and the cars could travel down the street as hazards
+'''
+:office::office::office::office::office::office::office::office::office::office:
+:office::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::office:
+:office::green_square::green_square::green_square::green_square::green_square::deciduous_tree::green_square::green_square::office:
+:office::green_square::green_square::green_square::deciduous_tree::deciduous_tree::green_square::green_square::green_square::office:
+:office::green_square:⛳️:deciduous_tree::green_square::green_square::green_square::green_square::green_square::office:
+:office::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::office:
+:red_car::blue_car::taxi::blue_car:⬛️:red_car::red_car::taxi::taxi::police_car:
+:office::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::office:
+:office::green_square::green_square::green_square::deciduous_tree::deciduous_tree::green_square::green_square::green_square::office:
+:office::green_square::green_square::deciduous_tree::green_square::green_square::green_square::green_square::green_square::office:
+:office::green_square::deciduous_tree::green_square::green_square::green_square::deciduous_tree::green_square::green_square::office:
+:office::green_square::deciduous_tree::green_square::green_square::green_square::deciduous_tree::green_square::green_square::office:
+:office::green_square::deciduous_tree::green_square:⛳️:green_square::deciduous_tree::green_square::green_square::office:
+:office::green_square::green_square::deciduous_tree::deciduous_tree::deciduous_tree::green_square::green_square::green_square::office:
+:office::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::office:
+:office::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::office:
+:office::office::office::office::office::office::office::office::office::office:
 '''
 ]
 # to do: give each course a name
