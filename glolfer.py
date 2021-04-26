@@ -96,7 +96,7 @@ class Glolfer(Entity):
 
         self.game.report_hit(self, ball,swing,club,shot_vec) 
         ball.hit(shot_vec,player_to_take_credit=self)
-        self.game.objects.insert(0,HittingArrow(self.game, self.position, shot_vec)) #show where you hit
+        self.game.objects.append(HittingArrow(self.game, self.position, shot_vec)) #show where you hit
 
     def choose_shot_target_tile():
         # ideally this would involve fancy A* pathfinding and avoiding hazards
