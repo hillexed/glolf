@@ -87,7 +87,8 @@ class SingleHole:
         string = ""
         for y in range(self.course_bounds[1]):
             for x in range(self.course_bounds[0]):
-              string += "".join(course[x][y])   
+                if x < len(course) and y < len(course[x]):
+                    string += "".join(course[x][y])   
             string += '\n'     
 
         string += self.print_score()
