@@ -101,22 +101,24 @@ class SingleHole:
         '''
             The winner is the player who scored the most holes! Otherwise, lowest strokes wins
         '''
+        print(self.scores)
         winner = None
         for player in self.scores:
             if winner is None:
-                player = winner
+                winner = player
                 continue
             if self.scores[player].balls_scored > self.scores[winner].balls_scored:
                 winner = player
             elif self.scores[player].balls_scored == self.scores[winner].balls_scored:
                 if self.scores[player].total_strokes < self.scores[winner].total_strokes:
                     winner = player
+        print(winner)
         return winner
 
     def compute_winner_name(self):
         winner = self.compute_winner()
         if winner is not None:
-            return winner
+            return winner.name
         return "Everybody"
             
 
