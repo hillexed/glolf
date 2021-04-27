@@ -53,6 +53,7 @@ class SingleHole:
             self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
 
         self.message_queue = []
+        self.new_objects = []
         
 
     def parse_course(self, course_string):
@@ -85,11 +86,17 @@ class SingleHole:
         for obj in self.objects:
             obj.update()
 
+        # add any new objects
+        self.objects += self.new_objects
+        self.new_objects = []
+
         self.objects = [x for x in filter(lambda obj:not obj.isDead, self.objects)]
 
-                    # todo: actually do something, like count par
-                #winning team = glolfball.last_hit_by.team
-                #winning team += glolfball.score
+        # todo: count scoring
+
+    def add_object(self, obj):
+        # add an object to the game, guaranteeing it won't have update() called on it until next turn
+        self.new_objects.append(obj)
 
 
     def printboard(self):
@@ -204,6 +211,8 @@ class SingleHole:
             length = "medium"
         if np.linalg.norm(shot_vec) > 3:
             length = "long"
+        if np.linalg.norm(shot_vec) > 6:
+            length = "really long"
 
         message = f"{shooting_player.name} {shooting_player.displayEmoji} hits a {length} {swing.name}!"
         if self.debug:

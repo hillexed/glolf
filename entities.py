@@ -47,6 +47,8 @@ class Ball(Entity):
             else:
                 self.game.send_message(f"The ball scores itself! {self.game.score_name(self.strokes,self.game.par)}!")
 
+            self.game.add_object(ScoreConfetti(self.game, flag.position))
+
             self.times_hit = 0
             self.strokes = 0
             self.last_hit_by = None
@@ -73,6 +75,17 @@ class Hole(Entity):
         self.id = id
 
 
+class ScoreConfetti(Entity):
+    displayEmoji = "🎊"
+    showOnBoard = True
+    isDead = False
+    def __init__(self, game, position):
+        self.position = np.array(position)
+        self.game = game
+
+    def update(self):
+        self.isDead = True
+
 
 class HittingArrow(Entity):
     displayEmoji = "X"
@@ -83,6 +96,7 @@ class HittingArrow(Entity):
         self.id = id
         self.isDead = False
         self.displayEmoji = self.choose_direction_emoji(velocityVec)
+        print("new hitting arrow" + self.displayEmoji + str(self.position))
 
     def update(self):
         self.isDead = True
@@ -90,7 +104,7 @@ class HittingArrow(Entity):
 
     def choose_direction_emoji(self, velocityVector):
         angle = math.atan2(velocityVector[1],velocityVector[0])
-        emojis = ['➡️','↗️','⬆️','↖️','⬅️','↙️','⬇️','↘️']
+        emojis = ['➡️','↘️','⬇️','↙️','⬅️','↖️','⬆️','↗️']
         fraction_of_full_revolution = angle/(2*math.pi) % 1 #an angle of 0 means pointing right
         emoji_number = round(fraction_of_full_revolution * 8) % 8
         return emojis[emoji_number]

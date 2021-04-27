@@ -14,7 +14,7 @@ class Glolfer(Entity):
         self.position = np.array(position).astype(float)
 
         if playername is None:
-            self.name = random.choice(("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri"))
+            self.name = random.choice(players.default_player_names)
         else:
             self.name = playername
 
@@ -46,6 +46,7 @@ class Glolfer(Entity):
             target = self.game.get_closest_object(self) #head to whatever's closest
         target_vec = target.position - self.position #todo: pathfinding
 
+        # create a vector in the direction of the target that's `move_speed` long
         move_speed = self.stlats.nyoomability
         move_speed = min(move_speed, np.linalg.norm(target_vec)) #don't overshoot the ball
         move_vector = target_vec / np.linalg.norm(target_vec) * move_speed
@@ -96,7 +97,7 @@ class Glolfer(Entity):
 
         self.game.report_hit(self, ball,swing,club,shot_vec) 
         ball.hit(shot_vec,player_to_take_credit=self)
-        self.game.objects.append(HittingArrow(self.game, self.position, shot_vec)) #show where you hit
+        self.game.add_object(HittingArrow(self.game, self.position, shot_vec)) #show where you hit
 
     def choose_shot_target_tile():
         # ideally this would involve fancy A* pathfinding and avoiding hazards
