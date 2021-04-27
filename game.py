@@ -5,6 +5,7 @@ import copy
 import random
 import glolfcourses
 from players import default_player_names
+import utils
 
 class SingleHoleScoresheet:
     def __init__(self, player):
@@ -19,6 +20,9 @@ class SingleHole:
 
         self.objects = []
         self.scores = {} #glolfer : SingleHoleScore(glolfer)
+
+        self.wind = random.choice(("Ominous","Pleasant","Fruity","Monsoon","Trade","Purple","Tasteless","Mechanical","Electric","Four-dimensional","Exact","Differential","Manifold","Change","Aggressively Normal")) #purely decorative for now
+        self.windDirection = np.random.random(2) # [blah,blah] 0-1 each coord
 
         # parse course
         self.course = self.parse_course(glolfcourses.get_random_course())
@@ -103,6 +107,10 @@ class SingleHole:
     def printboard(self):
         string = ""
 
+        string += "Wind: "+ self.wind + " " + utils.choose_direction_emoji(self.windDirection)
+        self.windDirection += np.random.random(2) - np.array((0.5,0.5)) # random walk
+        string += '\n'
+
         # any status update messages
         for line in self.message_queue:
             string += line + '\n'
@@ -146,7 +154,7 @@ class SingleHole:
     def compute_winner_name(self):
         winner = self.compute_winner()
         if winner is not None:
-            return winner.name
+            return winner.get_display_name()
         return "Everybody"
             
 
@@ -154,7 +162,7 @@ class SingleHole:
         string = ""
         for player in self.scores:
             scorecard = self.scores[player]
-            string += f"{scorecard.player.displayEmoji} {scorecard.player.name}: {scorecard.balls_scored} holes, {scorecard.total_strokes} strokes \n"
+            string += f"{scorecard.player.get_display_name()}: {scorecard.balls_scored} holes, {scorecard.total_strokes} strokes \n"
 
         return string
 
@@ -214,7 +222,7 @@ class SingleHole:
         if np.linalg.norm(shot_vec) > 6:
             length = "really long"
 
-        message = f"{shooting_player.name} {shooting_player.displayEmoji} hits a {length} {swing.name}!"
+        message = f"{shooting_player.get_display_name()} hits a {length} {swing.name}!"
         if self.debug:
             message += f"{shot_vec}"
         print(message)
@@ -222,27 +230,3 @@ class SingleHole:
         self.scores[shooting_player].total_strokes += 1
 
         self.message_queue.append(message)
-
-
-    def score_name(self, strokes,par):
-        if strokes == 1:
-            return "hole in one"
-
-        if strokes-par == -4:
-            return "condor"
-        elif strokes-par == -3:
-            return "albatross"
-        elif strokes-par == -2:
-            return "eagle"
-        elif strokes-par == -1:
-            return "birdie"
-        elif strokes-par == 0:
-            return "par"
-        if strokes-par == 1:
-            return "bogey"
-        elif strokes-par == 2:
-            return "double bogey"
-        elif strokes-par == 3:
-            return "triple bogey"
-        else:
-            return str(strokes-par) + " over par"

@@ -25,6 +25,9 @@ class Glolfer(Entity):
 
         self.team = "Undefined Team"
 
+    def get_display_name(self):
+        return f"{self.name} {self.displayEmoji}"
+
     def update(self):
         '''
         Decide what to do each turn!
@@ -94,6 +97,9 @@ class Glolfer(Entity):
         shot_vec = shot_direction * shot_speed
 
         # to do: wind and weather
+
+        if ball.last_hit_by is not None and ball.last_hit_by != self:            
+            self.game.send_message(f"{self.get_display_name()} Possesses {ball.last_hit_by.get_display_name()}'s ball {ball.displayEmoji}!")
 
         self.game.report_hit(self, ball,swing,club,shot_vec) 
         ball.hit(shot_vec,player_to_take_credit=self)

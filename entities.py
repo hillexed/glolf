@@ -1,5 +1,6 @@
 import collections, random, math
 import numpy as np
+import utils
 
 class Entity():
     displayEmoji = "❓"
@@ -41,11 +42,11 @@ class Ball(Entity):
             # Score!
             print("Score!")
             if self.last_hit_by is not None:
-                self.game.send_message(f"{self.last_hit_by.name} {self.last_hit_by.displayEmoji} scores! {self.game.score_name(self.strokes,self.game.par)}!")
+                self.game.send_message(f"{self.last_hit_by.get_display_name()} scores! {utils.score_name(self.strokes,self.game.par)}!")
                 self.game.scores[self.last_hit_by].scored_strokes += self.strokes
                 self.game.scores[self.last_hit_by].balls_scored += 1
             else:
-                self.game.send_message(f"The ball scores itself! {self.game.score_name(self.strokes,self.game.par)}!")
+                self.game.send_message(f"The ball scores itself! {utils.score_name(self.strokes,self.game.par)}!")
 
             self.game.add_object(ScoreConfetti(self.game, flag.position))
 
@@ -95,18 +96,10 @@ class HittingArrow(Entity):
         self.game = game
         self.id = id
         self.isDead = False
-        self.displayEmoji = self.choose_direction_emoji(velocityVec)
+        self.displayEmoji = utils.choose_direction_emoji(velocityVec)
 
     def update(self):
         self.isDead = True
-        
-
-    def choose_direction_emoji(self, velocityVector):
-        angle = math.atan2(velocityVector[1],velocityVector[0])
-        emojis = ['➡️','↘️','⬇️','↙️','⬅️','↖️','⬆️','↗️']
-        fraction_of_full_revolution = angle/(2*math.pi) % 1 #an angle of 0 means pointing right
-        emoji_number = round(fraction_of_full_revolution * 8) % 8
-        return emojis[emoji_number]
 
 
 
