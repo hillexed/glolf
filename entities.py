@@ -41,7 +41,7 @@ class Ball(Entity):
             # Score!
             print("Score!")
             if self.last_hit_by is not None:
-                self.game.send_message(f"{self.last_hit_by.name} scores! {self.game.score_name(self.strokes,self.game.par)}!")
+                self.game.send_message(f"{self.last_hit_by.name} {self.last_hit_by.displayEmoji} scores! {self.game.score_name(self.strokes,self.game.par)}!")
                 self.game.scores[self.last_hit_by].scored_strokes += self.strokes
                 self.game.scores[self.last_hit_by].balls_scored += 1
             else:
@@ -52,7 +52,7 @@ class Ball(Entity):
             self.last_hit_by = None
 
             #make a new ball appear in a random location
-            self.position=[random.randrange(1,9),random.randrange(1,9)]
+            self.position=[random.random()*self.game.course_bounds[0], random.random()*self.game.course_bounds[1]]
 
     def hit(self, vector, player_to_take_credit=None):
         self.position += vector

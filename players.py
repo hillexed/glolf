@@ -1,6 +1,9 @@
 import random, uuid, math
 from typing import NamedTuple
 
+default_player_names = ("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri")
+    
+
 
 def random_player_emoji(rng):
     humanoid = ["👶","👧","🧒","👦","👩","🧑","👨","👩‍🦱","🧑‍🦱","👨‍🦱","👩‍🦰","🧑‍🦰","👨‍🦰","👱‍♀️",
@@ -29,13 +32,13 @@ def random_player_emoji(rng):
 "🐈","🐓","🦃","🦚","🦜","🦢","🦩","🕊","🐇","🦝","🦨","🦡","🦦","🦥","🐁","🐀","🐿","🦔",
 "🐉","🐲","🪐","💫","🌪","🌈","📠","📺"]
 
-    if rng.random() > 0.8:
+    if rng.random() > 0.5:
         return rng.choice(humanoid)
     else:
         return rng.choice(nonhumanoid)
 
 class PlayerStlats(NamedTuple):
-    stance: str = random.choice(["Tricky","Flashy","Aggro","Tanky","Twitchy","Powerful","Wibble","Wobble","Reverse","Feint","Electric","Spicy ","Pomegranate ","Explosive"]),
+    stance: str = "Incredibly boring"
     fav_tea: str = "Iced"
     nyoomability: float = 1.5           # movement speed
 
@@ -132,8 +135,8 @@ def generate_random_stlats_from_name(name="Random Player"):
     rng = random.Random(name) #seed with name
 
     return PlayerStlats(
-        stance= rng.choice(["Tricky ","Flashy ","Aggro ","Tanky ","Twitchy ","Powerful ","Wibble ","Wobble ","Reverse ","Feint ","Electric ","Spicy ","Pomegranate ","Explosive"]),
-        fav_tea= "Iced",
+        stance= random.choice(["Tricky","Flashy","Aggro","Tanky","Twitchy","Powerful","Wibble","Wobble","Reverse","Feint","Electric","Spicy ","Pomegranate ","Explosive","Cottagecore","Corecore","Hardcore","Softcore","Hand to Hand","Lefty","Pop-Punk","DPS","Repose"]),
+        fav_tea= random.choice(["Iced","Boba","White","Green","Oolong","Pu'erh","Chai","Milk","Neon","Sweet","Void","Tea? ","Caramel","Lightspeed","Time-traveling","Bloody","Black","Miso","Concrete","Hard-boiled egg","Hot Chocolate","Bubble"]),
         nyoomability = max(rng.gauss(0,0.3),1.4),
         tofu=           rng.random(), # unused
         wiggle=         rng.random(), # unused

@@ -4,6 +4,7 @@ import numpy as np
 import copy
 import random
 import glolfcourses
+from players import default_player_names
 
 class SingleHoleScoresheet:
     def __init__(self, player):
@@ -13,26 +14,43 @@ class SingleHoleScoresheet:
         self.balls_scored = 0
 
 class SingleHole:
-    def __init__(self, debug=False):
-        self.objects = []
-
-        self.course = self.parse_course(glolfcourses.get_random_course())
-
-        # place one glolfer on each hole
-        self.objects.append(glolfer.Ball(self, position=[5,2]))
-        self.objects.append(glolfer.Ball(self, position=[6,9]))
-        self.objects.append(glolfer.Ball(self, position=[9,9]))
-
-        glolfer1 = glolfer.Glolfer(self, position=[1,6])
-        self.objects.append(glolfer1)
-        glolfer2 = glolfer.Glolfer(self, position=[9,6])
-        self.objects.append(glolfer2)
-
+    def __init__(self, debug=False, glolfer_names=[]):
         self.debug = debug
 
+        self.objects = []
+        self.scores = {} #glolfer : SingleHoleScore(glolfer)
+
+        # parse course
+        self.course = self.parse_course(glolfcourses.get_random_course())
         self.par=3
 
-        self.scores = {glolfer1: SingleHoleScoresheet(glolfer1), glolfer2: SingleHoleScoresheet(glolfer2)}
+        # place one glolfer on each hole
+        random_position = lambda: [random.random()*self.course_bounds[0], random.random()*self.course_bounds[1]]
+
+        # place three balls
+        self.objects.append(glolfer.Ball(self, position=random_position()))
+        self.objects.append(glolfer.Ball(self, position=random_position()))
+        self.objects.append(glolfer.Ball(self, position=random_position()))
+
+        if len(glolfer_names) == 0:
+            glolfer_names.append(random.choice(default_player_names))
+            glolfer_names.append(random.choice(default_player_names))     
+
+        # place one glolfer at each hole, in order, then any more are random
+        placed_glolfers = 0
+        flags = [obj for obj in self.objects if type(obj) == glolfer.Hole]
+
+        for name in glolfer_names:
+            if placed_glolfers < len(flags):
+                # place glolfer #1 on flag #1, glolfer #2 on flag #2, etc
+                new_glolfer_pos = flags[placed_glolfers].position
+                placed_glolfers += 1
+            else:
+                # Out of flags, throw em anywhere
+                new_glolfer_pos = random_position()            
+            newglolfer = glolfer.Glolfer(self, position=new_glolfer_pos)
+            self.objects.append(newglolfer)
+            self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
 
         self.message_queue = []
         
@@ -187,9 +205,9 @@ class SingleHole:
         if np.linalg.norm(shot_vec) > 3:
             length = "long"
 
-        message = f"{shooting_player.name}{shooting_player.emoji} hits a {length} {swing.name}!"
+        message = f"{shooting_player.name} {shooting_player.displayEmoji} hits a {length} {swing.name}!"
         if self.debug:
-            message += "f{shot_vec}"
+            message += f"{shot_vec}"
         print(message)
 
         self.scores[shooting_player].total_strokes += 1
