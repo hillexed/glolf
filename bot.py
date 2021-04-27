@@ -37,11 +37,11 @@ async def newglolfgame(message):
     glolfgame = await message.channel.send("Beginning game...")
     await asyncio.sleep(2)
     try:
-        await glolfgame.edit(content="Glolf!\n"+game.printboard())
+        await glolfgame.edit(content="Glolf! (alpha)\n"+game.printboard())
         for i in range(60):
             await asyncio.sleep(3)
             game.update()
-            await glolfgame.edit(content="Glolf!\n"+game.printboard())
+            await glolfgame.edit(content="Glolf! (alpha)\n"+game.printboard())
     except (Exception, KeyboardInterrupt) as e:
             await glolfgame.add_reaction('⚠️')
             raise e
