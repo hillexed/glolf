@@ -96,7 +96,6 @@ class HittingArrow(Entity):
         self.id = id
         self.isDead = False
         self.displayEmoji = self.choose_direction_emoji(velocityVec)
-        print("new hitting arrow" + self.displayEmoji + str(self.position))
 
     def update(self):
         self.isDead = True

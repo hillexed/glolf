@@ -38,6 +38,7 @@ async def newglolfgame(message):
             raise e
 
     
+    await asyncio.sleep(3)
     await glolfgame.edit(content=game.printboard() + '\n' + f"Game over! {game.compute_winner_name()} wins!")
 
 async def get_glolfer_stats(message):

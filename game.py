@@ -100,6 +100,13 @@ class SingleHole:
 
 
     def printboard(self):
+        string = ""
+
+        # any status update messages
+        for line in self.message_queue:
+            string += line + '\n'
+        self.message_queue = []
+
         # print the board and return a string
         course = copy.deepcopy(self.course)
         for obj in self.objects:
@@ -110,7 +117,6 @@ class SingleHole:
                 course[tile[0]][tile[1]] = obj.displayEmoji
 
         # board is stored internally as [x][y] but to print it we need to flip that and go [y][x]
-        string = ""
         for y in range(self.course_bounds[1]):
             for x in range(self.course_bounds[0]):
                 if x < len(course) and y < len(course[x]):
@@ -118,18 +124,12 @@ class SingleHole:
             string += '\n'     
 
         string += self.print_score()
-
-        # any status update messages
-        for line in self.message_queue:
-            string += line + '\n'
-        self.message_queue = []
         return string
 
     def compute_winner(self):
         '''
             The winner is the player who scored the most holes! Otherwise, lowest strokes wins
         '''
-        print(self.scores)
         winner = None
         for player in self.scores:
             if winner is None:
@@ -140,7 +140,6 @@ class SingleHole:
             elif self.scores[player].balls_scored == self.scores[winner].balls_scored:
                 if self.scores[player].total_strokes < self.scores[winner].total_strokes:
                     winner = player
-        print(winner)
         return winner
 
     def compute_winner_name(self):
