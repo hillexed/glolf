@@ -187,7 +187,7 @@ class SingleHole:
         if np.linalg.norm(shot_vec) > 3:
             length = "long"
 
-        message = f"{shooting_player.name} hits a {length} {swing.name}!"
+        message = f"{shooting_player.name}{shooting_player.emoji} hits a {length} {swing.name}!"
         if self.debug:
             message += "f{shot_vec}"
         print(message)
