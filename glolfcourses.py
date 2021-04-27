@@ -4,7 +4,7 @@ import emoji
 courses = [
 #The Llawn
 '''
-        🕸️🟩🟩🟩🟩🟩🟩🟩🟩🕸️🕸️
+        🕸️🕸️🟩🟩🟩🟩🟩🟩🟩🕸️🕸️
         🕸️🟩🟩🟩🟩🟩🟩🌻🌻🟩🕸️
         🟩🟩🟩🟩🟩🟩🟩🌻🌻🟩🟩
         🟩🟩🟩🟩🟩🟨🟩🟩🟩🟩🟩
@@ -59,7 +59,7 @@ courses = [
 :blue_square::blue_square::blue_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::evergreen_tree::white_large_square:
 :blue_square::blue_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square:
 ''',
-# glolf in SPACE by shorkball
+# glolf in SPACE by hal 2000
 '''
 :milky_way::milky_way::milky_way::milky_way::milky_way::milky_way::milky_way::milky_way::milky_way::milky_way::milky_way:
 :milky_way::golf::milky_way::milky_way::milky_way::milky_way::milky_way::milky_way::star::milky_way::milky_way:
@@ -134,13 +134,228 @@ courses = [
 :office::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::office:
 :office::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::office:
 :office::office::office::office::office::office::office::office::office::office:
+''',
+# chleckers by syl
 '''
+⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️
+⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️
+⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⛳️⬜️⬜️
+⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️
+⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️
+⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️
+⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️
+⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️
+⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️
+⬜️⬜️⛳️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️
+⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️
+⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️
+''',
+# loss by astro
+'''
+:blue_square::black_large_square::blue_square::blue_square::black_large_square::blue_square::black_large_square::blue_square::blue_square:
+:blue_square::black_large_square::golf::blue_square::black_large_square::blue_square::black_large_square::blue_square::black_large_square:
+:blue_square::black_large_square::blue_square::blue_square::black_large_square::blue_square::black_large_square::blue_square::black_large_square:
+:blue_square::black_large_square::blue_square::blue_square::black_large_square::blue_square::black_large_square::blue_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::blue_square::black_large_square::blue_square::black_large_square::blue_square::black_large_square::blue_square::blue_square:
+:black_large_square::blue_square::black_large_square::blue_square::black_large_square::blue_square::black_large_square::blue_square::blue_square:
+:black_large_square::blue_square::black_large_square::blue_square::black_large_square::blue_square::golf::black_large_square::black_large_square:
+:black_large_square::blue_square::black_large_square::blue_square::black_large_square::blue_square::blue_square::blue_square::blue_square:
+''',
+# hades tiger pit by syl
+'''
+:fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
+:black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square::black_large_square::orange_square:
+:black_large_square::orange_square::fire::orange_square::black_large_square::orange_square::golf::fire::black_large_square::orange_square::tiger2::orange_square:
+:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square:
+:black_large_square::orange_square::tiger2::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square:
+:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
+:black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::fire:
+:black_large_square::orange_square::black_large_square::orange_square::tiger2::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
+:black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
+:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::golf::orange_square::black_large_square::orange_square::tiger2::orange_square:
+:black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square::black_large_square::orange_square:
+:fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
+''',
+# dale by hal 2000
+'''
+:blue_square::blue_square::blue_square::blue_square::blue_square::yellow_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::yellow_square::golf::yellow_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::yellow_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::tada::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::speedboat::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::yellow_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::yellow_square::golf::yellow_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::yellow_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+''',
+# MOUTH by loading
+'''
+:red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square:
+:white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square:
+:black_large_square::golf::black_large_square::black_large_square::red_square::red_square::red_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::red_square::black_large_square::black_large_square::black_large_square::golf::black_large_square:
+:white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square:
+:red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square:
+''',
+# foggy road by davee
+'''
+:fog::black_large_square::fog::fog::fog::fog::fog::fog::fog::fog::fog:
+:fog::black_large_square::black_large_square::fog:⛳️:fog::fog::fog::fog::fog::fog:
+:fog::fog::black_large_square::black_large_square::fog::fog::fog::fog::fog::fog::black_large_square:
+:fog::fog::fog::black_large_square::black_large_square::fog::fog::fog::fog::black_large_square::black_large_square:
+:fog::fog::fog::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::fog:
+:fog::fog::fog::fog::black_large_square::black_large_square::black_large_square::black_large_square::fog::fog::fog:
+:fog::fog::fog::fog::black_large_square::black_large_square::black_large_square::fog::fog::fog::fog:
+:fog::fog::fog::fog::black_large_square::black_large_square::fog::fog::fog::fog::fog:
+:fog::fog::fog::black_large_square::black_large_square::black_large_square::fog::fog::fog::fog::fog:
+:fog::fog::fog::black_large_square::black_large_square::fog::fog:⛳️:fog::fog::fog:
+:fog::fog::black_large_square::black_large_square::fog::fog::fog::fog::fog::fog::fog:
+''',
+# highway by zickery
+'''
+:city_sunset::city_dusk::city_dusk::city_dusk::cityscape::cityscape::cityscape::cityscape::cityscape::city_dusk::city_dusk::city_dusk::night_with_stars:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::golf::white_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::blue_car::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:truck::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::motorcycle::black_large_square:
+:yellow_square::yellow_square::black_large_square::black_large_square::black_large_square::yellow_square::yellow_square::yellow_square::black_large_square::black_large_square::black_large_square::yellow_square::yellow_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::bus::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::race_car::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:white_large_square::golf::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::red_car::police_car::black_large_square::black_large_square::black_large_square::black_large_square:
+''',
+# gearball by octagenerian redpenguin
+'''
+:gear::gear::gear::gear::brown_square::orange_square::brown_square::gear::gear::gear::gear:
+:gear::orange_square::orange_square::red_square::orange_square::orange_square::orange_square::red_square::orange_square::orange_square::gear:
+:gear::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::gear:
+:gear::red_square::golf::orange_square::white_large_square::red_square::white_large_square::orange_square::orange_square::red_square::gear:
+:brown_square::orange_square::orange_square::white_large_square::red_square::red_square::white_large_square::white_large_square::orange_square::orange_square::brown_square:
+:orange_square::orange_square::orange_square::red_square::red_square::white_large_square::red_square::red_square::orange_square::orange_square::orange_square:
+:brown_square::orange_square::orange_square::white_large_square::white_large_square::red_square::red_square::white_large_square::orange_square::orange_square::brown_square:
+:gear::red_square::orange_square::orange_square::white_large_square::red_square::white_large_square::orange_square::golf::red_square::gear:
+:gear::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::gear:
+:gear::orange_square::orange_square::red_square::orange_square::orange_square::orange_square::red_square::orange_square::orange_square::gear:
+:gear::gear::gear::gear::brown_square::orange_square::brown_square::gear::gear::gear::gear:
+''',
+# atlantis by zickery
+'''
+:ocean::ocean::ocean::ocean::ocean:
+:blue_square::blue_square::arrow_double_down::blue_square::blue_square:
+:fish::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::fish:
+:blue_square::blue_square::fish::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::fish::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::fish::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square:
+:golf::blue_square::blue_square::blue_square::golf:
+:blue_square::blue_square::blue_square::blue_square::blue_square:
+:night_with_stars::night_with_stars::night_with_stars::night_with_stars::night_with_stars:
+''',
+# the taqueria by syl
+'''
+
+:purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square:
+:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
+:green_square::taco::green_square::green_square::green_square::green_square::green_square:⛳️:green_square::green_square::green_square::green_square:
+:green_square::green_square::green_square::green_square::yellow_square::yellow_square::yellow_square::yellow_square::green_square::green_square::green_square::green_square:
+:green_square::green_square::green_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::green_square::green_square::green_square:
+:green_square::green_square::green_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::green_square::green_square::green_square:
+:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
+:green_square::green_square::green_square:⛳️:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
+:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
+:purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square:
+''',
+
+# san fran lovers by syl
+'''
+:heart::heart::heart::heart::heart::heart::heart::heart::heart::heart::heart::heart:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::golf::red_square::red_square::red_square::black_large_square::black_large_square::red_square::red_square::red_square::black_large_square::black_large_square:
+:black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
+:black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
+:black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
+:black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::black_large_square::black_large_square::black_large_square::golf::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:heart::heart::heart::heart::heart::heart::heart::heart::heart::heart::heart::heart:
+''',
+# link by davee
+'''
+:spider_web::spider_web::spider_web::spider_web::green_square::green_square::green_square::green_square::spider_web::spider_web::spider_web:
+:spider_web::purple_square::spider_web::green_square::green_square::green_square::green_square::green_square::green_square::spider_web::spider_web:
+:spider_web::purple_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::spider_web:
+:spider_web::purple_square::green_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::green_square::green_square::spider_web:
+:spider_web::purple_square::golf::yellow_square::blue_square::yellow_square::blue_square::white_large_square::yellow_square::white_large_square::spider_web:
+:spider_web::purple_square::green_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::green_square::spider_web:
+:purple_square::purple_square::purple_square::green_square::white_large_square::white_large_square::brown_square::brown_square::brown_square::brown_square::brown_square:
+:spider_web::white_large_square::green_square::green_square::green_square::green_square::brown_square::brown_square::orange_square::brown_square::brown_square:
+:spider_web::white_large_square::green_square::green_square::green_square::green_square::brown_square::orange_square::golf::orange_square::brown_square:
+:spider_web::spider_web::spider_web::brown_square::brown_square::yellow_square::brown_square::brown_square::orange_square::brown_square::brown_square:
+:spider_web::spider_web::spider_web::green_square::green_square::green_square::green_square::brown_square::brown_square::brown_square::spider_web:
+:spider_web::spider_web::spider_web::white_large_square::white_large_square::spider_web::white_large_square::white_large_square::brown_square::spider_web::spider_web:
+''',
+#cursed madeleine by syl
+'''
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::white_large_square::golf::white_large_square::golf::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::brown_square::white_large_square::white_large_square::white_large_square::black_large_square::red_square::black_large_square:
+:black_large_square::black_large_square::brown_square::brown_square::brown_square::brown_square::blue_square::blue_square::brown_square::brown_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::brown_square::brown_square::brown_square::blue_square::brown_square::blue_square::blue_square::blue_square::brown_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::brown_square::brown_square::blue_square::blue_square::white_large_square::white_large_square::blue_square::blue_square::white_large_square::white_large_square::black_large_square:
+:black_large_square::black_large_square::brown_square::brown_square::brown_square::blue_square::white_large_square::white_large_square::blue_square::blue_square::white_large_square::white_large_square::black_large_square:
+:black_large_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::black_large_square::black_large_square:
+:black_large_square::brown_square::brown_square::brown_square::blue_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::brown_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square:
+''',
+# wrong splort by zickery (it's a baseball diamond)
+'''
+:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
+:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::golf::green_square::green_square:
+:green_square::green_square::green_square::green_square::orange_square::orange_square::orange_square::green_square::green_square::green_square::green_square::green_square:
+:green_square::green_square::green_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::green_square::green_square:
+:green_square::green_square::orange_square::orange_square::black_square_button::orange_square::orange_square::orange_square::orange_square::orange_square::black_square_button::green_square:
+:green_square::green_square::orange_square::orange_square::orange_square::orange_square::green_square::green_square::green_square::orange_square::orange_square::green_square:
+:green_square::green_square::orange_square::orange_square::orange_square::green_square::green_square::green_square::green_square::green_square::orange_square::green_square:
+:green_square::green_square::green_square::orange_square::orange_square::green_square::green_square::black_square_button::green_square::green_square::orange_square::green_square:
+:green_square::green_square::green_square::orange_square::orange_square::green_square::green_square::green_square::green_square::green_square::orange_square::green_square:
+:green_square::golf::green_square::orange_square::orange_square::orange_square::green_square::green_square::green_square::orange_square::orange_square::orange_square:
+:green_square::green_square::green_square::green_square::black_square_button::orange_square::orange_square::orange_square::orange_square::orange_square::black_square_button::orange_square:
+:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::orange_square::orange_square::orange_square:
+''',
+#munich's the scream by loading
+'''
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::green_square:
+:blue_square::blue_square::blue_square::blue_square::yellow_square::yellow_square::yellow_square::blue_square::blue_square::golf::green_square:
+:blue_square::blue_square::blue_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::blue_square::green_square::green_square:
+:blue_square::blue_square::orange_square::yellow_square::white_square_button::yellow_square::white_square_button::yellow_square::orange_square::green_square::green_square:
+:blue_square::blue_square::orange_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::orange_square::green_square::green_square:
+:brown_square::blue_square::orange_square::orange_square::yellow_square::black_large_square::yellow_square::orange_square::orange_square::green_square::green_square:
+:brown_square::brown_square::blue_square::orange_square::yellow_square::black_large_square::yellow_square::orange_square::blue_square::green_square::green_square:
+:blue_square::brown_square::brown_square::orange_square::yellow_square::yellow_square::yellow_square::orange_square::blue_square::green_square::green_square:
+:blue_square::golf::brown_square::brown_square::orange_square::yellow_square::orange_square::brown_square::blue_square::blue_square::green_square:
+:blue_square::blue_square::blue_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::blue_square:
+'''
+
 ]
 # to do: give each course a name
 
 
-special_case_emojis = {
+special_case_emojis = { #these are emojis which aren't converted to unicode by emojize() so I need to do it manually
 ":golf:":"⛳",
+":city_dusk:":"🌆",
+":race_car:":"🏎️",
 }
 
 
