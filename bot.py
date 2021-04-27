@@ -24,7 +24,16 @@ async def on_ready():
     print("The bot is ready!")
 
 async def newglolfgame(message):
-    game = SingleHole(debug=debug)
+
+    arguments = message.content.split("\n") #first line has "!glolf" on it
+    glolfer_names = []
+    if len(arguments) > 1:
+        glolfer_names = arguments[1:]
+        if len(glolfer_names) == 1:
+            await message.channel.send("It's too dangerous to glolf alone. Bring an opponent.")
+            return 
+
+    game = SingleHole(debug=debug,glolfer_names=glolfer_names)
     glolfgame = await message.channel.send("Beginning game...")
     await asyncio.sleep(2)
     try:
@@ -70,7 +79,7 @@ Stance: **{newplayer.stlats.stance}**
 async def on_message(message):
     if message.author == client.user or message.webhook_id is not None:
         return
-    if message.content == prefix + "glolf":
+    if message.content.startswith(prefix + "glolf"):
         print("glolf detected")
         await newglolfgame(message)
 

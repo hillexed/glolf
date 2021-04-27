@@ -33,6 +33,7 @@ class SingleHole:
         self.objects.append(glolfer.Ball(self, position=random_position()))
 
         if len(glolfer_names) == 0:
+            print("No glolfers, choosing random...")
             glolfer_names.append(random.choice(default_player_names))
             glolfer_names.append(random.choice(default_player_names))     
 
@@ -48,7 +49,7 @@ class SingleHole:
             else:
                 # Out of flags, throw em anywhere
                 new_glolfer_pos = random_position()            
-            newglolfer = glolfer.Glolfer(self, position=new_glolfer_pos)
+            newglolfer = glolfer.Glolfer(self, position=new_glolfer_pos, playername=name)
             self.objects.append(newglolfer)
             self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
 
