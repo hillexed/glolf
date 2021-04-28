@@ -45,7 +45,7 @@ courses = [
 :green_square::green_square::green_square::green_square::green_square::green_square::green_square::golf::green_square::green_square::green_square:
 :green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
 ''',
-
+# winter by hal 2000
 '''
 :white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::blue_square:
 :white_large_square::evergreen_tree::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::blue_square::blue_square::blue_square:
@@ -258,7 +258,6 @@ courses = [
 ''',
 # the taqueria by syl
 '''
-
 :purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square:
 :green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
 :green_square::taco::green_square::green_square::green_square::green_square::green_square:⛳️:green_square::green_square::green_square::green_square:

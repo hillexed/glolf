@@ -57,11 +57,7 @@ async def glolfcommand(message):
         glolfer_names = arguments[1:]
         if len(glolfer_names) == 1:
             await message.channel.send("It's too dangerous to glolf alone. Bring an opponent.")
-            return 
-
-
-        if message.author in users_with_games_active:
-            return await message.channel.send("To avoid lag, please wait for your current game to finish before starting another.")
+            return
 
     users_with_games_active.append(message.author)
     await newglolfgame(message.channel, glolfer_names)
@@ -74,7 +70,7 @@ async def one_v_one_glolftourney(message):
 
     global users_with_games_active
     if message.author in users_with_games_active:
-        return await message.channel.send("To avoid lag, please wait for your current game to finish before starting another.")
+        return await message.channel.send("To avoid lag, please wait for your current game to finish before starting a tournament.")
 
     arguments = message.content.split("\n") #first line has "!glolf" on it
     glolfer_names = []
@@ -118,10 +114,12 @@ async def one_v_one_glolftourney(message):
                 winningname = random.choice(glolfers)
                 move_onto_next_round.append(winningname)
                 await message.channel.send(f"Tie game! {winningname} wins the tiebreaking swordfight to advance to the next round!")
+                await asyncio.sleep(30)
         glolfer_names = move_onto_next_round
 
         if len(move_onto_next_round) > 1:
-            await message.channel.send(f"{len(move_onto_next_round)} contestants move on: {', '.join(move_onto_next_round)}")
+            await message.channel.send(f"{len(move_onto_next_round)} contestants move on: {', '.join(move_onto_next_round)}. Next round starts in one minute...")
+            await asyncio.sleep(60)
     
     users_with_games_active.remove(message.author)
     await message.channel.send(f"{glolfer_names[0]} wins the tournament!")
@@ -153,7 +151,6 @@ Stance: **{newplayer.stlats.stance}**
 
 def user_is_admin(message):
     if "ADMIN_IDS" in config:
-        print(config["ADMIN_IDS"].strip().split(","))
         if str(message.author.id) in config["ADMIN_IDS"].strip().split(","):
             return True
     return False
@@ -187,9 +184,7 @@ async def on_message(message):
     if message.content.startswith(prefix + "tourney"):
 
         if message.content.startswith(prefix + "tourney 1v1"):
-            users_with_games_active.append(message.author)
             await one_v_one_glolftourney(message)
-            users_with_games_active.remove(message.author)
         else:
             await message.channel.send("The llawn only allows 1v1 tourneys right now. try "+prefix+"tourney 1v1")
 
