@@ -51,6 +51,7 @@ class PlayerStlats(NamedTuple):
     # shot power stats
     musclitude: float = 1.0             # how hard you swing
     finesse: float = 1.0                # how consistent your shots are hit with power, higher = better
+    estimation: int = 0
 
     # shot angle stats
     needlethreadableness: float = 0.8   # how well you thread the needle (multiplier for how much angle variance your shots have), lower = better
@@ -76,7 +77,7 @@ class Player(NamedTuple):
         return format_stlat_display(rating_number)
 
     def self_awareness_rating(self):
-        rating_number = (self.stlats.wiggle + self.stlats.polkadottedness) * 5 #means nothing for now
+        rating_number = (self.stlats.wiggle + self.stlats.estimation) * 5/2 + self.stlats.polkadottedness * 5 #means nothing for now
         return format_stlat_display(rating_number)
 
     def modifications_string(self):
@@ -128,6 +129,7 @@ def generate_random_stlats_from_name(name="Random Player"):
         left_handedness=        rng.gauss(0,0.3), #how often shots are biased to the left or right of what you want
         stance= rng.choice(["Tricky","Flashy","Aggro","Tanky","Twitchy","Powerful","Wibble","Wobble","Reverse","Feint","Electric","Spicy ","Pomegranate ","Explosive","Cottagecore","Corecore","Hardcore","Softcore","Hand to Hand","Lefty","Pop-Punk","DPS","Repose"]),
         fav_tea= rng.choice(["Iced","Boba","White","Green","Oolong","Pu'erh","Chai","Milk","Neon","Sweet","Void","Tea? ","Caramel","Lightspeed","Time-traveling","Bloody","Black","Miso","Concrete","Hard-boiled egg","Hot Chocolate","Bubble"]),
+        estimation= rng.random(),
     )
 
 
@@ -145,9 +147,10 @@ known_players = {
         finesse=1,
         needlethreadableness=1,
         polkadottedness=1,  
-        left_handedness= 0),emoji="😅"),
+        left_handedness= 0,
+        estimation=1,),emoji="😅"),
     "Simulacrum": Player(name="Simulacrum", id=2,emoji="🐂",stlats=generate_random_stlats_from_name("Simulacrum"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
-    "Solar Dies": Player(name="Solar Dies", id=3,emoji="🦞",stlats=generate_random_stlats_from_name("Solar Dies"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
+    "Solar Dies": Player(name="Solar Dies", id=3,emoji="🦞",stlats=generate_random_stlats_from_name("Solar Dies"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈","1️"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
 

@@ -3,12 +3,14 @@ import math
 import random
 
 import players
+import utils
 
 from entities import *
 
 class Glolfer(Entity):
     type = "player"
     displayEmoji = "🏌️" # will be overwritten
+    zIndex = 10 # show below players
     def __init__(self, game, position = [0,0], playername=None):
         self.game = game
         self.position = np.array(position).astype(float)
@@ -77,6 +79,11 @@ class Glolfer(Entity):
         min_speed = club["power_boost"] + swing.min_power + self.stlats.musclitude
         strength_variance = swing.power_variance / self.stlats.finesse
         attempted_shot_power = swing.mean_power
+
+        # estimation stlat helps glolfers adjust their shot power slightly to match the distance to the hole
+        estimationFactor = min(self.stlats.estimation * 0.2,1)
+        attempted_shot_power = utils.lerp(swing.mean_power, target_distance, estimationFactor)
+
         whack_strength = np.random.normal(attempted_shot_power,strength_variance)
         whack_strength = max(0, whack_strength) #can't have negative power
 
@@ -85,7 +92,6 @@ class Glolfer(Entity):
         shot_speed = np.random.normal(whack_strength,strength_variance)
         shot_speed = max(shot_speed, min_speed)
         # max power isn't actually capped because shots overshooting is funny
-
 
         # shot angle
         target_angle -= self.stlats.left_handedness
@@ -101,9 +107,19 @@ class Glolfer(Entity):
         if ball.last_hit_by is not None and ball.last_hit_by != self:            
             self.game.send_message(f"{self.get_display_name()} Possesses {ball.last_hit_by.get_display_name()}'s ball {ball.displayEmoji}!")
 
+
         self.game.report_hit(self, ball,swing,club,shot_vec) 
         ball.hit(shot_vec,player_to_take_credit=self)
         self.game.add_object(HittingArrow(self.game, self.position, shot_vec)) #show where you hit
+
+        if shot_speed > 20:
+            # REALLY LONG SHOT ALERT
+            self.game.send_message(f"💥 {self.get_display_name()}'s stroke tears a crack in spacetime! The ball disintegrates! 3-stroke penalty! 💥!")
+            for i in range(25):
+                pos = [random.random()*self.game.course_bounds[0], random.random()*self.game.course_bounds[1]]
+                self.game.add_object(RealityCrack(self.game, pos)) #show where you hit
+            self.game.scores[self].total_strokes += 3
+            ball.reset_at_random_point()
 
     def choose_shot_target_tile():
         # ideally this would involve fancy A* pathfinding and avoiding hazards
