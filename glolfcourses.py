@@ -361,7 +361,18 @@ courses = [
 :white_large_square::alarm_clock::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::golf::brown_square::white_large_square:
 :white_large_square::bed::brown_square::brown_square::brown_square::couch::brown_square::white_large_square::brown_square::brown_square::bathtub::white_large_square:
 :white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square:
+''',
+# mario 1-1 by syl
 '''
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::question::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::golf::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::golf::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::question::blue_square::brown_square::question::brown_square::question::brown_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::green_square::green_square:
+:blue_square::green_square::green_square::blue_square::frog::blue_square::blue_square::blue_square::green_square::green_square::blue_square::green_square::green_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square:
+''',
 
 ]
 # to do: give each course a name
