@@ -100,8 +100,8 @@ known_players["Alto"] = known_players["Polkadot Patterson"]
 def get_player_from_name(name):
     # generate a player from their name with random stats
     # ...or if they're polkadot, return a maxed person
-    if name in known_players:
-        return known_players[name]
+    if name.title() in known_players:
+        return known_players[name.title()]
     else:
         return generate_random_player_from_name(name)
 
@@ -111,7 +111,7 @@ def generate_random_player_from_name(name="Random Player", emoji="🏌️"):
     Generate a completely random player.
     """
 
-    seed = name
+    seed = name.strip().title()
 
     rng = random.Random(seed)
     if seed:
