@@ -375,6 +375,8 @@ special_case_emojis = { #these are emojis which aren't converted to unicode by e
 ":frame_photo:":"🖼️",
 ":desktop:":"🖥️",
 ":couch:":"🛋️",
+":gear:":"⚙️",
+"⚙":"⚙️", # emojize converts :gear: to this tiny non-fullwidth thing (it's the same character, but missing a variation selector)
 }
 
 
