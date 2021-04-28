@@ -174,25 +174,26 @@ async def on_message(message):
     if message.author == client.user or message.webhook_id is not None:
         return
 
-    if message.content.startswith(prefix + "glolf"):
-        print("glolf detected")
-        await glolfcommand(message)
-
     if message.content.startswith(prefix + "glolfer"):
         await get_glolfer_stats(message)
 
-    if message.content.startswith(prefix + "tourney"):
+
+    elif message.content.startswith(prefix + "glolf"):
+        print("glolf detected")
+        await glolfcommand(message)
+
+    elif message.content.startswith(prefix + "tourney"):
 
         if message.content.startswith(prefix + "tourney 1v1"):
             await one_v_one_glolftourney(message)
         else:
             await message.channel.send("The llawn only allows 1v1 tourneys right now. try "+prefix+"tourney 1v1")
 
-    if message.content.startswith(prefix + "discordid"):
+    elif message.content.startswith(prefix + "discordid"):
         print(message.author.id) # you should only be able to access this if you're an admin
 
     # 'forceupdate' auto-updater
-    if user_is_admin(message) and message.content.startswith(prefix + "forceupdate"):
+    elif user_is_admin(message) and message.content.startswith(prefix + "forceupdate"):
         if "yes" not in message.content:
             return await message.channel.send("Are you sure? If so add 'yes' to the end of your message") 
         import subprocess
@@ -205,7 +206,7 @@ async def on_message(message):
         print("Update complete! Now I need to be restarted!")
 
     # forcequit command
-    if user_is_admin(message) and message.content.startswith(prefix + "forcequit"):
+    elif user_is_admin(message) and message.content.startswith(prefix + "forcequit"):
         if "yes" not in message.content:
             return await message.channel.send("Are you sure? If so add 'yes' to the end of your message")
         exit()
