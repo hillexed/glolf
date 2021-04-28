@@ -146,8 +146,8 @@ known_players = {
         needlethreadableness=1,
         polkadottedness=1,  
         left_handedness= 0),emoji="😅"),
-    "Simulacrum": Player(name="Simulacrum", id=2,emoji="🐂",stlats=generate_random_stlats_from_name("Simulacrum"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😱"]),
-    "Solar Dies": Player(name="Solar Dies", id=3,emoji="🦞",stlats=generate_random_stlats_from_name("Solar Dies"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌"]),
+    "Simulacrum": Player(name="Simulacrum", id=2,emoji="🐂",stlats=generate_random_stlats_from_name("Simulacrum"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
+    "Solar Dies": Player(name="Solar Dies", id=3,emoji="🦞",stlats=generate_random_stlats_from_name("Solar Dies"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
 

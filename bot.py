@@ -66,6 +66,65 @@ async def glolfcommand(message):
 def biggest_power_of_two_less_than(n):
     return 2 ** math.floor(math.log2(n))
 
+
+
+
+async def one_v_one_glolftourney_oneround(message):
+
+    global users_with_games_active
+    if message.author in users_with_games_active:
+        return await message.channel.send("To avoid lag, please wait for your current game to finish before starting a tournament.")
+
+    arguments = message.content.split("\n") #first line has "!glolf" on it
+    glolfer_names = []
+    if len(arguments) > 1: # 0 players is fine
+        glolfer_names = arguments[1:]
+        num_players = len(glolfer_names)
+        if num_players == 1:
+            await message.channel.send("That's a short tournament... I guess they win by default!")
+            return None
+        if num_players % 2 == 1:
+            await message.channel.send("I need an even number of players!")
+            return None
+            
+    else:
+        await message.channel.send("To use, please specify a list of competitors, on one line each")
+        return
+    
+    await message.channel.send(f"One round of {len(glolfer_names)} people starting...")
+    users_with_games_active.append(message.author)
+
+    round_num = 1
+    move_onto_next_round = []
+    for index in range(0,len(glolfer_names)-1,2):
+        # go down the bracket
+        # competitors 
+        glolfers = [glolfer_names[index],glolfer_names[index+1]]
+        await asyncio.sleep(2)
+
+        turns = 60  
+        if debug:
+            turns = 3
+
+        winner = await newglolfgame(message.channel, glolfer_names=glolfers, header=f"- Match {int(index/2)+1} of round {round_num}!",turns=turns)
+        if winner is not None:
+            move_onto_next_round.append(winner.name)
+        else:
+            winningname = random.choice(glolfers)
+            move_onto_next_round.append(winningname)
+            await message.channel.send(f"Tie game! {winningname} wins the tiebreaking swordfight to advance to the next round!")
+            await asyncio.sleep(30)
+    glolfer_names = move_onto_next_round
+
+    if len(move_onto_next_round) > 1:
+        await message.channel.send(f"{len(move_onto_next_round)} contestants move on: {', '.join(move_onto_next_round)}.")
+        await asyncio.sleep(60)
+    
+    users_with_games_active.remove(message.author)
+    await message.channel.send(f"{glolfer_names[0]} is the last one standing!")
+
+
+
 async def one_v_one_glolftourney(message):
 
     global users_with_games_active
@@ -141,7 +200,8 @@ Stance: **{newplayer.stlats.stance}**
 **Aerodynamics:**
 {newplayer.aerodynamics_rating()}
 **Self-Awareness:**
-{newplayer.self_awareness_rating()}'''
+{newplayer.self_awareness_rating()}
+{newplayer.modifications_string()}'''
             await message.channel.send(newmessage)
             
         
@@ -186,6 +246,8 @@ async def on_message(message):
 
         if message.content.startswith(prefix + "tourney 1v1"):
             await one_v_one_glolftourney(message)
+        elif message.content.startswith(prefix + "tourney oneround"):
+            await one_v_one_glolftourney_oneround(message)
         else:
             await message.channel.send("The llawn only allows 1v1 tourneys right now. try "+prefix+"tourney 1v1")
 
