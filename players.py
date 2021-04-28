@@ -130,7 +130,7 @@ def generate_random_player_from_name(name="Random Player", emoji="🏌️"):
 
 def generate_random_stlats_from_name(name="Random Player"):
     # Generate stlats for a player using their name
-    name = name.strip()
+    name = name.strip().title() # case insensitive
 
     rng = random.Random(name) #seed with name
 

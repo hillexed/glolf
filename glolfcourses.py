@@ -346,6 +346,22 @@ courses = [
 :blue_square::brown_square::brown_square::orange_square::yellow_square::yellow_square::yellow_square::orange_square::blue_square::green_square::green_square:
 :blue_square::golf::brown_square::brown_square::orange_square::yellow_square::orange_square::brown_square::blue_square::blue_square::green_square:
 :blue_square::blue_square::blue_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::blue_square:
+''',
+# house by hal 2000
+'''
+:white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square:
+:white_large_square::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square:
+:window::brown_square::golf::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::chair::desktop::white_large_square:
+:white_large_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::printer::brown_square::brown_square::brown_square::white_large_square:
+:white_large_square::white_large_square::white_large_square::brown_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::brown_square::white_large_square::white_large_square:
+:door::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::white_large_square:
+:door::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::sunflower::white_large_square::white_large_square:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::brown_square::brown_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square:
+:white_large_square::brown_square::frame_photo::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::toilet::roll_of_paper::white_large_square:
+:window::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::window:
+:white_large_square::alarm_clock::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::golf::brown_square::white_large_square:
+:white_large_square::bed::brown_square::brown_square::brown_square::couch::brown_square::white_large_square::brown_square::brown_square::bathtub::white_large_square:
+:white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square:
 '''
 
 ]
@@ -356,6 +372,9 @@ special_case_emojis = { #these are emojis which aren't converted to unicode by e
 ":golf:":"⛳",
 ":city_dusk:":"🌆",
 ":race_car:":"🏎️",
+":frame_photo:":"🖼️",
+":desktop:":"🖥️",
+":couch:":"🛋️",
 }
 
 
