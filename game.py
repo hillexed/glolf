@@ -146,10 +146,10 @@ class SingleHole:
     def print_board_game_completed(self):
         string = ""
 
-        string += f"Turn {self.turn_number} - Wind: {self.wind} \n"
-        string += "Final score: \n"
+        string += f"Turn {self.turn_number} - Wind: {self.wind}"
+        string += "\n\nFinal score: \n"
         string += self.print_score()
-        string += f"\nGame over! {self.compute_winner_name()} wins!"
+        string += f"\n🎉Game over! {self.compute_winner_name()} wins!🎉\n"
         return string
         
 

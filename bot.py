@@ -25,7 +25,7 @@ if len(sys.argv) > 1:
 async def newglolfgame(channel, glolfer_names, header="", turns=60):
     # start a round of glolf and return the winning player's name
 
-    fullheader = f"Glolf! (alpha) {header}\n"
+    fullheader = f"🏌️ Glolf! (alpha) {header}\n"
 
     game = SingleHole(debug=debug,glolfer_names=glolfer_names)
     glolfgame = await channel.send("Beginning game...")
@@ -42,6 +42,7 @@ async def newglolfgame(channel, glolfer_names, header="", turns=60):
 
     await asyncio.sleep(3)
     await glolfgame.edit(content=fullheader+game.print_board_game_completed())
+    await asyncio.sleep(3)
     return game.compute_winner()
 
 async def glolfcommand(message):
