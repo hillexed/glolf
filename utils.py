@@ -1,11 +1,13 @@
 import math
     
 
+def lerp(start,finish,t):
+    return start*(1-t) + finish*t
+
 def tile_coordinates(position):
     return [int(position[0]), int(position[1])] #if our position is 5.6,5.2, return [5,5]
 
 def choose_direction_emoji(velocityVector):
-    print(velocityVector)
     angle = math.atan2(velocityVector[1],velocityVector[0])
     emojis = ['➡️','↘️','⬇️','↙️','⬅️','↖️','⬆️','↗️']
     fraction_of_full_revolution = angle/(2*math.pi) % 1 #an angle of 0 means pointing right

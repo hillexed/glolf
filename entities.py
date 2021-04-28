@@ -6,6 +6,7 @@ class Entity():
     displayEmoji = "❓"
     showOnBoard = True
     isDead = False
+    zIndex = 0
     def __init__(self, game, position = [0.0,0.0]):
         self.position = np.array(position).astype(float)
         self.game = game
@@ -23,6 +24,7 @@ class Ball(Entity):
     displayEmoji = "⚪"
     showOnBoard = True
     type = "ball"
+    zIndex = 1 
     def __init__(self, game, position = [0.0,0.0]):
         self.position = np.array(position).astype(float)
         self.game = game
@@ -35,6 +37,14 @@ class Ball(Entity):
 
     def update(self):
         self.check_if_ball_scored()
+
+    def reset_at_random_point(self):
+        self.times_hit = 0
+        self.strokes = 0
+        self.last_hit_by = None
+
+        #make this ball appear in a random location
+        self.position=[random.random()*self.game.course_bounds[0], random.random()*self.game.course_bounds[1]]
           
     def check_if_ball_scored(self):
         flag = self.game.get_closest_object(self, Hole)
@@ -49,13 +59,7 @@ class Ball(Entity):
                 self.game.send_message(f"The ball scores itself! {utils.score_name(self.strokes,self.game.par)}!")
 
             self.game.add_object(ScoreConfetti(self.game, flag.position))
-
-            self.times_hit = 0
-            self.strokes = 0
-            self.last_hit_by = None
-
-            #make a new ball appear in a random location
-            self.position=[random.random()*self.game.course_bounds[0], random.random()*self.game.course_bounds[1]]
+            self.reset_at_random_point()
 
     def hit(self, vector, player_to_take_credit=None):
         self.position += vector
@@ -69,9 +73,9 @@ class Ball(Entity):
 class Hole(Entity):
     displayEmoji = "⛳"
     type = "hole"
-    showOnBoard = False
+    showOnBoard = True
     def __init__(self, game, id, position = [0,0]):
-        self.position = np.array(position)
+        self.position = np.array(position).astype(float)
         self.game = game
         self.id = id
 
@@ -80,17 +84,44 @@ class ScoreConfetti(Entity):
     displayEmoji = "🎊"
     showOnBoard = True
     isDead = False
+    zIndex = 20
     def __init__(self, game, position):
-        self.position = np.array(position)
+        self.position = np.array(position).astype(float)
         self.game = game
 
     def update(self):
         self.isDead = True
 
+class RealityCrack(Entity):
+    displayEmoji = "💥"
+    showOnBoard = True
+    isDead = False
+    def __init__(self, game, position):
+        self.displayEmoji = random.choice(["💥"])
+        self.position = np.array(position).astype(float)
+        self.game = game
+        self.life = random.randrange(5,10)
+
+    def update(self):
+        self.life -= 1
+        if self.life <= 0:
+            self.isDead = True
+    
+        obj = self.game.get_closest_object(self)
+        if obj is not None and self.game.on_same_tile(obj, self) and self is not obj and type(obj) != RealityCrack:
+            # teleport that object to a different flicker tile
+            otherflickers = self.game.get_closest_objects(self, RealityCrack)
+            if len(otherflickers) > 0:
+                otherflicker = random.choice(otherflickers)
+                obj.position = otherflicker.position
+                otherflicker.isDead = True
+                self.game.send_message(f"{obj.displayEmoji} falls through a crack in spacetime to somewhere else!")
+            
 
 class HittingArrow(Entity):
     displayEmoji = "X"
     showOnBoard = True
+    zIndex = 20 # show above players, with zIndex of 10
     def __init__(self, game, position, velocityVec):
         self.position = np.array(position)
         self.game = game
