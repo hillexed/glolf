@@ -20,8 +20,9 @@ class SingleHole:
 
         self.objects = []
         self.scores = {} #glolfer : SingleHoleScore(glolfer)
+        self.turn_number = 0
 
-        self.wind = random.choice(("Ominous","Pleasant","Fruity","Monsoon","Trade","Purple","Tasteless","Mechanical","Electric","Four-dimensional","Exact","Differential","Manifold","Change","Aggressively Normal")) #purely decorative for now
+        self.wind = random.choice(("Ominous","Pheasant","Fruity","Monsoon","Trade","Purple","Tasteless","Mechanical","Electric","Four-dimensional","Exact","Differential","Manifold","Change","Aggressively Normal")) #purely decorative for now
         self.windDirection = np.random.random(2) # [blah,blah] 0-1 each coord
 
         # parse course
@@ -77,10 +78,12 @@ class SingleHole:
             for x,terrain in enumerate(line):
                 if x == len(course):
                     course.append([])
-                course[x].append(terrain)
                 if terrain == "⛳":
                     self.objects.append(glolfer.Hole(self, id=self.num_holes,position=[x,y]))     
                     self.num_holes += 1  
+                    terrain = "🟩"
+                course[x].append(terrain)
+                    
 
         self.course = course
         self.course_bounds = [len(self.course),len(self.course[0])]
@@ -97,6 +100,7 @@ class SingleHole:
 
         self.objects = [x for x in filter(lambda obj:not obj.isDead, self.objects)]
 
+        self.turn_number += 1
         # todo: count scoring
 
     def add_object(self, obj):
@@ -107,9 +111,8 @@ class SingleHole:
     def printboard(self):
         string = ""
 
-        string += "Wind: "+ self.wind + " " + utils.choose_direction_emoji(self.windDirection)
+        string += f"Turn {self.turn_number} - Wind: {self.wind} {utils.choose_direction_emoji(self.windDirection)} \n"
         self.windDirection += np.random.random(2) - np.array((0.5,0.5)) # random walk
-        string += '\n'
 
         # any status update messages
         for line in self.message_queue:
@@ -118,11 +121,16 @@ class SingleHole:
 
         # print the board and return a string
         course = copy.deepcopy(self.course)
+        zBuffer = {}
         for obj in self.objects:
             if not obj.showOnBoard:
                 continue
             tile = obj.tile_coordinates()
+            tile_tuple = (tile[0],tile[1])
             if 0 <= tile[0] < len(course) and 0 <= tile[1] < len(course[tile[0]]):
+                if tile_tuple in zBuffer and obj.zIndex < zBuffer[tile_tuple]:  
+                    continue
+                zBuffer[(tile[0],tile[1])] = obj.zIndex
                 course[tile[0]][tile[1]] = obj.displayEmoji
 
         # board is stored internally as [x][y] but to print it we need to flip that and go [y][x]
@@ -134,6 +142,16 @@ class SingleHole:
 
         string += self.print_score()
         return string
+
+    def print_board_game_completed(self):
+        string = ""
+
+        string += f"Turn {self.turn_number} - Wind: {self.wind} \n"
+        string += "Final score: \n"
+        string += self.print_score()
+        string += f"\nGame over! {self.compute_winner_name()} wins!"
+        return string
+        
 
     def compute_winner(self):
         '''
@@ -168,7 +186,7 @@ class SingleHole:
 
 
     def get_closest_object_to_position(self, position, object_type=None):
-        consideredobjects = self.objects
+        consideredobjects = [o for o in self.objects if o is not target]
         if object_type is not None:
              consideredobjects = [o for o in self.objects if (type(o) == object_type)]
 
@@ -176,9 +194,9 @@ class SingleHole:
         return objectsSortedByDistance[0]
 
     def get_closest_objects(self, target, object_type=None):
-        consideredobjects = self.objects
+        consideredobjects = [o for o in self.objects if o is not target]
         if object_type is not None:
-             consideredobjects = [o for o in self.objects if (type(o) == object_type and o != target)]
+             consideredobjects = [o for o in consideredobjects if type(o) == object_type]
 
         objectsSortedByDistance = sorted(consideredobjects, key=lambda object:np.linalg.norm(object.position-target.position))
         return objectsSortedByDistance

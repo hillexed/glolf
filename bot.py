@@ -41,7 +41,7 @@ async def newglolfgame(channel, glolfer_names, header="", turns=60):
             raise e
 
     await asyncio.sleep(3)
-    await glolfgame.edit(content=fullheader+game.printboard() + '\n' + f"Game over! {game.compute_winner_name()} wins!")
+    await glolfgame.edit(content=fullheader+game.print_board_game_completed())
     return game.compute_winner()
 
 async def glolfcommand(message):
@@ -121,7 +121,6 @@ async def one_v_one_glolftourney_oneround(message):
         await asyncio.sleep(60)
     
     users_with_games_active.remove(message.author)
-    await message.channel.send(f"{glolfer_names[0]} is the last one standing!")
 
 
 
