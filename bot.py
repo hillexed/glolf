@@ -31,18 +31,19 @@ async def newglolfgame(channel, glolfer_names, header="", turns=60):
     glolfgame = await channel.send("Beginning game...")
     await asyncio.sleep(2)
     try:
-        await glolfgame.edit(content=fullheader+game.printboard())
+        await glolfgame.edit(content=fullheader+game.printgamestate())
         for i in range(turns):
             await asyncio.sleep(3)
             game.update()
-            await glolfgame.edit(content=fullheader+game.printboard())
+            await glolfgame.edit(content=fullheader+game.printgamestate())
     except (Exception, KeyboardInterrupt) as e:
             await glolfgame.add_reaction('⚠️')
             raise e
 
     await asyncio.sleep(3)
-    await glolfgame.edit(content=fullheader+game.print_board_game_completed())
-    await asyncio.sleep(3)
+    await glolfgame.edit(content=fullheader+game.print_board_game_completed(include_board=True))
+    await asyncio.sleep(10)
+    await glolfgame.edit(content=fullheader+game.print_board_game_completed(include_board=False))
     return game.compute_winner()
 
 async def glolfcommand(message):
@@ -114,7 +115,6 @@ async def one_v_one_glolftourney_oneround(message):
             winningname = random.choice(glolfers)
             move_onto_next_round.append(winningname)
             await message.channel.send(f"Tie game! {winningname} wins the tiebreaking swordfight to advance to the next round!")
-            await asyncio.sleep(30)
     glolfer_names = move_onto_next_round
 
     if len(move_onto_next_round) > 1:
