@@ -44,7 +44,7 @@ class Ball(Entity):
         self.last_hit_by = None
 
         #make this ball appear in a random location
-        self.position=[random.random()*self.game.course_bounds[0], random.random()*self.game.course_bounds[1]]
+        self.position=self.game.course.random_position_on_course()
           
     def check_if_ball_scored(self):
         flag = self.game.get_closest_object(self, Hole)
@@ -74,10 +74,9 @@ class Hole(Entity):
     displayEmoji = "⛳"
     type = "hole"
     showOnBoard = True
-    def __init__(self, game, id, position = [0,0]):
+    def __init__(self, game, position = [0,0]):
         self.position = np.array(position).astype(float)
         self.game = game
-        self.id = id
 
 
 class ScoreConfetti(Entity):
@@ -97,7 +96,6 @@ class RealityCrack(Entity):
     showOnBoard = True
     isDead = False
     def __init__(self, game, position):
-        self.displayEmoji = random.choice(["💥"])
         self.position = np.array(position).astype(float)
         self.game = game
         self.life = random.randrange(5,10)

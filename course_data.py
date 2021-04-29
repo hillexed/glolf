@@ -374,6 +374,31 @@ courses = [
 :brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square:
 ''',
 
+# boardwalk by lazaretto
+'''
+:icecream::truck::race_car::pickup_truck::pickup_truck::people_holding_hands::blue_car::truck::sunrise_over_mountains::white_large_square::ocean:
+:salad::yellow_square::yellow_square::yellow_square::yellow_square::guide_dog::yellow_square::yellow_square::yellow_square::crab::ocean:
+:tropical_drink::beach_umbrella::golf::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::yellow_square::white_large_square::ocean:
+:poultry_leg::yellow_square::beach_umbrella::yellow_square::yellow_square::beach_umbrella::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
+:pretzel::yellow_square::beach_umbrella::yellow_square::volleyball::yellow_square::yellow_square::yellow_square::yellow_square::white_large_square::dolphin:
+:pizza::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
+:popcorn::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::golf::yellow_square::white_large_square::ocean:
+:hotdog::yellow_square::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
+''',
+# minesweeper by blamperer
+'''
+:blue_square::blue_square::blue_square::one::white_large_square::one::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::one::golf::one::blue_square::blue_square::one::one:
+:one::one::blue_square::one::one::one::blue_square::blue_square::one::white_large_square:
+:white_large_square::one::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::one::white_large_square:
+:one::one::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::one::white_large_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::one::white_large_square:
+:one::one::blue_square::blue_square::blue_square::one::one::one::one::one:
+:white_large_square::one::blue_square::blue_square::blue_square::one::golf::one::blue_square::blue_square:
+:white_large_square::two::one::blue_square::blue_square::one::one::one::blue_square::blue_square:
+:white_large_square::white_large_square::one::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+''',
+
 ]
 # to do: give each course a name
 

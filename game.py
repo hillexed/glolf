@@ -3,9 +3,10 @@ import glolfer
 import numpy as np
 import copy
 import random
-import glolfcourses
+import courses
 from players import default_player_names
 import utils
+from courses import Course
 
 class SingleHoleScoresheet:
     def __init__(self, player):
@@ -26,16 +27,14 @@ class SingleHole:
         self.windDirection = np.random.random(2) # [blah,blah] 0-1 each coord
 
         # parse course
-        self.course = self.parse_course(glolfcourses.get_random_course())
+        self.course = courses.get_random_course()
+        self.objects += self.course.get_objects()
         self.par=3
 
-        # place one glolfer on each hole
-        random_position = lambda: [random.random()*self.course_bounds[0], random.random()*self.course_bounds[1]]
-
         # place three balls
-        self.objects.append(glolfer.Ball(self, position=random_position()))
-        self.objects.append(glolfer.Ball(self, position=random_position()))
-        self.objects.append(glolfer.Ball(self, position=random_position()))
+        self.objects.append(glolfer.Ball(self, position=self.course.random_position_on_course()))
+        self.objects.append(glolfer.Ball(self, position=self.course.random_position_on_course()))
+        self.objects.append(glolfer.Ball(self, position=self.course.random_position_on_course()))
 
         if len(glolfer_names) == 0:
             print("No glolfers, choosing random...")
@@ -60,34 +59,6 @@ class SingleHole:
 
         self.message_queue = []
         self.new_objects = []
-        
-
-    def parse_course(self, course_string):
-        lines = course_string.strip().split("\n")
-        lines = [[c for c in line.strip() if c != '\ufe0f'] for line in lines]
-
-        # remove unicode \ufe0f, variation selector, so it doesn't mess up the grid
-
-        # turn this y,x array into an x,y array
-
-        self.num_holes = 0
-
-        course = [[] for line in lines]
-        for y, line in enumerate(lines):
-            #print((repr(y),line))
-            for x,terrain in enumerate(line):
-                if x == len(course):
-                    course.append([])
-                if terrain == "⛳":
-                    self.objects.append(glolfer.Hole(self, id=self.num_holes,position=[x,y]))     
-                    self.num_holes += 1  
-                    terrain = "🟩"
-                course[x].append(terrain)
-                    
-
-        self.course = course
-        self.course_bounds = [len(self.course),len(self.course[0])]
-        return course
 
     def update(self):
         # one turn
@@ -107,8 +78,7 @@ class SingleHole:
         # add an object to the game, guaranteeing it won't have update() called on it until next turn
         self.new_objects.append(obj)
 
-
-    def printboard(self):
+    def printgamestate(self, include_board=True):
         string = ""
 
         string += f"Turn {self.turn_number} - Wind: {self.wind} {utils.choose_direction_emoji(self.windDirection)} \n"
@@ -119,9 +89,18 @@ class SingleHole:
             string += line + '\n'
         self.message_queue = []
 
+        if include_board == True:
+            string += self.printboard()   
+
+        string += self.print_score()
+        return string
+        
+
+    def printboard(self):
         # print the board and return a string
-        course = copy.deepcopy(self.course)
+        course = copy.deepcopy(self.course.terrain)
         zBuffer = {}
+        string = ""
         for obj in self.objects:
             if not obj.showOnBoard:
                 continue
@@ -131,23 +110,27 @@ class SingleHole:
                 if tile_tuple in zBuffer and obj.zIndex < zBuffer[tile_tuple]:  
                     continue
                 zBuffer[(tile[0],tile[1])] = obj.zIndex
+                print(course[tile[0]])
                 course[tile[0]][tile[1]] = obj.displayEmoji
 
         # board is stored internally as [x][y] but to print it we need to flip that and go [y][x]
-        for y in range(self.course_bounds[1]):
-            for x in range(self.course_bounds[0]):
+        for y in range(self.course.bounds[1]):
+            for x in range(self.course.bounds[0]):
                 if x < len(course) and y < len(course[x]):
                     string += "".join(course[x][y])   
-            string += '\n'     
-
-        string += self.print_score()
+            string += '\n'  
         return string
 
-    def print_board_game_completed(self):
+    def print_board_game_completed(self, include_board=True):
         string = ""
 
-        string += f"Turn {self.turn_number} - Wind: {self.wind}"
-        string += "\n\nFinal score: \n"
+        string += f"Turn {self.turn_number} - Wind: {self.wind}\n"
+
+
+        if include_board == True:
+            string += self.printboard()  
+
+        string += "Final score: \n"
         string += self.print_score()
         string += f"\n🎉Game over! {self.compute_winner_name()} wins!🎉\n"
         return string
