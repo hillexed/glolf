@@ -151,6 +151,7 @@ known_players = {
         estimation=1,),emoji="😅"),
     "Simulacrum": Player(name="Simulacrum", id=2,emoji="🐂",stlats=generate_random_stlats_from_name("Simulacrum"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
     "Solar Dies": Player(name="Solar Dies", id=3,emoji="🦞",stlats=generate_random_stlats_from_name("Solar Dies"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈","1️"]),
+    "Load Bearing Coconut": Player(name="Load Bearing Coconut", id=3,emoji="🦊",stlats=generate_random_stlats_from_name("Load Bearing Coconut"), modifications=["🧥"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
 
