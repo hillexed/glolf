@@ -52,11 +52,11 @@ class Ball(Entity):
             # Score!
             print("Score!")
             if self.last_hit_by is not None:
-                self.game.send_message(f"{self.last_hit_by.get_display_name()} scores! {utils.score_name(self.strokes,self.game.par)}!")
+                self.game.send_message(f"{self.last_hit_by.get_display_name()} scores 🎊! {utils.score_name(self.strokes,self.game.par)}!")
                 self.game.scores[self.last_hit_by].scored_strokes += self.strokes
                 self.game.scores[self.last_hit_by].balls_scored += 1
             else:
-                self.game.send_message(f"The ball scores itself! {utils.score_name(self.strokes,self.game.par)}!")
+                self.game.send_message(f"The ball scores itself 🎊! {utils.score_name(self.strokes,self.game.par)}!")
 
             self.game.add_object(ScoreConfetti(self.game, flag.position))
             self.reset_at_random_point()
@@ -142,6 +142,7 @@ SwingType = collections.namedtuple("SwingType",[
 ])
 
 SwingTypes = {
+    "drive": SwingType(name="drive",mean_power=6,min_power=2,max_power=7,power_variance=1,angle_variance=0.15),
     "chip": SwingType(name="chip",mean_power=3,min_power=2,max_power=3,power_variance=1,angle_variance=0.1),
     "putt":SwingType(name="putt",mean_power=1,min_power=0,max_power=2,power_variance=0.3,angle_variance=0.04),
 }
