@@ -4,6 +4,7 @@ import random
 
 import players
 import utils
+from utils import SWORDFIGHT_OPTIONS
 
 from entities import *
 
@@ -38,6 +39,10 @@ class Glolfer(Entity):
         ball = self.game.get_closest_object(self, Ball)
         if self.game.on_same_tile(self, ball):
             self.hit(ball)
+
+        closest_player = self.game.get_closest_object(self, Ball)
+        if self.game.on_same_tile(self, closest_player):
+            self.swordfight(closest_player)
         else: #attempt to move to ball
             self.move_somewhere()
 
@@ -59,6 +64,7 @@ class Glolfer(Entity):
         # here's where various different type of movements would go
 
         self.attempt_move(move_vector)
+
 
     def hit(self, ball):
         '''
@@ -133,7 +139,9 @@ class Glolfer(Entity):
     def choose_swing_type(self, target_vector):
         # currently very simple. swing types defined in entities.py
         
-        if np.linalg.norm(target_vector) > 3:
+        if np.linalg.norm(target_vector) > 8:
+            return SwingTypes["drive"]
+        elif np.linalg.norm(target_vector) > 3:
             return SwingTypes["chip"]
         else:
             return SwingTypes["putt"]

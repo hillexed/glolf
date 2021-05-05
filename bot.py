@@ -19,32 +19,54 @@ if len(sys.argv) > 1:
         print("Debug mode on!")
         prefix = 'd' + prefix
 
+users_with_games_active = []
 
+def limit_one_game_per_person(func):
+    '''
+    A decorator to ensure someone can only run one command at a time.
+    Also, has some bonus error reporting if something goes wrong.
+    The first argument of a function using this decorator must be 'message', a discord message to react to if something goes wrong
+    ''' 
+    async def wrapper(message, *args, **kwargs):
+        global users_with_games_active
 
+        if message.author in users_with_games_active:
+            return await message.channel.send("To avoid lag, please wait for your current game to finish before starting a tournament.")
+        users_with_games_active.append(message.author)
+        try:
+            return await func(message, *args, **kwargs)
+        except (Exception, KeyboardInterrupt) as e:
+                await message.add_reaction('⚠️')
+                raise e
+        finally:
+            users_with_games_active.remove(message.author)
 
-async def newglolfgame(channel, glolfer_names, header="", turns=60):
+    return wrapper
+
+@limit_one_game_per_person
+async def newglolfgame(message, glolfer_names, header=None, turns=60):
     # start a round of glolf and return the winning player's name
 
-    fullheader = f"🏌️ Glolf! (alpha) {header}\n"
-
-    game = SingleHole(debug=debug,glolfer_names=glolfer_names)
-    glolfgame = await channel.send("Beginning game...")
-    await asyncio.sleep(2)
+    glolfgame = await message.channel.send("Beginning game...")
     try:
-        await glolfgame.edit(content=fullheader+game.printgamestate())
+
+        game = SingleHole(debug=debug,glolfer_names=glolfer_names)
+        await asyncio.sleep(2)
+        await glolfgame.edit(content=game.printgamestate(),header=header)
+
         for i in range(turns):
             await asyncio.sleep(3)
             game.update()
-            await glolfgame.edit(content=fullheader+game.printgamestate())
+            await glolfgame.edit(content=game.printgamestate(),header=header)
+
+        await asyncio.sleep(3)
+        await glolfgame.edit(content=game.printgamestate(game_over=True, include_board=True,header=header))
+        await asyncio.sleep(10)
+        await glolfgame.edit(content=game.printgamestate(game_over=True, include_board=False,header=header))
+        return game.compute_winner()
     except (Exception, KeyboardInterrupt) as e:
             await glolfgame.add_reaction('⚠️')
             raise e
-
-    await asyncio.sleep(3)
-    await glolfgame.edit(content=fullheader+game.print_board_game_completed(include_board=True))
-    await asyncio.sleep(10)
-    await glolfgame.edit(content=fullheader+game.print_board_game_completed(include_board=False))
-    return game.compute_winner()
 
 async def glolfcommand(message):
     # parse a glolf command
@@ -61,21 +83,15 @@ async def glolfcommand(message):
             await message.channel.send("It's too dangerous to glolf alone. Bring an opponent.")
             return
 
-    users_with_games_active.append(message.author)
-    await newglolfgame(message.channel, glolfer_names)
-    users_with_games_active.remove(message.author)
-
+    await newglolfgame(message, glolfer_names)
+ 
 def biggest_power_of_two_less_than(n):
     return 2 ** math.floor(math.log2(n))
 
 
 
-
+@limit_one_game_per_person
 async def one_v_one_glolftourney_oneround(message):
-
-    global users_with_games_active
-    if message.author in users_with_games_active:
-        return await message.channel.send("To avoid lag, please wait for your current game to finish before starting a tournament.")
 
     arguments = message.content.split("\n") #first line has "!glolf" on it
     glolfer_names = []
@@ -120,17 +136,10 @@ async def one_v_one_glolftourney_oneround(message):
     if len(move_onto_next_round) > 1:
         await message.channel.send(f"{len(move_onto_next_round)} contestants move on: {', '.join(move_onto_next_round)}.")
         await asyncio.sleep(60)
-    
-    users_with_games_active.remove(message.author)
 
 
-
+@limit_one_game_per_person
 async def one_v_one_glolftourney(message):
-
-    global users_with_games_active
-    if message.author in users_with_games_active:
-        return await message.channel.send("To avoid lag, please wait for your current game to finish before starting a tournament.")
-
     arguments = message.content.split("\n") #first line has "!glolf" on it
     glolfer_names = []
     if len(arguments) > 1: # 0 players is fine
@@ -150,7 +159,6 @@ async def one_v_one_glolftourney(message):
 
     
     await message.channel.send(f"{len(glolfer_names)}-person tournament starting...")
-    users_with_games_active.append(message.author)
 
     round_num = 0
     while len(glolfer_names) > 1:
@@ -180,7 +188,6 @@ async def one_v_one_glolftourney(message):
             await message.channel.send(f"{len(move_onto_next_round)} contestants move on: {', '.join(move_onto_next_round)}. Next round starts in one minute...")
             await asyncio.sleep(60)
     
-    users_with_games_active.remove(message.author)
     await message.channel.send(f"{glolfer_names[0]} wins the tournament!")
 
 async def get_glolfer_stats(message):
