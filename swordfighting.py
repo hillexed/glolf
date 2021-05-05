@@ -1,6 +1,7 @@
 import utils
 import random
 from enum import Enum
+from entities import Hole
 
 class SWORDFIGHT_OPTIONS(Enum):
     offensive=1
@@ -28,6 +29,22 @@ def get_swordfight_move(player):
         weights[2] += 0.5
 
     return utils.random_weighted_choice(options, weights)
+
+
+def handle_swordfight_result(winning_move, losing_move, winner, loser):
+
+
+    if winning_move == SWORDFIGHT_OPTIONS.kiss and losing_move != SWORDFIGHT_OPTIONS.kiss:
+        if random.random() > loser.stlats.aceness:
+            # asked to kiss, passed the ace check, partner reciprocates
+            losing_move = SWORDFIGHT_OPTIONS.kiss
+        if losing_move == SWORDFIGHT_OPTIONS.kiss:
+            game.end_next_turn(winner_name_override="Love") # TODO: implement
+
+    
+
+    return print_swordfight_message(winning_move, losing_move, winner, loser)
+
     
 def print_swordfight_message(winning_move, losing_move, winner, loser):
     message = choose_swordfight_message(winning_move, losing_move, winner, loser)
@@ -43,6 +60,7 @@ def print_swordfight_message(winning_move, losing_move, winner, loser):
         elif winning_move == SWORDFIGHT_OPTIONS.kiss:
             message = "💋 " + message
 
+
     if __name__ == "__main__":
         print(message)
         #print("TODO: SEND MESSAGE TO GAME")
@@ -51,12 +69,12 @@ def print_swordfight_message(winning_move, losing_move, winner, loser):
     return message
 
 pose_adjectives = ('menacing','disgusting','confusing','flat','2D','impressive','unflappable','flappable','owlish','goofy','light-hearted','clever','maniacal','majestic','limp','tight','tall','steel','sawtooth','fluttering','shivering','acidic',
-'harsh','envious','slim','spicy','painful','healing','one-of-a-kind','bootleg','bootleg','abhorrent','juicy','clumsy','spectacular','quizzical','breezy','familiar','coordinated','reverse','dimensional',
-'floating')
+'harsh','dreaded','slim','spicy','painful','healing','one-of-a-kind','bootleg','bootleg','abhorrent','juicy','clumsy','spectacular','quizzical','breezy','familiar','coordinated','reverse','dimensional',
+'floating','invisible','compound','cute','socialist','dramatic')
 pose_adverbs = ('menacingly','disgustingly','lovingly','owlishly','goofily','light-heartedly','badly','shakily','lazily','frantically','briskly',
 'directly','sharply','sheepishly','questionably','unnaturally',
-'limply','tightly','promptly','cleverly','cheerfully','majestically')
-fancy_attack_names = ("Marrow Parry","Double Jointed Double","Blameslash","reckless swing","Judo Chop","Swear","Propellor Thrust","Delta V","Best Defense","Dimensional Strike","Targeted Flop","Cannonball","Club","Compound Meter","Swingshot","Chelation","Metal Mettle","Cute Animal","Stylish Pose",f"{random.choice(pose_adjectives).title()} Rocket",f"{random.choice(pose_adjectives).title()} Swing","Mindy Wimdy","Bottles Wottles","Mocksicle","Hurdy-Gurdy","Bump","Spike","Hash Set",f"{random.choice(pose_adjectives).title()} Trap","Talk It Out")
+'limply','tightly','promptly','cleverly','cheerfully','majestically','dramatically')
+fancy_attack_names = ("Marrow Parry","Double Jointed Double","Blameslash","reckless swing","Judo Chop","Swear","Propellor Thrust","Delta V","Best Defense","Dimensional Strike","Targeted Flop","Cannonball","Club","Compound Meter","Swingshot","Chelation","Metal Mettle","Cute Animal","Stylish Pose",f"{random.choice(pose_adjectives).title()} Rocket",f"{random.choice(pose_adjectives).title()} Swing","Mindy Wimdy","Bottles Wottles","Mocksicle","Hurdy-Gurdy","Bump","Spike","Hash Set",f"{random.choice(pose_adjectives).title()} Trap","Talk It Out","Paper Plane","Root Around","Crime",f"{random.choice(pose_adjectives).title()} Poke", "Garbage Fling", "Gunk Shot", "Animal Assist", "Hunk Shot", "Jillywam", "Measure Zero", "Mandelbonk","Diffeomorphism","Pathological Example","Taken Limit","Broken Limit","See-no-blade","Outer Milds","Townhown Project","Infinite Sum","False False Swipe")
 
 def choose_swordfight_message(winning_move, losing_move, winner, loser):
     if winning_move == SWORDFIGHT_OPTIONS.offensive:
@@ -85,9 +103,11 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
             if random.random() < 0.8:
                 # offensive succeeds, common message
                 messages = (f"{winner.name} lunges!",
+                            f"{winner.name} thrusts!",
                             f"{winner.name} lands a swing!",
                             f"{winner.name} goes on the offensive!",
-                            f"{winner.name} Bonks {loser.name}!")
+                            f"{winner.name} Bonks {loser.name}!",
+                            f"{winner.name} tries a {random.choice(fancy_attack_names)}!")
 
                 return random.choice(messages) + " Touché!"
 
@@ -102,7 +122,10 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
                             f"{winner.name} unleashes their Signature Move!",
                             f"{winner.name} unleashes their {random.choice(pose_adjectives)} Signature Move! It catches {loser.name} by surprise!",
                             f"{winner.name} unleashes their Signature Move! {loser.name} is overwhelmed by handwriting!",
-                            f"{winner.name} lunges! It slips through {loser.name}'s defense!")
+                            f"{winner.name} lunges! It slips through {loser.name}'s defense!",
+                            f"{winner.name} tries a {random.choice(fancy_attack_names)}!",
+                            f"{winner.name} tries a {random.choice(fancy_attack_names)}!",
+                            f"{winner.name} tries a {random.choice(fancy_attack_names)}!")
 
                 return random.choice(rare_messages) + " Touché!"
     # defense wins against stylish, ties defense
@@ -112,7 +135,7 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
                 # defense succeeds, common message
                 messages = (f"{loser.name} tries to Bonk {winner.name}, but it's Blonked!",
                     f"{winner.name} deflects {loser.name}'s efforts and counters!",
-                    f"{winner.name} sees {loser.name}'s {random.choice(('strike','attack','advance','flip','wavedash','move','Signature Move','handwriting'))} coming and dodges!",
+                    f"{winner.name} sees {loser.name}'s {random.choice(('strike','attack','advance','flip','club','move','Signature Move','handwriting'))} coming and dodges!",
                     f"{loser.name} dodges {winner.name}'s {random.choice(fancy_attack_names)}!",)
 
                 return random.choice(messages)
@@ -124,7 +147,7 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
                         f"{winner.name} wavedashes away!",
                         f"{winner.name} sidesteps the issue.",
                         f"{winner.name} cartwheels out of the way",
-                        f"{winner.name} dodges with a scissors leap!",
+                        f"{winner.name} dodges with a {random.choice(pose_adjectives)} scissors leap!",
                         f"{winner.name} dodges with a back handspring!",
                         f"{winner.name} dodges with a front handspring!",
                         f"{winner.name} throws the attack aside!",))
@@ -135,6 +158,7 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
                     f"{winner.name} sees {winner.name}'s advance coming! {random.choice(acrobatic_actions)}",
                     f"{winner.name} talks {loser.name} out of attacking for a second!",
                     f"{winner.name} takes a yummy snack break!"
+                    f"{winner.name} {random.choice(pose_adverbs)} blocks all damage!",       
                 )
 
                 return random.choice(rare_messages)
@@ -164,14 +188,15 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
             if random.random() < 0.8:
                 messages = (
                     f"Despite {loser.name}'s {random.choice(('best','half-hearted','desperate'))} efforts, there's no stopping {winner.name}'s moves!",
-                    f"{winner.name} does a {random.choice(('wavedash','backflip','therapy','wealth redistribution'))}! {loser.name} is {random.choice(('impressed','afraid','excited'))}!",
+                    f"{winner.name} does a {random.choice(('speedpaint','jig','crime','side flip','backwards high jump','backflip','therapy','wealth redistribution'))}! {loser.name} is {random.choice(('impressed','afraid','excited'))}!",
                     f"{winner.name} shows off their style! It's too much for {loser.name}!",
-                    f"{winner.name} pulls off a stylish pose!"
+                    f"{winner.name} expresses themself through {random.choice(pose_adjectives)} {random.choice(('dance','poetry','song','sculpture','interpretive dance','naps','creation','words'))}!",
                 )
 
                 return random.choice(messages) + " Touché!"
             else:
                 rare_messages = (
+                f"{loser.name} tries to sketch {winner.name} but {random.choice(('gets the details wrong!','has trouble drawing hands!','has trouble drawing faces','has trouble matching the image in their head','drops it halfway through'))}",
                 f"{loser.name} poses {random.choice(pose_adverbs)}!",
                 f"{loser.name} strikes a {random.choice(pose_adjectives)} pose!",
                 f"{winner.name} does a {random.choice(('wavedash','backflip','therapy','wealth redistribution'))}! {loser.name} is {random.choice(('impressed!','afraid','excited'))}!"
@@ -183,7 +208,7 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
                 f"{winner.name} and {loser.name} trade {random.choice(('phone numbers','blows','hits','digimon cards','souls','advice','taunts','jeers','tea packets'))}!",
                 f"{winner.name} talks about their hobbies!",
                 f"{winner.name} and {loser.name} take a moment to bond over shared interests!",
-                f"{loser.name} infodumps excitedly to {winner.name}! {winner.name} listens intently!",
+                f"{loser.name} infodumps excitedly to {winner.name}! {winner.name} listens {random.choice(('intently','excitedly'))}!",
             )
             return random.choice(messages)
 
@@ -192,15 +217,14 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
 
         kiss_string = f"{winner.name} asks if they can kiss {loser.name}!"
 
-        if random.random() < loser.stlats.aceness:
+        if losing_move != SWORDFIGHT_OPTIONS.kiss: #consent is important!
             rejection_messages = (f"{loser.name} isn't interested right now! {winner.name} understands and backs off.",
                 f"{loser.name} is caught off guard! {winner.name} understands and backs off.",
                 f"{loser.name} suggests maybe sometime later!",
                 f"{loser.name}, flustered, asks to wait until after the game's over!")
             kiss_string += " "+random.choice(rejection_messages)
         else:
-            # game.end(winner="Love") # "Love wins!" ######### TODO ###########
-            acceptance_messages = (f"{loser.name} blushes and leans in!",f"{loser.name} is flustered but leans in!",f"{loser.name} raises an eyebrow and moves in!")
+            acceptance_messages = (f"{loser.name} blushes and leans in!",f"{loser.name} is flustered but leans in!",f"{loser.name} raises an eyebrow and moves in!",f"{loser.name} smiles and moves in!")
             kiss_string += " "+random.choice(acceptance_messages)
         return kiss_string
             
@@ -246,11 +270,11 @@ def swordfight(player1, player2):
     elif (p2move, p1move) in winning_combos:
         # p1 lost the point!
 
-        print_swordfight_message(p2move, p1move, player2, player1)
+        handle_swordfight_result(p2move, p1move, player2, player1)
         # player1.hp -= 1
     else: # tie
         
-        print_swordfight_message(p1move, p2move, player1, player2)
+        handle_swordfight_result(p1move, p2move, player1, player2)
 
 def lose_swordfight(loser, winner):
 
@@ -269,11 +293,19 @@ def lose_swordfight(loser, winner):
     #game.scores[winner].scored_strokes += 1
     #game.scores[winner].balls_scored += 1
 
-    # loser.position = farthest hole's position
+
+
+    # the loser is hit into the farthest hole
+    holes = game.get_closest_objects(winner, Hole)
+    if len(otherflickers) > 0:
+        farthesthole = holes[-1]
+        loser.position = farthesthole.position
+    else:
+        game.send_message("There's... no holes? {winner.name} is a bit confused.")
 
 
 if __name__ == "__main__":
     import players
     for i in range(10):
-        swordfight(players.generate_random_player_from_name("Accc"),players.generate_random_player_from_name("Bc"))
+        swordfight(players.generate_random_player_from_name("Pikachu"),players.generate_random_player_from_name("Eevee"))
 
