@@ -1,4 +1,5 @@
 from typing import TypedDict
+import discord
 import glolfer
 import numpy as np
 import copy
@@ -52,7 +53,7 @@ class SingleHole:
                 placed_glolfers += 1
             else:
                 # Out of flags, throw em anywhere
-                new_glolfer_pos = random_position()            
+                new_glolfer_pos = self.course.random_position_on_course()         
             newglolfer = glolfer.Glolfer(self, position=new_glolfer_pos, playername=name)
             self.objects.append(newglolfer)
             self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
@@ -64,6 +65,8 @@ class SingleHole:
         # one turn
         for obj in self.objects:
             obj.update()
+
+        self.windDirection += np.random.random(2) - np.array((0.5,0.5)) # random walk
 
         # add any new objects
         self.objects += self.new_objects
@@ -78,21 +81,72 @@ class SingleHole:
         # add an object to the game, guaranteeing it won't have update() called on it until next turn
         self.new_objects.append(obj)
 
-    def printgamestate(self, include_board=True):
-        string = ""
-
-        string += f"Turn {self.turn_number} - Wind: {self.wind} {utils.choose_direction_emoji(self.windDirection)} \n"
-        self.windDirection += np.random.random(2) - np.array((0.5,0.5)) # random walk
+    def embed_gamestate(self, include_board=True, game_over=False):
+        embed=discord.Embed(title="🏌️ Glolf! (alpha)", description="", color=0x50BC43)
+        embed.add_field(name="Turn", value=str(self.turn_number), inline=True)
+        embed.add_field(name="Wind", value=f"{self.wind} {utils.choose_direction_emoji(self.windDirection)}", inline=True)
 
         # any status update messages
-        for line in self.message_queue:
-            string += line + '\n'
+        if len(self.message_queue) == 0:
+            events = "None"
+        else:
+            events = ""
+            for line in self.message_queue:
+                events += line + '\n'
+        self.message_queue = []
+        embed.add_field(name="Events", value=events, inline=False)
+
+        if include_board:
+            embed.add_field(name="Course", value=self.printboard(), inline=False)
+
+        if game_over:
+            embed.add_field(name="Final Score", value=self.print_score(), inline=False)
+        else:
+            embed.add_field(name="Scorecard", value=self.print_score(), inline=False)
+            
+
+        if game_over:
+            embed.add_field(name="Game over!", value=f"🎉{self.compute_winner_name()} wins!🎉")
+
+        embed.set_footer(text="Brought to you by Instigator Hillexed#8194.")
+        return embed
+
+
+    def printgamestate(self, game_over=False, include_board=True, header=None):
+        string = ""
+
+        string += "        🏌️** Glolf! (alpha)**"
+        if header is not None:
+            string += f" - {header}"
+        string += "\n"
+
+        string += f"**Turn** {self.turn_number} - **Wind:** {self.wind} {utils.choose_direction_emoji(self.windDirection)} \n"
+
+        # any status update messages
+        if len(self.message_queue) == 0:
+            events = ""
+        else:
+            events = ""
+            for line in self.message_queue:
+                events += line + '\n'
         self.message_queue = []
 
-        if include_board == True:
-            string += self.printboard()   
+        string += events + "\n"
 
-        string += self.print_score()
+        if include_board:
+            string += "**Course:**\n"
+            string += self.printboard()
+
+        if game_over:
+            string += "**Final Score:**\n"
+            string += self.print_score()
+        else:
+            string += "**Scorecard:\n**"
+            string += self.print_score()
+            
+
+        if game_over:
+            string += f"**Game over!** 🎉{self.compute_winner_name()} wins!🎉"
         return string
         
 
@@ -110,7 +164,6 @@ class SingleHole:
                 if tile_tuple in zBuffer and obj.zIndex < zBuffer[tile_tuple]:  
                     continue
                 zBuffer[(tile[0],tile[1])] = obj.zIndex
-                print(course[tile[0]])
                 course[tile[0]][tile[1]] = obj.displayEmoji
 
         # board is stored internally as [x][y] but to print it we need to flip that and go [y][x]
@@ -120,21 +173,6 @@ class SingleHole:
                     string += "".join(course[x][y])   
             string += '\n'  
         return string
-
-    def print_board_game_completed(self, include_board=True):
-        string = ""
-
-        string += f"Turn {self.turn_number} - Wind: {self.wind}\n"
-
-
-        if include_board == True:
-            string += self.printboard()  
-
-        string += "Final score: \n"
-        string += self.print_score()
-        string += f"\n🎉Game over! {self.compute_winner_name()} wins!🎉\n"
-        return string
-        
 
     def compute_winner(self):
         '''
@@ -223,7 +261,7 @@ class SingleHole:
         if np.linalg.norm(shot_vec) > 6:
             length = "really long"
 
-        message = f"{shooting_player.get_display_name()} hits a {length} {swing.name}!"
+        message = f"{shooting_player.get_display_name()} hits a {length} {swing.name} {utils.choose_direction_emoji(shot_vec)}!"
         if self.debug:
             message += f"{shot_vec}"
         print(message)
