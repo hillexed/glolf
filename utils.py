@@ -1,5 +1,6 @@
 import math
-    
+import random
+
 
 def lerp(start,finish,t):
     return start*(1-t) + finish*t
@@ -15,6 +16,11 @@ def choose_direction_emoji(velocityVector):
     return emojis[emoji_number]
 
 
+
+def random_weighted_choice(options, weights=None):
+    # like random.choice(options), but each choice has a different chance of being selected
+    # so random_weighted_choice(['a','b','c'],[1,1,2]) has a 2/(1+1+2) = 50% chance of choosing 'c', and a 25% chance of choosing 'a' or 'b'.
+    return random.choices(options, weights=weights)[0]
 
 
 def score_name(strokes,par):

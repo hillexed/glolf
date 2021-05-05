@@ -1,7 +1,7 @@
 import random, uuid, math
 from typing import NamedTuple
 
-default_player_names = ("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri")
+default_player_names = ("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri","Load Bearing Coconut")
     
 
 
@@ -46,12 +46,31 @@ class PlayerStlats(NamedTuple):
     tofu: int = 4
     wiggle: int = 3
     ritualism: int = 2
-    polkadottedness: int = 0
+
+    unworthiness: float = 0.5
+    splortsmanship: float = 1.0
+    tankitude: float = 1.0
+    pettiness: float = 0.0
+    owlishness: float = 0.0
+    disco: float = 0.0
+    pettability: float = 0.0
+    softness: float = 0.0
+    improv: float = 0.0
+    tentacles: int = 1
+    capitalism: float = -0.5
 
     # shot power stats
     musclitude: float = 1.0             # how hard you swing
     finesse: float = 1.0                # how consistent your shots are hit with power, higher = better
     estimation: int = 0
+
+    # swordfighting stlats
+    churliness: float = 0.2 # how likely this player will go for offensive options in a swordfight
+    earliness: float = 0.2 # how likely this player will go for defensive options in a swordfight
+    twirliness: float = 0.2 # how likely this player will go for stylish options in a swordfight
+    aceness: float = 0.3 # chance of resisting a kiss
+
+    polkadottedness: int = 0 # used for easter egg
 
     # shot angle stats
     needlethreadableness: float = 0.8   # how well you thread the needle (multiplier for how much angle variance your shots have), lower = better
@@ -64,20 +83,40 @@ class Player(NamedTuple):
     emoji:str = "🏌️"
     modifications:list = []
 
+    def unpredictability(self): # how much someone sticks to one swordfighting style
+        weights = [self.churliness,self.earliness,self.twirliness]
+        if player.stlats.stance in ("Aggro","Powerful","Hand to Hand","DPS","Explosive","Hardcore", "Wibble","Electric"): #offense-boosting stances
+            weights[0] += 0.5
+        # earliness-boosting stances
+        elif player.stlats.stance in ("Tanky","Twitchy","Repose","Reverse","Softcore",  "Cottagecore","Pomegranate"): # defense-boosting stances
+            weights[1] += 0.5
+        #twirliness-boosting stances
+        if player.stlats.stance in ("Feint","Tricky","Pop-Punk","Flashy","Spicy",       "Corecore","Wobble","Lefty"): # style-boosting stances
+            weights[2] += 0.5
+
+        weights = sorted(weights)
+        return weights[0] - weights[1]
+
+
     def driving_rating(self): # "Driving": hitting, and driving a kart
+        # +disco + tankitude
         rating_number = (self.stlats.musclitude + self.stlats.finesse + self.stlats.tofu)*5/3
         return format_stlat_display(rating_number)
 
     def precision_rating(self):
+        # +pettability + splortsmanship +tentacles
         rating_number = self.stlats.needlethreadableness * 5 - abs(self.stlats.left_handedness)
         return format_stlat_display(rating_number)
 
     def aerodynamics_rating(self):
-        rating_number = self.stlats.ritualism * 5 #unused for now, need more stlats
+        # +ritualism +softness +owlishness - unworthiness
+
+        rating_number = (self.stlats.ritualism + self.stlats.owlishness + self.stlats.softness) * 5/3 #unused for now, need more stlats
         return format_stlat_display(rating_number)
 
     def self_awareness_rating(self):
-        rating_number = (self.stlats.wiggle + self.stlats.estimation) * 5/2 + self.stlats.polkadottedness * 5 #means nothing for now
+        # - self.stlats.pettiness - capitalism + improv + tentacles
+        rating_number = (self.stlats.wiggle + self.stlats.estimation) * 5/3 + self.stlats.polkadottedness * 5 #means nothing for now
         return format_stlat_display(rating_number)
 
     def modifications_string(self):
@@ -127,9 +166,32 @@ def generate_random_stlats_from_name(name="Random Player"):
         finesse=        rng.random(),
         needlethreadableness=   rng.random(), 
         left_handedness=        rng.gauss(0,0.3), #how often shots are biased to the left or right of what you want
-        stance= rng.choice(["Tricky","Flashy","Aggro","Tanky","Twitchy","Powerful","Wibble","Wobble","Reverse","Feint","Electric","Spicy ","Pomegranate ","Explosive","Cottagecore","Corecore","Hardcore","Softcore","Hand to Hand","Lefty","Pop-Punk","DPS","Repose"]),
-        fav_tea= rng.choice(["Iced","Boba","White","Green","Oolong","Pu'erh","Chai","Milk","Neon","Sweet","Void","Tea? ","Caramel","Lightspeed","Time-traveling","Bloody","Black","Miso","Concrete","Hard-boiled egg","Hot Chocolate","Bubble"]),
+        stance= rng.choice(["Tricky","Flashy","Aggro","Tanky","Twitchy","Powerful",
+            "Wibble","Wobble","Reverse","Feint","Electric","Spicy","Pomegranate",
+            "Explosive","Cottagecore","Corecore","Hardcore","Softcore",
+            "Hand to Hand","Lefty","Pop-Punk","DPS","Repose"]),
+        fav_tea= rng.choice(["Iced","Boba","White","Green","Oolong",
+            "Pu'erh","Chai","Milk","Neon","Sweet","Void","Tea?","Caramel",
+            "Lightspeed","Time-traveling","Bloody","Black","Miso","Concrete",
+                "Hard-boiled egg","Hot Chocolate","Bubble"]),
         estimation= rng.random(),
+
+        earliness= rng.random(),
+        twirliness= rng.random(),
+        aceness=rng.random(),
+
+        unworthiness=rng.random(),
+        splortsmanship=rng.random(),
+        tankitude=rng.random(),
+        pettiness=rng.random(),
+        owlishness=rng.random(),
+        disco=rng.random(),
+        pettability=rng.random(),
+        softness=rng.random(),
+        improv=rng.random(),
+        tentacles= rng.randrange(0,10),
+        capitalism= -rng.random()
+
     )
 
 
@@ -148,7 +210,12 @@ known_players = {
         needlethreadableness=1,
         polkadottedness=1,  
         left_handedness= 0,
-        estimation=1,),emoji="😅"),
+        estimation=1,
+        owlishness=1,
+        softness=1,
+        unworthiness=0,
+        tentacles=4,
+        ),emoji="😅"),
     "Simulacrum": Player(name="Simulacrum", id=2,emoji="🐂",stlats=generate_random_stlats_from_name("Simulacrum"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
     "Solar Dies": Player(name="Solar Dies", id=3,emoji="🦞",stlats=generate_random_stlats_from_name("Solar Dies"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈","1️"]),
     "Load Bearing Coconut": Player(name="Load Bearing Coconut", id=3,emoji="🦊",stlats=generate_random_stlats_from_name("Load Bearing Coconut"), modifications=["🧥"]),
