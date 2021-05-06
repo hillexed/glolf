@@ -31,7 +31,7 @@ def limit_one_game_per_person(func):
         global users_with_games_active
 
         if message.author in users_with_games_active:
-            return await message.channel.send("To avoid lag, please wait for your current game to finish before starting a tournament.")
+            return await message.channel.send("To avoid lag, please wait for your current game to finish before starting any more.")
         users_with_games_active.append(message.author)
         try:
             return await func(message, *args, **kwargs)
@@ -303,9 +303,9 @@ async def on_message(message):
         await add_temp_modification(message)
 
     # "remove_from_active_game_list" command. just in case
-    elif user_is_admin(message) and message.content.startswith(prefix + "clear_active_game_list"):
+    elif user_is_admin(message) and message.content.startswith(prefix + "clear_game_list"):
         global users_with_games_active
-        await message.channel.send(f"Cleared users with active games list. It was previously {users_with_games_active}.")
+        await message.channel.send(f"Cleared users with active games list. It was previously {users_with_games_active}. The games are still running but those players can now start new games.")
         
         users_with_games_active = []
 
