@@ -39,7 +39,8 @@ def limit_one_game_per_person(func):
                 await message.add_reaction('⚠️')
                 raise e
         finally:
-            users_with_games_active.remove(message.author)
+            if message.author in users_with_games_active:
+                users_with_games_active.remove(message.author)
 
     return wrapper
 
@@ -210,7 +211,31 @@ Stance: **{newplayer.stlats.stance}**
 {newplayer.self_awareness_rating()}
 {newplayer.modifications_string()}'''
             await message.channel.send(newmessage)
-            
+        
+    except (Exception, KeyboardInterrupt) as e:
+            await message.add_reaction('⚠️')
+            raise e
+
+
+async def add_temp_modification(message):
+    # Add a modification to the player until the bot restarts. Admin-only
+    try:
+        
+        rest = message.content.replace(prefix + "glolfer","").strip()
+        if len(rest) == 0:        
+            await message.channel.send("Please add a glolfer's name to check their stlats!")
+        else:
+            if len(rest.split("\n")) < 2:
+                return await message.channel.send("Please add a glolfer's name, then the modification on a new line.")
+                
+            glolfername = rest.split("\n")[0].strip()
+            modification = rest.split("\n")[1].strip()
+
+            newplayer = players.get_player_from_name(glolfername)
+            newplayer.modifications.append(modification)
+            players.known_players[glolfername] = newplayer
+
+            return await message.channel.send("Added modification {} to player {}. It'll go away when you restart the bot, so make sure to edit the code!")
         
     except (Exception, KeyboardInterrupt) as e:
             await message.add_reaction('⚠️')
@@ -273,6 +298,16 @@ async def on_message(message):
         await message.channel.send(output)
         await message.channel.send(">_< Looks good! Restart me whenever you're ready!")
         print("Update complete! Now I need to be restarted!")
+
+    elif user_is_admin(message) and message.content.startswith(prefix + "addtempmodification"):
+        await add_temp_modification(message)
+
+    # "remove_from_active_game_list" command. just in case
+    elif user_is_admin(message) and message.content.startswith(prefix + "clear_active_game_list"):
+        global users_with_games_active
+        await message.channel.send(f"Cleared users with active games list. It was previously {users_with_games_active}.")
+        
+        users_with_games_active = []
 
     # forcequit command
     elif user_is_admin(message) and message.content.startswith(prefix + "forcequit"):
