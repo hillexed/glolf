@@ -43,9 +43,9 @@ class PlayerStlats(NamedTuple):
     nyoomability: float = 1.5           # movement speed
 
     # unused for now except for fun
-    tofu: int = 4
-    wiggle: int = 3
-    ritualism: int = 2
+    tofu: float = 4
+    wiggle: float = 0.5 # chance someone about to bump into a swordfight holds back instead
+    ritualism: float = 2
 
     unworthiness: float = 0.5
     splortsmanship: float = 1.0
@@ -69,6 +69,7 @@ class PlayerStlats(NamedTuple):
     earliness: float = 0.2 # how likely this player will go for defensive options in a swordfight
     twirliness: float = 0.2 # how likely this player will go for stylish options in a swordfight
     aceness: float = 0.3 # chance of resisting a kiss
+    marbles: int = 3 # beginning-of-fight swordfighting hp
 
     polkadottedness: int = 0 # used for easter egg
 
@@ -83,29 +84,37 @@ class Player(NamedTuple):
     emoji:str = "🏌️"
     modifications:list = []
 
-    def unpredictability(self): # how much someone sticks to one swordfighting style
-        weights = [self.churliness,self.earliness,self.twirliness]
-        if player.stlats.stance in ("Aggro","Powerful","Hand to Hand","DPS","Explosive","Hardcore", "Wibble","Electric"): #offense-boosting stances
+    def unpredictability(self): 
+        # how much someone sticks to one swordfighting style. 0-1, 1 = better
+        # if someone will always choose offensive, this is 0. if it's split evenly betwen churliness, earliness, and twirliness, it's 1
+        weights = [self.stlats.churliness,self.stlats.earliness,self.stlats.twirliness]
+        if self.stlats.stance in ("Aggro","Powerful","Hand to Hand","DPS","Explosive","Hardcore", "Wibble","Electric"): #offense-boosting stances
             weights[0] += 0.5
         # earliness-boosting stances
-        elif player.stlats.stance in ("Tanky","Twitchy","Repose","Reverse","Softcore",  "Cottagecore","Pomegranate"): # defense-boosting stances
+        elif self.stlats.stance in ("Tanky","Twitchy","Repose","Reverse","Softcore",  "Cottagecore","Pomegranate"): # defense-boosting stances
             weights[1] += 0.5
         #twirliness-boosting stances
-        if player.stlats.stance in ("Feint","Tricky","Pop-Punk","Flashy","Spicy",       "Corecore","Wobble","Lefty"): # style-boosting stances
+        if self.stlats.stance in ("Feint","Tricky","Pop-Punk","Flashy","Spicy",       "Corecore","Wobble","Lefty"): # style-boosting stances
             weights[2] += 0.5
+        print(weights)
 
-        weights = sorted(weights)
-        return weights[0] - weights[1]
+        weights = sorted(weights, reverse=True)
+
+        chanceOfBiggest = weights[0]/sum(weights) #this ranges from highest = 1 to lowest = 1/len(weights)
+
+        minChance = 1/len(weights)
+
+        return 1-(chanceOfBiggest-minChance)/(1-minChance)
 
 
     def driving_rating(self): # "Driving": hitting, and driving a kart
         # +disco + tankitude
-        rating_number = (self.stlats.musclitude + self.stlats.finesse + self.stlats.tofu)*5/3
+        rating_number = (self.stlats.musclitude + self.stlats.tofu)*5/2
         return format_stlat_display(rating_number)
 
     def precision_rating(self):
         # +pettability + splortsmanship +tentacles
-        rating_number = self.stlats.needlethreadableness * 5 - abs(self.stlats.left_handedness)
+        rating_number = (self.stlats.needlethreadableness*0.5 + self.stlats.finesse + self.stlats.estimation*0.2) * 5/(1+0.2+0.5) - abs(self.stlats.left_handedness)
         return format_stlat_display(rating_number)
 
     def aerodynamics_rating(self):
@@ -116,7 +125,7 @@ class Player(NamedTuple):
 
     def self_awareness_rating(self):
         # - self.stlats.pettiness - capitalism + improv + tentacles
-        rating_number = (self.stlats.wiggle + self.stlats.estimation) * 5/3 + self.stlats.polkadottedness * 5 #means nothing for now
+        rating_number = (self.stlats.wiggle*0.5 + (self.stlats.marbles-2)/2 + self.unpredictability()*0.8) * 5/(0.5+1+0.8) + self.stlats.polkadottedness * 5 #means nothing for now
         return format_stlat_display(rating_number)
 
     def modifications_string(self):
@@ -179,6 +188,7 @@ def generate_random_stlats_from_name(name="Random Player"):
         earliness= rng.random(),
         twirliness= rng.random(),
         aceness=rng.random(),
+        marbles= rng.randrange(2,4),
 
         unworthiness=rng.random(),
         splortsmanship=rng.random(),
@@ -190,7 +200,7 @@ def generate_random_stlats_from_name(name="Random Player"):
         softness=rng.random(),
         improv=rng.random(),
         tentacles= rng.randrange(0,10),
-        capitalism= -rng.random()
+        capitalism= -rng.random() # always negative
 
     )
 
@@ -202,15 +212,20 @@ known_players = {
         stance="Squiddish",
         fav_tea= "Iced",
         nyoomability = 1.5,
-        tofu=1, # unused
-        wiggle=1, # unused
-        ritualism=1, # unused
         musclitude=1,
         finesse=1,
         needlethreadableness=1,
         polkadottedness=1,  
         left_handedness= 0,
         estimation=1,
+        twirliness=0.3,
+        churliness=0.3,
+        earliness=0.3,
+        marbles=4,
+
+        tofu=1, # unused
+        wiggle=1, # unused
+        ritualism=1, # unused
         owlishness=1,
         softness=1,
         unworthiness=0,

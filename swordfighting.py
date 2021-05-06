@@ -2,7 +2,7 @@ import utils
 import random
 from enum import Enum
 from entities import Hole
-from glolfer import Glolfer
+from glolfer import Glolfer, HittingArrow, ScoreConfetti, SwordfightIndicator
 
 class SWORDFIGHT_OPTIONS(Enum):
     offensive=1
@@ -200,6 +200,7 @@ class SwordfightingDecree():
     starting_hp = 3
     current_swordfights = []
     new_swordfights = []
+    stunned_from_swordfight = []
 
 
     def __init__(self, game):
@@ -221,6 +222,16 @@ class SwordfightingDecree():
         return in_swordfight
         
 
+    def on_glolfer_move(self, glolfer, target):
+
+        # glolfers actively avoid joining duels if they have high wiggle
+        if not self.is_in_a_duel(glolfer):
+            if self.game.object_shares_tile_with(target, SwordfightIndicator):
+                # if your wiggle is high enough, you don't join the swordfight
+                if random.random() < glolfer.stlats.wiggle:
+                    return glolfer # change target to your current position. stay in place
+        return None # don't change the target
+
     def on_glolfer_update(self, glolfer, current_glolfer_action):
 
         in_swordfight = self.is_in_a_duel(glolfer)
@@ -236,13 +247,18 @@ class SwordfightingDecree():
         if in_swordfight:
             current_glolfer_action["action"] = "swordfighting" #stop the player from moving or hitting balls
 
+        # make players stay in place for one turn after losing a swordfight and being launched into the hole
+        if glolfer in self.stunned_from_swordfight:
+            current_glolfer_action["action"] = "stunned" #stop the player from moving or hitting balls
+            self.stunned_from_swordfight.remove(glolfer)
+
     def start_swordfight(self, glolfer1, glolfer2):
         # start a swordfight
         # this means if there's 3 players on the same tile there'll be one player facing two swordfights
         if glolfer1 not in self.player_hp:
-            self.player_hp[glolfer1] = self.starting_hp
+            self.player_hp[glolfer1] = glolfer1.stlats.marbles
         if glolfer2 not in self.player_hp:
-            self.player_hp[glolfer2] = self.starting_hp
+            self.player_hp[glolfer2] = glolfer2.stlats.marbles
 
         if not self.is_in_a_duel(glolfer2):
             self.game.send_message(f"⚔️{glolfer1.get_display_name()} challenges {glolfer2.get_display_name()} to a Duel! En garde!")
@@ -250,6 +266,7 @@ class SwordfightingDecree():
             self.game.send_message(f"⚔️{glolfer1.get_display_name()} joins the Duel, targeting {glolfer2.get_display_name()}! En garde!")
 
         self.new_swordfights.append((glolfer1, glolfer2))
+        self.game.add_object(SwordfightIndicator(self.game, glolfer1.position))
 
     def update(self):
 
@@ -275,6 +292,8 @@ class SwordfightingDecree():
             return self.lose_swordfight(loser=glolfer2,winner=glolfer1)
             # yes that does mean if p1 and p2 both have 0 hp at the same time for some reason, p1 dies from port priority.
 
+
+        self.game.add_object(SwordfightIndicator(self.game, glolfer1.position))
 
         p1move = get_swordfight_move(glolfer1)
         p2move = get_swordfight_move(glolfer2)
@@ -335,9 +354,9 @@ class SwordfightingDecree():
         message = choose_swordfight_message(winning_move, losing_move, winner, loser)
 
         if winning_move == losing_move:
-            message = self.get_emoji(winning_move) + self.get_emoji(losing_move) + message
+            message = "    " + self.get_emoji(winning_move) + " " + message
         else:
-            message = self.get_emoji(winning_move) + " " + message
+            message = "    " + self.get_emoji(winning_move) + " " + message
             
 
         if __name__ == "__main__":
@@ -358,9 +377,7 @@ class SwordfightingDecree():
             f"{loser.get_display_name()} flies into the air",
             f"{loser.get_display_name()} is launched into the air"))
 
-        self.player_hp[loser] = self.starting_hp
-
-        self.game.send_message(f"⚔️{first_message} {next_message}! Hole in one!")
+        self.player_hp[loser] = loser.stlats.marbles
 
         # the winner already has access to a ball now, so they don't need an extra hole    
         #game.scores[winner].scored_strokes += 1
@@ -372,8 +389,15 @@ class SwordfightingDecree():
         if len(holes) > 0:
             farthesthole = holes[-1]
             loser.position = utils.copyvec(farthesthole.position)
+
+            hitvec = farthesthole.position - winner.position
+            self.game.add_object(HittingArrow(self.game, utils.copyvec(winner.position), hitvec))
+            self.game.add_object(ScoreConfetti(self.game, utils.copyvec(farthesthole.position)))
+
+            self.game.send_message(f"⚔️{first_message} {next_message} {utils.choose_direction_emoji(hitvec)}! Hole in one!")
+
         else:
-            self.game.send_message("There's... no holes? {winner.get_display_name()} is a bit confused.")
+            self.game.send_message("Wait. There's... no holes? {winner.get_display_name()} is a bit confused.")
 
         if (winner, loser) in self.current_swordfights:
             self.current_swordfights.remove((winner, loser))
@@ -383,6 +407,8 @@ class SwordfightingDecree():
         for fight in self.current_swordfights:
             if loser in fight:
                 self.current_swordfights.remove(fight)
+
+        self.stunned_from_swordfight.append(loser)
 
 
 

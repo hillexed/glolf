@@ -71,12 +71,14 @@ class Glolfer(Entity):
             if newtarget:
                 target = newtarget
 
-
         target_vec = target.position - self.position #todo: pathfinding
+
+        if np.linalg.norm(target_vec) < 0.01:
+            return #we're on the target, don't move or we might divide by 0
 
         # create a vector in the direction of the target that's `move_speed` long
         move_speed = self.stlats.nyoomability
-        move_speed = min(move_speed, np.linalg.norm(target_vec)) #don't overshoot the ball
+        move_speed = min(move_speed, np.linalg.norm(target_vec)) #don't overshoot the target
         move_vector = target_vec / np.linalg.norm(target_vec) * move_speed
 
         # here's where various different type of movements would go
