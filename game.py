@@ -170,8 +170,8 @@ class SingleHole:
                 course[tile[0]][tile[1]] = obj.displayEmoji
 
         # board is stored internally as [x][y] but to print it we need to flip that and go [y][x]
-        for y in range(self.course.bounds[1]):
-            for x in range(self.course.bounds[0]):
+        for y in range(self.course.arraybounds[1]):
+            for x in range(self.course.arraybounds[0]):
                 if x < len(course) and y < len(course[x]):
                     string += "".join(course[x][y])   
             string += '\n'  
@@ -224,6 +224,13 @@ class SingleHole:
 
         objectsSortedByDistance = sorted(consideredobjects, key=lambda object:np.linalg.norm(object.position-position))
         return objectsSortedByDistance[0]
+
+    def object_shares_tile_with(self, target, object_type):
+        # returns True if there's an object of type `object_type` on the same tile as `target` 
+        for obj in self.objects:
+            if type(obj) == object_type and self.on_same_tile(target, obj):
+                return True
+        return False
 
     def get_closest_objects(self, target, object_type=None):
         consideredobjects = [o for o in self.objects if o is not target]

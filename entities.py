@@ -47,8 +47,7 @@ class Ball(Entity):
         self.position=self.game.course.random_position_on_course()
           
     def check_if_ball_scored(self):
-        flag = self.game.get_closest_object(self, Hole)
-        if self.game.on_same_tile(flag, self):
+        if self.game.object_shares_tile_with(self, Hole):
             # Score!
             print("Score!")
             if self.last_hit_by is not None:
@@ -58,7 +57,7 @@ class Ball(Entity):
             else:
                 self.game.send_message(f"The ball scores itself 🎊! {utils.score_name(self.strokes,self.game.par)}!")
 
-            self.game.add_object(ScoreConfetti(self.game, flag.position))
+            self.game.add_object(ScoreConfetti(self.game, self.position))
             self.reset_at_random_point()
 
     def hit(self, vector, player_to_take_credit=None):
@@ -79,17 +78,29 @@ class Hole(Entity):
         self.game = game
 
 
-class ScoreConfetti(Entity):
-    displayEmoji = "🎊"
+class OneTurnParticle(Entity):
+    # displayEmoji = "🎊" # override this in a subclass
     showOnBoard = True
     isDead = False
     zIndex = 20
     def __init__(self, game, position):
         self.position = np.array(position).astype(float)
         self.game = game
+        self.isDead = False
 
     def update(self):
         self.isDead = True
+
+class HittingArrow(OneTurnParticle):
+    def __init__(self, game, position, velocityVec):
+        super().__init__(game, position)
+        self.displayEmoji = utils.choose_direction_emoji(velocityVec)
+
+class ScoreConfetti(OneTurnParticle):
+    displayEmoji = "🎊"
+
+class SwordfightIndicator(OneTurnParticle):
+    displayEmoji = "⚔️"
 
 class RealityCrack(Entity):
     displayEmoji = "💥"
@@ -114,22 +125,6 @@ class RealityCrack(Entity):
                 obj.position = utils.copyvec(otherflicker.position)
                 otherflicker.isDead = True
                 self.game.send_message(f"{obj.displayEmoji} falls through a crack in spacetime to somewhere else!")
-            
-
-class HittingArrow(Entity):
-    displayEmoji = "X"
-    showOnBoard = True
-    zIndex = 20 # show above players, with zIndex of 10
-    def __init__(self, game, position, velocityVec):
-        self.position = np.array(position)
-        self.game = game
-        self.id = id
-        self.isDead = False
-        self.displayEmoji = utils.choose_direction_emoji(velocityVec)
-
-    def update(self):
-        self.isDead = True
-
 
 
 SwingType = collections.namedtuple("SwingType",[

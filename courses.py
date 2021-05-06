@@ -76,7 +76,7 @@ class Course:
         self.parse_course_string(course_string)
 
     def random_position_on_course(self):
-        return [random.random()*self.bounds[0], random.random()*self.bounds[1]]
+        return [random.random()*(self.bounds[0]-0.6), random.random()*(self.bounds[1]-0.6)]
 
     def parse_course_string(self, course_string):
         lines = course_string.strip().split("\n")
@@ -98,7 +98,8 @@ class Course:
                 terrain[x].append(tileEmoji)
 
         self.terrain = terrain
-        self.bounds = [len(self.terrain),len(self.terrain[0])]
+        self.bounds = [len(self.terrain[0]),len(self.terrain)]
+        self.arraybounds = [len(self.terrain),len(self.terrain[0])]
 
     def get_objects(self):
         return self.course_objects
