@@ -111,7 +111,7 @@ class RealityCrack(Entity):
             otherflickers = self.game.get_closest_objects(self, RealityCrack)
             if len(otherflickers) > 0:
                 otherflicker = random.choice(otherflickers)
-                obj.position = otherflicker.position
+                obj.position = utils.copyvec(otherflicker.position)
                 otherflicker.isDead = True
                 self.game.send_message(f"{obj.displayEmoji} falls through a crack in spacetime to somewhere else!")
             
