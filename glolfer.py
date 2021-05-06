@@ -4,7 +4,6 @@ import random
 
 import players
 import utils
-from utils import SWORDFIGHT_OPTIONS
 
 from entities import *
 
@@ -28,6 +27,9 @@ class Glolfer(Entity):
 
         self.team = "Undefined Team"
 
+    def get_relevant_modifiers(self):
+        return self.game.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)
+
     def get_display_name(self):
         return f"{self.name} {self.displayEmoji}"
 
@@ -36,14 +38,23 @@ class Glolfer(Entity):
         Decide what to do each turn!
         Currently the logic is "Move towards the nearest ball - or if you're on the same tile as a ball, hit that ball"
         '''
+
+        current_action = {
+            "action":"move",
+            "source":self
+        }
+
         ball = self.game.get_closest_object(self, Ball)
         if self.game.on_same_tile(self, ball):
-            self.hit(ball)
+            current_action["action"] = "hit"
+            current_action["target"] = ball
 
-        closest_player = self.game.get_closest_object(self, Ball)
-        if self.game.on_same_tile(self, closest_player):
-            self.swordfight(closest_player)
-        else: #attempt to move to ball
+        for modifier in self.get_relevant_modifiers():
+            modifier.on_glolfer_update(self, current_action)
+
+        if current_action["action"] == "hit":
+            self.hit(current_action["target"])
+        elif current_action["action"] == "move":
             self.move_somewhere()
 
     def move_somewhere(self):
@@ -54,6 +65,13 @@ class Glolfer(Entity):
         target = self.game.get_closest_object(self, Ball)
         if target is None:
             target = self.game.get_closest_object(self) #head to whatever's closest
+
+        for modifier in self.get_relevant_modifiers():
+            newtarget = modifier.on_glolfer_move(self, target)
+            if newtarget:
+                target = newtarget
+
+
         target_vec = target.position - self.position #todo: pathfinding
 
         # create a vector in the direction of the target that's `move_speed` long

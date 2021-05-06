@@ -6,6 +6,7 @@ import copy
 import random
 import courses
 from players import default_player_names
+from swordfighting import SwordfightingDecree
 import utils
 from courses import Course
 
@@ -31,6 +32,8 @@ class SingleHole:
         self.course = courses.get_random_course()
         self.objects += self.course.get_objects()
         self.par=3
+
+        self.modifiers = [SwordfightingDecree(self)]
 
         # place three balls
         self.objects.append(glolfer.Ball(self, position=self.course.random_position_on_course()))
@@ -63,7 +66,7 @@ class SingleHole:
 
     def update(self):
         # one turn
-        for obj in self.objects:
+        for obj in self.objects + self.modifiers:
             obj.update()
 
         self.windDirection += np.random.random(2) - np.array((0.5,0.5)) # random walk
@@ -179,16 +182,24 @@ class SingleHole:
             The winner is the player who scored the most holes! Otherwise, lowest strokes wins
         '''
         winner = None
+        tie = False
         for player in self.scores:
-            if winner is None:
+            if winner is None: # start with the first player in the list
                 winner = player
                 continue
             if self.scores[player].balls_scored > self.scores[winner].balls_scored:
-                winner = player
+                winner = player # more holes? winner
+                tie = False
             elif self.scores[player].balls_scored == self.scores[winner].balls_scored:
                 if self.scores[player].total_strokes < self.scores[winner].total_strokes:
-                    winner = player
-        return winner
+                    winner = player #same holes? lowest strokes wins
+                    tie = False
+                elif self.scores[player].total_strokes == self.scores[winner].total_strokes:
+                    tie = True
+        if tie:
+            return None
+        else:
+            return winner
 
     def compute_winner_name(self):
         winner = self.compute_winner()
