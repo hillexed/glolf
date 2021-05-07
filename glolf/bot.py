@@ -27,7 +27,7 @@ def limit_one_game_per_person(func):
     A decorator to ensure someone can only run one command at a time.
     Also, has some bonus error reporting if something goes wrong.
     The first argument of a function using this decorator must be 'message', a discord message to react to if something goes wrong
-    ''' 
+    '''
     async def wrapper(message, *args, **kwargs):
         global users_with_games_active
 
@@ -83,7 +83,7 @@ async def glolfcommand(message):
             return
 
     await newglolfgame(message, glolfer_names)
- 
+
 def biggest_power_of_two_less_than(n):
     return 2 ** math.floor(math.log2(n))
 
@@ -103,26 +103,26 @@ async def one_v_one_glolftourney_oneround(message):
         if num_players % 2 == 1:
             await message.channel.send("I need an even number of players!")
             return None
-            
+
     else:
         await message.channel.send("To use, please specify a list of competitors, on one line each")
         return
-    
+
     await message.channel.send(f"One round of {len(glolfer_names)} people starting...")
 
     round_num = 1
     move_onto_next_round = []
     for index in range(0,len(glolfer_names)-1,2):
         # go down the bracket
-        # competitors 
+        # competitors
         glolfers = [glolfer_names[index],glolfer_names[index+1]]
         await asyncio.sleep(2)
 
-        turns = 60  
+        turns = 60
         if debug:
             turns = 3
 
-        
+
         winner = await newglolfgame(message, glolfer_names=glolfers, header=f"Match {int(index/2)+1}/{int(len(glolfer_names)/2)} of round {round_num}!",turns=turns)
 
         if winner is not None:
@@ -157,7 +157,7 @@ async def one_v_one_glolftourney(message):
         await message.channel.send(f"I need a power-of-two number of people. You have {len(glolfer_names)}")
         return
 
-    
+
     await message.channel.send(f"{len(glolfer_names)}-person tournament starting...")
 
     round_num = 0
@@ -166,11 +166,11 @@ async def one_v_one_glolftourney(message):
         move_onto_next_round = []
         for index in range(0,len(glolfer_names)-1,2):
             # go down the bracket
-            # competitors 
+            # competitors
             glolfers = [glolfer_names[index],glolfer_names[index+1]]
             await asyncio.sleep(2)
 
-            max_turns = 60  
+            max_turns = 60
             if debug:
                 max_turns = 3
 
@@ -206,13 +206,13 @@ async def one_v_one_glolftourney(message):
 
             await message.channel.send(f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in one minute...")
             await asyncio.sleep(60)
-    
+
     await message.channel.send(f"**{glolfer_names[0]} wins the tournament!**")
 
 async def get_glolfer_stats(message):
     try:
         rest = message.content.replace(prefix + "glolfer","").strip()
-        if len(rest) == 0:        
+        if len(rest) == 0:
             await message.channel.send("Please add a glolfer's name to check their stlats!")
         else:
             newplayer = players.get_player_from_name(rest)
@@ -229,7 +229,7 @@ Stance: **{newplayer.stlats.stance}**
 {newplayer.self_awareness_rating()}
 {newplayer.modifications_string()}'''
             await message.channel.send(newmessage)
-        
+
     except (Exception, KeyboardInterrupt) as e:
             await message.add_reaction('⚠️')
             raise e
@@ -238,14 +238,14 @@ Stance: **{newplayer.stlats.stance}**
 async def add_temp_modification(message):
     # Add a modification to the player until the bot restarts. Admin-only
     try:
-        
+
         rest = message.content.replace(prefix + "glolfer","").strip()
-        if len(rest) == 0:        
+        if len(rest) == 0:
             await message.channel.send("Please add a glolfer's name to check their stlats!")
         else:
             if len(rest.split("\n")) < 2:
                 return await message.channel.send("Please add a glolfer's name, then the modification on a new line.")
-                
+
             glolfername = rest.split("\n")[0].strip()
             modification = rest.split("\n")[1].strip()
 
@@ -254,7 +254,7 @@ async def add_temp_modification(message):
             players.known_players[glolfername] = newplayer
 
             return await message.channel.send("Added modification {} to player {}. It'll go away when you restart the bot, so make sure to edit the code!")
-        
+
     except (Exception, KeyboardInterrupt) as e:
             await message.add_reaction('⚠️')
             raise e
@@ -307,7 +307,7 @@ async def on_message(message):
     # 'forceupdate' auto-updater
     elif user_is_admin(message) and message.content.startswith(prefix + "forceupdate"):
         if "yes" not in message.content:
-            return await message.channel.send("Are you sure? If so add 'yes' to the end of your message") 
+            return await message.channel.send("Are you sure? If so add 'yes' to the end of your message")
         import subprocess
         output = subprocess.check_output(["git", "stash"])
         await message.channel.send(output)
@@ -324,7 +324,7 @@ async def on_message(message):
     elif user_is_admin(message) and message.content.startswith(prefix + "clear_game_list"):
         global users_with_games_active
         await message.channel.send(f"Cleared users with active games list. It was previously {users_with_games_active}. The games are still running but those players can now start new games.")
-        
+
         users_with_games_active = []
 
     # forcequit command
@@ -339,4 +339,3 @@ if debug:
     token = config["DEV_TOKEN"]
 
 client.run(token)
-    
