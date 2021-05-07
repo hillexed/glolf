@@ -178,9 +178,9 @@ async def one_v_one_glolftourney(message):
             if len(glolfer_names) == 2:
                 round_name = "the finals"
             if len(glolfer_names) == 4 and round_num != 1:
-                round_name = "the semifinals"
+                round_name = "the almostfinals"
             if len(glolfer_names) == 8 and round_num != 1:
-                round_name = "the quarterfinals"
+                round_name = "the nearfinals"
 
             match_name = f"Match {int(index/2)+1}/{int(len(glolfer_names)/2)}"
             if int(index/2)+1 == int(len(glolfer_names)/2) and round_name != "the finals":
@@ -200,9 +200,9 @@ async def one_v_one_glolftourney(message):
 
             round_descriptor = f"Round {round_num} results:"
             if len(move_onto_next_round) == 2 and round_num != 1:
-                round_descriptor = "Semifinals results:"
+                round_descriptor = "Almostfinals results:"
             if len(move_onto_next_round) == 4 and round_num != 1:
-                round_descriptor = "Quarterfinals results:"
+                round_descriptor = "Nearfinals results:"
 
             await message.channel.send(f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in one minute...")
             await asyncio.sleep(60)
