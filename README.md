@@ -1,6 +1,8 @@
 # Glolf!
 
-The prequel to blaseball nobody asked for, glolf is a surrealist 2D emoji splorts battle royale fencing game discord bot. Use `!glolf` to start a relaxing round of glolf!
+The prequel to blaseball nobody asked for, glolf is a turn-based surrealist simulated 2D emoji splorts multiplayer battle royale fencing parody of golf. Run the discord bot and use `!glolf` to start a relaxing round of glolf!
+
+Gods not included.
 
 ## Installing
 
