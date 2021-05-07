@@ -160,7 +160,7 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
                 return random.choice(messages) + " Touché!"
             else:
                 rare_messages = (
-                f"{loser.get_display_name()} tries to sketch {winner.get_display_name()} but {random.choice(('gets the details wrong!','has trouble drawing hands','has trouble drawing faces','has trouble matching the image in their head','drops it halfway through'))}!",
+                f"{loser.get_display_name()} tries to sketch {winner.get_display_name()} but {random.choice(('gets the details wrong','has trouble drawing hands','has trouble drawing their features','has trouble matching the image in their head','drops it halfway through'))}!",
                 f"{winner.get_display_name()} poses {random.choice(pose_adverbs)}!",
                 f"{winner.get_display_name()} strikes a {random.choice(pose_adjectives)} pose!",
                 f"{winner.get_display_name()} does a {random.choice(('wavedash','backflip','therapy','wealth redistribution'))}! {loser.get_display_name()} is {random.choice(('impressed!','afraid','excited'))}!"
@@ -228,7 +228,7 @@ class SwordfightingDecree():
         if not self.is_in_a_duel(glolfer):
             if self.game.object_shares_tile_with(target, SwordfightIndicator):
                 # if your wiggle is high enough, you don't join the swordfight
-                if random.random() < glolfer.stlats.wiggle:
+                if random.random() - 0.5 < glolfer.stlats.wiggle:
                     return glolfer # change target to your current position. stay in place
         return None # don't change the target
 
@@ -340,16 +340,12 @@ class SwordfightingDecree():
 
 
     def handle_swordfight_result(self, winning_move, losing_move, winner, loser):
-
-
         if winning_move == SWORDFIGHT_OPTIONS.kiss and losing_move != SWORDFIGHT_OPTIONS.kiss:
             if random.random() > loser.stlats.aceness:
                 # asked to kiss, passed the ace check, partner reciprocates
                 losing_move = SWORDFIGHT_OPTIONS.kiss
             if losing_move == SWORDFIGHT_OPTIONS.kiss:
-                pass
-                #game.end_next_turn(winner_name_override="Love") # TODO: implement
-        print("IMPLEMENT KISSING ENDING")
+                self.game.end(custom_winner_name="Love") # TODO: implement
 
         message = choose_swordfight_message(winning_move, losing_move, winner, loser)
 
@@ -357,13 +353,9 @@ class SwordfightingDecree():
             message = "    " + self.get_emoji(winning_move) + " " + message
         else:
             message = "    " + self.get_emoji(winning_move) + " " + message
-            
 
-        if __name__ == "__main__":
-            print(message)
-        else:
-            self.game.send_message(f"⚔️{winner.get_display_name()} and {loser.get_display_name()} are Dueling!⚔️")
-            self.game.send_message(message)
+        self.game.send_message(f"⚔️{winner.get_display_name()} and {loser.get_display_name()} are Dueling!⚔️")
+        self.game.send_message(message)
         return message
 
     def lose_swordfight(self, loser, winner):

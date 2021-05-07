@@ -5,6 +5,7 @@ import time
 import sys
 import asyncio
 import math
+import random
 
 import players
 from game import SingleHole
@@ -31,7 +32,8 @@ def limit_one_game_per_person(func):
         global users_with_games_active
 
         if message.author in users_with_games_active:
-            return await message.channel.send("To avoid lag, please wait for your current game to finish before starting any more.")
+            await message.channel.send("To avoid lag, please wait for your current game to finish before starting any more.")
+            return
         users_with_games_active.append(message.author)
         try:
             return await func(message, *args, **kwargs)
@@ -44,37 +46,33 @@ def limit_one_game_per_person(func):
 
     return wrapper
 
-@limit_one_game_per_person
-async def newglolfgame(message, glolfer_names, header=None, turns=60):
+async def newglolfgame(message, glolfer_names, header=None, max_turns=60):
     # start a round of glolf and return the winning player's name
 
     glolfgame = await message.channel.send("Beginning game...")
     try:
 
-        game = SingleHole(debug=debug,glolfer_names=glolfer_names)
+        game = SingleHole(debug=debug,glolfer_names=glolfer_names,max_turns=max_turns)
         await asyncio.sleep(2)
-        await glolfgame.edit(content=game.printgamestate(),header=header)
+        await glolfgame.edit(content=game.printgamestate(header=header))
+        await asyncio.sleep(2)
 
-        for i in range(turns):
-            await asyncio.sleep(3)
-            game.update()
-            await glolfgame.edit(content=game.printgamestate(),header=header)
+        while not game.over:
+            delay = game.update()
+            await glolfgame.edit(content=game.printgamestate(header=header))
+            await asyncio.sleep(delay)
 
-        await asyncio.sleep(3)
-        await glolfgame.edit(content=game.printgamestate(game_over=True, include_board=True,header=header))
+        await glolfgame.edit(content=game.printgamestate(include_board=True,header=header))
         await asyncio.sleep(10)
-        await glolfgame.edit(content=game.printgamestate(game_over=True, include_board=False,header=header))
+        await glolfgame.edit(content=game.printgamestate(include_board=False,header=header))
         return game.compute_winner()
     except (Exception, KeyboardInterrupt) as e:
             await glolfgame.add_reaction('⚠️')
             raise e
 
+@limit_one_game_per_person
 async def glolfcommand(message):
     # parse a glolf command
-
-    global users_with_games_active
-    if message.author in users_with_games_active and not debug:
-        return await message.channel.send("To avoid lag, please wait for your current game to finish before starting another.")
 
     arguments = message.content.split("\n") #first line has "!glolf" on it
     glolfer_names = []
@@ -111,7 +109,6 @@ async def one_v_one_glolftourney_oneround(message):
         return
     
     await message.channel.send(f"One round of {len(glolfer_names)} people starting...")
-    users_with_games_active.append(message.author)
 
     round_num = 1
     move_onto_next_round = []
@@ -125,7 +122,9 @@ async def one_v_one_glolftourney_oneround(message):
         if debug:
             turns = 3
 
-        winner = await newglolfgame(message.channel, glolfer_names=glolfers, header=f"- Match {int(index/2)+1} of round {round_num}!",turns=turns)
+        
+        winner = await newglolfgame(message, glolfer_names=glolfers, header=f"Match {int(index/2)+1}/{int(len(glolfer_names)/2)} of round {round_num}!",turns=turns)
+
         if winner is not None:
             move_onto_next_round.append(winner.name)
         else:
@@ -135,7 +134,7 @@ async def one_v_one_glolftourney_oneround(message):
     glolfer_names = move_onto_next_round
 
     if len(move_onto_next_round) > 1:
-        await message.channel.send(f"{len(move_onto_next_round)} contestants move on: {', '.join(move_onto_next_round)}.")
+        await message.channel.send(f"**Round results:** {len(move_onto_next_round)} contestants move on: {', '.join(move_onto_next_round)}.")
         await asyncio.sleep(60)
 
 
@@ -171,25 +170,25 @@ async def one_v_one_glolftourney(message):
             glolfers = [glolfer_names[index],glolfer_names[index+1]]
             await asyncio.sleep(2)
 
-            turns = 60  
+            max_turns = 60  
             if debug:
-                turns = 3
+                max_turns = 3
 
-            winner = await newglolfgame(message.channel, glolfer_names=glolfers, header=f"- Match {int(index/2)+1} of round {round_num}!",turns=turns)
+            winner = await newglolfgame(message, glolfer_names=glolfers, header=f"Match {int(index/2)+1}/{int(len(glolfer_names)/2)} of round {round_num}!",max_turns=max_turns)
             if winner is not None:
                 move_onto_next_round.append(winner.name)
             else:
                 winningname = random.choice(glolfers)
                 move_onto_next_round.append(winningname)
-                await message.channel.send(f"Tie game! {winningname} wins the tiebreaking swordfight to advance to the next round!")
-                await asyncio.sleep(30)
+                await message.channel.send(f"Tie game! {winningname} wins the tiebreaking duel to advance to the next round!")
+                await asyncio.sleep(5)
         glolfer_names = move_onto_next_round
 
         if len(move_onto_next_round) > 1:
-            await message.channel.send(f"{len(move_onto_next_round)} contestants move on: {', '.join(move_onto_next_round)}. Next round starts in one minute...")
+            await message.channel.send(f"**Round {round_num} results:** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in one minute...")
             await asyncio.sleep(60)
     
-    await message.channel.send(f"{glolfer_names[0]} wins the tournament!")
+    await message.channel.send(f"**{glolfer_names[0]} wins the tournament!**")
 
 async def get_glolfer_stats(message):
     try:

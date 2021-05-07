@@ -18,12 +18,16 @@ class SingleHoleScoresheet:
         self.balls_scored = 0
 
 class SingleHole:
-    def __init__(self, debug=False, glolfer_names=[]):
+    def __init__(self, debug=False, glolfer_names=[], max_turns=60):
         self.debug = debug
 
         self.objects = []
         self.scores = {} #glolfer : SingleHoleScore(glolfer)
         self.turn_number = 0
+        self.max_turns = max_turns
+
+        self.over = False
+        self.custom_winner_name = None
 
         self.wind = random.choice(("Ominous","Pheasant","Fruity","Monsoon","Trade","Purple","Tasteless","Mechanical","Electric","Four-dimensional","Exact","Differential","Manifold","Change","Aggressively Normal")) #purely decorative for now
         self.windDirection = np.random.random(2) # [blah,blah] 0-1 each coord
@@ -57,7 +61,7 @@ class SingleHole:
             else:
                 # Out of flags, throw em anywhere
                 new_glolfer_pos = self.course.random_position_on_course()         
-            self.add_player(position=new_glolfer_pos, playername=name)
+            self.add_player(new_glolfer_pos, playername=name)
 
         self.message_queue = []
         self.new_objects = []
@@ -68,6 +72,9 @@ class SingleHole:
         self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
 
     def update(self):
+        if self.over:
+            return
+
         # one turn
         for obj in self.objects + self.modifiers:
             obj.update()
@@ -81,7 +88,12 @@ class SingleHole:
         self.objects = [x for x in filter(lambda obj:not obj.isDead, self.objects)]
 
         self.turn_number += 1
+        if self.turn_number >= self.max_turns:
+            self.end()
         # todo: count scoring
+
+        delay_time = 2 + min(len(self.message_queue),6) # 2 seconds normally, 0.5 seconds per message, 10 seconds max
+        return delay_time
 
     def add_object(self, obj):
         # add an object to the game, guaranteeing it won't have update() called on it until next turn
@@ -112,13 +124,14 @@ class SingleHole:
             
 
         if game_over:
-            embed.add_field(name="Game over!", value=f"🎉{self.compute_winner_name()} wins!🎉")
+            embed.add_field(name="Game over!", value=f"🎉 {self.compute_winner_name()} wins! 🎉")
 
         embed.set_footer(text="Brought to you by Instigator Hillexed#8194.")
         return embed
 
 
-    def printgamestate(self, game_over=False, include_board=True, header=None):
+    def printgamestate(self, include_board=True, header=None):
+        # also clears message queue
         string = ""
 
         string += "        🏌️** Glolf! (alpha)**"
@@ -126,7 +139,7 @@ class SingleHole:
             string += f" - {header}"
         string += "\n"
 
-        string += f"**Turn** {self.turn_number} - **Wind:** {self.wind} {utils.choose_direction_emoji(self.windDirection)} \n"
+        string += f"**Turn** {self.turn_number}/{self.max_turns} - **Wind:** {self.wind} {utils.choose_direction_emoji(self.windDirection)} \n"
 
         # any status update messages
         if len(self.message_queue) == 0:
@@ -143,7 +156,7 @@ class SingleHole:
             string += "**Course:**\n"
             string += self.printboard()
 
-        if game_over:
+        if self.over:
             string += "**Final Score:**\n"
             string += self.print_score()
         else:
@@ -151,7 +164,7 @@ class SingleHole:
             string += self.print_score()
             
 
-        if game_over:
+        if self.over:
             string += f"**Game over!** 🎉{self.compute_winner_name()} wins!🎉"
         return string
         
@@ -205,11 +218,17 @@ class SingleHole:
             return winner
 
     def compute_winner_name(self):
+        if self.custom_winner_name is not None:
+            return self.custom_winner_name
+
         winner = self.compute_winner()
         if winner is not None:
             return winner.get_display_name()
         return "Everybody"
-            
+
+    def end(self, custom_winner_name=None):
+        self.over = True
+        self.custom_winner_name = custom_winner_name
 
     def print_score(self):
         string = ""
