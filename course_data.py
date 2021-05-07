@@ -376,14 +376,26 @@ courses = [
 
 # boardwalk by lazaretto
 '''
-:sunrise_over_mountains::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::crab::ocean:
+:sunrise_over_mountains::blue_car::truck::race_car::pickup_truck::pickup_truck::truck::blue_car::truck::crab::ocean:
 :yellow_square::beach_umbrella::golf::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::yellow_square::white_large_square::ocean:
 :yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
 :yellow_square::beach_umbrella::yellow_square::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::white_large_square::dolphin:
 :yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
 :yellow_square::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::golf::yellow_square::white_large_square::ocean:
 :yellow_square::yellow_square::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
+''',
+# rift chasm by hal 2000
 '''
+:green_square::green_square::green_square::green_square::green_square::black_large_square::black_large_square::black_large_square::black_large_square::blue_square::blue_square::blue_square:
+:green_square::green_square::green_square::green_square::black_large_square::boom::black_large_square::black_large_square::black_large_square::green_square::blue_square::blue_square:
+:green_square::green_square::green_square::green_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::green_square::green_square::blue_square:
+:green_square::green_square::green_square::green_square::black_large_square::black_large_square::black_large_square::boom::black_large_square::green_square::green_square::green_square:
+:green_square::golf::green_square::green_square::brown_square::brown_square::brown_square::brown_square::brown_square::green_square::green_square::green_square:
+:green_square::green_square::green_square::green_square::brown_square::brown_square::brown_square::brown_square::brown_square::green_square::golf::green_square:
+:green_square::green_square::green_square::black_large_square::boom::black_large_square::black_large_square::black_large_square::green_square::green_square::green_square::green_square:
+:blue_square::green_square::green_square::black_large_square::black_large_square::black_large_square::boom::black_large_square::mailbox_closed::green_square::green_square::green_square:
+:blue_square::blue_square::green_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::brown_square::brown_square:
+:blue_square::blue_square::blue_square::black_large_square::black_large_square::black_large_square::black_large_square::green_square::green_square::green_square::green_square::green_square:'''
 ]
 
 disabled_courses = [
