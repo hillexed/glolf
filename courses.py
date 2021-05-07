@@ -6,8 +6,8 @@ import entities
 import re
 
 
-def get_random_course():
-    return Course(course_data.get_random_course())
+def get_random_course(game):
+    return Course(game, course_data.get_random_course())
 
 VEHICLES = ("🚗","🚙","🚕","🚌","🚚","🚙")
 
@@ -95,10 +95,11 @@ class Course:
     bounds = [0,0]
     course_objects = []
 
-    def __init__(self, course_string):
+    def __init__(self, game, course_string):
         self.course_objects = []
         self.terrain = [[]]
         self.bounds = [0,0]
+        self.game = game
         self.parse_course_string(course_string)
 
     def random_position_on_course(self):
@@ -118,9 +119,12 @@ class Course:
                 if x == len(terrain):
                     terrain.append([])
                 if tileEmoji == "⛳":
-                    self.course_objects.append(entities.Hole(self,position=[x,y]))     
+                    self.course_objects.append(entities.Hole(self.game,position=[x,y]))     
                     self.num_holes += 1  
                     tileEmoji = "🟩"
+                if tileEmoji == "💥":
+                    self.course_objects.append(entities.RealityCrack(self.game,position=[x,y],life=999))
+                    tileEmoji = "⬛"
                 terrain[x].append(tileEmoji)
 
         self.terrain = terrain
