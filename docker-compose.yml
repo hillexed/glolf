@@ -1,0 +1,7 @@
+version: "3.8"
+
+services:
+  glolf:
+    image: "glolf"
+    environment:
+      - TOKEN=...
