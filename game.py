@@ -57,12 +57,15 @@ class SingleHole:
             else:
                 # Out of flags, throw em anywhere
                 new_glolfer_pos = self.course.random_position_on_course()         
-            newglolfer = glolfer.Glolfer(self, position=new_glolfer_pos, playername=name)
-            self.objects.append(newglolfer)
-            self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
+            self.add_player(position=new_glolfer_pos, playername=name)
 
         self.message_queue = []
         self.new_objects = []
+
+    def add_player(self, starting_position, playername):         
+        newglolfer = glolfer.Glolfer(self, position=starting_position, playername=playername)
+        self.objects.append(newglolfer)
+        self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
 
     def update(self):
         # one turn
