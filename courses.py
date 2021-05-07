@@ -3,6 +3,7 @@ import random
 
 import course_data
 import entities
+import re
 
 
 def get_random_course():
@@ -62,6 +63,31 @@ terrainTypes = {
     "🟨": HardToHitOutTerrain(0.3, "The sand grabs the ball! {} can't hit it out! "),
     "🕸️": HardToHitOutTerrain(0.3, "{} is stuck in the web! ")
 }
+
+emoji_to_leave_together = [ # emoji which display as one character on discord
+'1️⃣'
+]
+# todo: leave these together
+
+def split_counting_discord_emoji(line): # unused for now
+    # parse "abc:one:" into ['a','b','c',':one']
+    if line.count(":") % 2 == 1:
+        raise ValueError("unmatched : for emoji!")
+    index = 0
+    arr = []
+    while index < len(line):
+        newchar = line[index]
+        if newchar == ":":
+            # emoji detected
+            endindex = line.find(":",index+1)
+            if endindex == -1:
+                raise ValueError              
+            arr.append(line[index:endindex+1])
+            index = endindex+1
+        else:              
+            arr.append(line[index])
+            index += 1
+    return arr
 
 
 class Course:

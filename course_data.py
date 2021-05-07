@@ -227,17 +227,17 @@ courses = [
 ''',
 # gearball by octagenerian redpenguin
 '''
-:gear::gear::gear::gear::brown_square::orange_square::brown_square::gear::gear::gear::gear:
-:gear::orange_square::orange_square::red_square::orange_square::orange_square::orange_square::red_square::orange_square::orange_square::gear:
-:gear::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::gear:
-:gear::red_square::golf::orange_square::white_large_square::red_square::white_large_square::orange_square::orange_square::red_square::gear:
+⬛⬛⬛⬛:brown_square::orange_square::brown_square:⬛⬛⬛⬛
+⬛:orange_square::orange_square::red_square::orange_square::orange_square::orange_square::red_square::orange_square::orange_square:⬛
+⬛:orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square:⬛
+⬛:red_square::golf::orange_square::white_large_square::red_square::white_large_square::orange_square::orange_square::red_square:⬛
 :brown_square::orange_square::orange_square::white_large_square::red_square::red_square::white_large_square::white_large_square::orange_square::orange_square::brown_square:
 :orange_square::orange_square::orange_square::red_square::red_square::white_large_square::red_square::red_square::orange_square::orange_square::orange_square:
 :brown_square::orange_square::orange_square::white_large_square::white_large_square::red_square::red_square::white_large_square::orange_square::orange_square::brown_square:
-:gear::red_square::orange_square::orange_square::white_large_square::red_square::white_large_square::orange_square::golf::red_square::gear:
-:gear::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::gear:
-:gear::orange_square::orange_square::red_square::orange_square::orange_square::orange_square::red_square::orange_square::orange_square::gear:
-:gear::gear::gear::gear::brown_square::orange_square::brown_square::gear::gear::gear::gear:
+⬛:red_square::orange_square::orange_square::white_large_square::red_square::white_large_square::orange_square::golf::red_square:⬛
+⬛:orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square:⬛
+⬛:orange_square::orange_square::red_square::orange_square::orange_square::orange_square::red_square::orange_square::orange_square:⬛
+⬛⬛⬛⬛:brown_square::orange_square::brown_square:⬛⬛⬛⬛
 ''',
 # atlantis by zickery
 '''
@@ -376,16 +376,19 @@ courses = [
 
 # boardwalk by lazaretto
 '''
-:icecream::truck::race_car::pickup_truck::pickup_truck::people_holding_hands::blue_car::truck::sunrise_over_mountains::white_large_square::ocean:
-:salad::yellow_square::yellow_square::yellow_square::yellow_square::guide_dog::yellow_square::yellow_square::yellow_square::crab::ocean:
-:tropical_drink::beach_umbrella::golf::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::yellow_square::white_large_square::ocean:
-:poultry_leg::yellow_square::beach_umbrella::yellow_square::yellow_square::beach_umbrella::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
-:pretzel::yellow_square::beach_umbrella::yellow_square::volleyball::yellow_square::yellow_square::yellow_square::yellow_square::white_large_square::dolphin:
-:pizza::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
-:popcorn::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::golf::yellow_square::white_large_square::ocean:
-:hotdog::yellow_square::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
-''',
+:sunrise_over_mountains::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::crab::ocean:
+:yellow_square::beach_umbrella::golf::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::yellow_square::white_large_square::ocean:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
+:yellow_square::beach_umbrella::yellow_square::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::white_large_square::dolphin:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
+:yellow_square::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::golf::yellow_square::white_large_square::ocean:
+:yellow_square::yellow_square::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
+'''
+]
+
+disabled_courses = [
 # minesweeper by blamperer
+# for some reason :one: is showing up as 3 characters
 '''
 :blue_square::blue_square::blue_square::one::white_large_square::one::blue_square::blue_square::blue_square::blue_square:
 :blue_square::blue_square::blue_square::one::golf::one::blue_square::blue_square::one::one:
@@ -398,8 +401,8 @@ courses = [
 :white_large_square::two::one::blue_square::blue_square::one::one::one::blue_square::blue_square:
 :white_large_square::white_large_square::one::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
 ''',
-
 ]
+
 # to do: give each course a name
 
 
@@ -410,8 +413,15 @@ special_case_emojis = { #these are emojis which aren't converted to unicode by e
 ":frame_photo:":"🖼️",
 ":desktop:":"🖥️",
 ":couch:":"🛋️",
-":gear:":"⚙️",
-"⚙":"⚙️", # emojize converts :gear: to this tiny non-fullwidth thing (it's the same character, but missing a variation selector)
+
+# still-problematic emojis
+#":gear:":"⚙️",
+#"⚙":"⚙️", # emojize converts :gear: to this tiny non-fullwidth thing (it's the same character, but missing a variation selector)
+# ":one:":"1️⃣", #:one: works perfectly on discord but it's actually two emojis and a ZWJ, so python treats it as 3 characters.
+
+":beach_umbrella:":'🏖️',
+":salad:":'🥗',
+":hotdog:":'🌭',
 }
 
 
@@ -438,7 +448,7 @@ def verify_courses():
 
     if len(unconverted_emoji) > 0:
         print("!!!! WARNING: UNCONVERTED EMOJI STILL REMAIN!!!!")
-        print([x for x in unconverted_emoji])
+        print(unconverted_emoji)
         raise ValueError
 
 
