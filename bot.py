@@ -174,7 +174,19 @@ async def one_v_one_glolftourney(message):
             if debug:
                 max_turns = 3
 
-            winner = await newglolfgame(message, glolfer_names=glolfers, header=f"Match {int(index/2)+1}/{int(len(glolfer_names)/2)} of round {round_num}!",max_turns=max_turns)
+            round_name = f"round {round_num}"
+            if len(glolfer_names) == 2:
+                round_name = "the finals"
+            if len(glolfer_names) == 4 and round_num != 1:
+                round_name = "the semifinals"
+            if len(glolfer_names) == 8 and round_num != 1:
+                round_name = "the quarterfinals"
+
+            match_name = f"Match {int(index/2)+1}/{int(len(glolfer_names)/2)}"
+            if int(index/2)+1 == int(len(glolfer_names)/2) and round_name != "the finals":
+                match_name = "Final match"
+
+            winner = await newglolfgame(message, glolfer_names=glolfers, header=f"{match_name} of {round_name}!",max_turns=max_turns)
             if winner is not None:
                 move_onto_next_round.append(winner.name)
             else:
@@ -185,7 +197,14 @@ async def one_v_one_glolftourney(message):
         glolfer_names = move_onto_next_round
 
         if len(move_onto_next_round) > 1:
-            await message.channel.send(f"**Round {round_num} results:** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in one minute...")
+
+            round_descriptor = f"Round {round_num} results:"
+            if len(move_onto_next_round) == 2 and round_num != 1:
+                round_descriptor = "Semifinals results:"
+            if len(move_onto_next_round) == 4 and round_num != 1:
+                round_descriptor = "Quarterfinals results:"
+
+            await message.channel.send(f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in one minute...")
             await asyncio.sleep(60)
     
     await message.channel.send(f"**{glolfer_names[0]} wins the tournament!**")
