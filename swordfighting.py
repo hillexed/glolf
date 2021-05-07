@@ -110,7 +110,7 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
                         f"{winner.get_display_name()} dodges with a {random.choice(pose_adjectives)} backflip!",
                         f"{winner.get_display_name()} wavedashes away!",
                         f"{winner.get_display_name()} sidesteps the issue.",
-                        f"{winner.get_display_name()} cartwheels out of the way",
+                        f"{winner.get_display_name()} cartwheels out of the way!",
                         f"{winner.get_display_name()} dodges with a {random.choice(pose_adjectives)} scissors leap!",
                         f"{winner.get_display_name()} dodges with a back handspring!",
                         f"{winner.get_display_name()} dodges with a front handspring!",
@@ -240,7 +240,7 @@ class SwordfightingDecree():
             # should we start a swordfight?
             glolfer2 = self.game.get_closest_object(glolfer, Glolfer)
             a_hole = self.game.get_closest_object(glolfer, Hole)
-            if glolfer2 is not None and self.game.on_same_tile(glolfer2, glolfer) and not self.game.on_same_tile(glolfer, a_hole):
+            if glolfer2 is not None and self.game.on_same_tile(glolfer2, glolfer) and not self.game.on_same_tile(glolfer, a_hole) and random.random() < 0.5:
                 self.start_swordfight(glolfer, glolfer2)
                 in_swordfight = True
 
@@ -261,9 +261,9 @@ class SwordfightingDecree():
             self.player_hp[glolfer2] = glolfer2.stlats.marbles
 
         if not self.is_in_a_duel(glolfer2):
-            self.game.send_message(f"⚔️{glolfer1.get_display_name()} challenges {glolfer2.get_display_name()} to a Duel! En garde!")
+            self.game.send_message(f"⚔️ {glolfer1.get_display_name()} challenges {glolfer2.get_display_name()} to a Duel! En garde!")
         else:
-            self.game.send_message(f"⚔️{glolfer1.get_display_name()} joins the Duel, targeting {glolfer2.get_display_name()}! En garde!")
+            self.game.send_message(f"⚔️ {glolfer1.get_display_name()} joins the Duel, targeting {glolfer2.get_display_name()}! En garde!")
 
         self.new_swordfights.append((glolfer1, glolfer2))
         self.game.add_object(SwordfightIndicator(self.game, glolfer1.position))
@@ -340,22 +340,28 @@ class SwordfightingDecree():
 
 
     def handle_swordfight_result(self, winning_move, losing_move, winner, loser):
-        if winning_move == SWORDFIGHT_OPTIONS.kiss and losing_move != SWORDFIGHT_OPTIONS.kiss:
-            if random.random() > loser.stlats.aceness:
-                # asked to kiss, passed the ace check, partner reciprocates
-                losing_move = SWORDFIGHT_OPTIONS.kiss
-            if losing_move == SWORDFIGHT_OPTIONS.kiss:
-                self.game.end(custom_winner_name="Love") # TODO: implement
+        if winning_move == SWORDFIGHT_OPTIONS.kiss:
+
+            if losing_move != SWORDFIGHT_OPTIONS.kiss: 
+                # one side asks to kiss. roll to see if the other one accepts
+                if random.random() > loser.stlats.aceness:
+                    # asked to kiss, passed the ace check, partner reciprocates
+                    losing_move = SWORDFIGHT_OPTIONS.kiss
 
         message = choose_swordfight_message(winning_move, losing_move, winner, loser)
 
         if winning_move == losing_move:
-            message = "    " + self.get_emoji(winning_move) + " " + message
+            message = "    " + self.get_emoji(winning_move) + "  " + message
         else:
-            message = "    " + self.get_emoji(winning_move) + " " + message
+            message = "    " + self.get_emoji(winning_move) + "  " + message
 
-        self.game.send_message(f"⚔️{winner.get_display_name()} and {loser.get_display_name()} are Dueling!⚔️")
+        self.game.send_message(f"⚔️ {winner.get_display_name()} and {loser.get_display_name()} are Dueling! ⚔️")
         self.game.send_message(message)
+
+        # love wins
+        if winning_move == losing_move and winning_move == SWORDFIGHT_OPTIONS.kiss:
+            self.game.end(custom_winner_name="Love")
+
         return message
 
     def lose_swordfight(self, loser, winner):
@@ -386,7 +392,7 @@ class SwordfightingDecree():
             self.game.add_object(HittingArrow(self.game, utils.copyvec(winner.position), hitvec))
             self.game.add_object(ScoreConfetti(self.game, utils.copyvec(farthesthole.position)))
 
-            self.game.send_message(f"⚔️{first_message} {next_message} {utils.choose_direction_emoji(hitvec)}! Hole in one!")
+            self.game.send_message(f"⚔️ {first_message} {next_message} {utils.choose_direction_emoji(hitvec)}! Hole in one!")
 
         else:
             self.game.send_message("Wait. There's... no holes? {winner.get_display_name()} is a bit confused.")

@@ -106,15 +106,28 @@ class RealityCrack(Entity):
     displayEmoji = "💥"
     showOnBoard = True
     isDead = False
-    def __init__(self, game, position):
+    def __init__(self, game, position, life=None):
         self.position = np.array(position).astype(float)
         self.game = game
-        self.life = random.randrange(5,10)
+        if life is None:
+            self.life = random.randrange(5,10)
+        else:
+            self.life = life
+
+        self.timeBeforeCanTeleport = 0 
+        self.showOnBoard = True
 
     def update(self):
         self.life -= 1
         if self.life <= 0:
             self.isDead = True
+
+        if self.timeBeforeCanTeleport > 0:
+            self.timeBeforeCanTeleport -= 1
+            self.showOnBoard = False
+            return
+        else:
+            self.showOnBoard = True
     
         obj = self.game.get_closest_object(self)
         if obj is not None and self.game.on_same_tile(obj, self) and self is not obj and type(obj) != RealityCrack:
@@ -123,7 +136,7 @@ class RealityCrack(Entity):
             if len(otherflickers) > 0:
                 otherflicker = random.choice(otherflickers)
                 obj.position = utils.copyvec(otherflicker.position)
-                otherflicker.isDead = True
+                otherflicker.timeBeforeCanTeleport = 3
                 otherflicker.showOnBoard = False
                 self.game.send_message(f"{obj.displayEmoji} falls through a crack in spacetime to somewhere else!")
 
@@ -140,7 +153,7 @@ SwingType = collections.namedtuple("SwingType",[
 SwingTypes = {
     "drive": SwingType(name="drive",mean_power=6,min_power=2,max_power=7,power_variance=1,angle_variance=0.15),
     "chip": SwingType(name="chip",mean_power=3,min_power=2,max_power=3,power_variance=1,angle_variance=0.1),
-    "putt":SwingType(name="putt",mean_power=1,min_power=0,max_power=2,power_variance=0.3,angle_variance=0.04),
+    "putt":SwingType(name="putt",mean_power=1,min_power=0.5,max_power=2,power_variance=0.3,angle_variance=0.04),
 }
     
 

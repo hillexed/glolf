@@ -33,7 +33,7 @@ class SingleHole:
         self.windDirection = np.random.random(2) # [blah,blah] 0-1 each coord
 
         # parse course
-        self.course = courses.get_random_course()
+        self.course = courses.get_random_course(self)
         self.objects += self.course.get_objects()
         self.par=3
 
@@ -72,6 +72,8 @@ class SingleHole:
         self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
 
     def update(self):
+        self.message_queue = []
+
         if self.over:
             return
 
@@ -131,26 +133,28 @@ class SingleHole:
 
 
     def printgamestate(self, include_board=True, header=None):
-        # also clears message queue
         string = ""
 
-        string += "        🏌️** Glolf! (alpha)**"
+        string += "        🏌️** Glolf! (alpha)**🏌️"
         if header is not None:
             string += f" - {header}"
         string += "\n"
 
-        string += f"**Turn** {self.turn_number}/{self.max_turns} - **Wind:** {self.wind} {utils.choose_direction_emoji(self.windDirection)} \n"
+        if not self.over:
+            string += f"**Turn** {self.turn_number}/{self.max_turns} - **Wind:** {self.wind} {utils.choose_direction_emoji(self.windDirection)} \n"
+        else:
+            string += f"**Turn** {self.turn_number} - **Wind:** {self.wind} - **Finished**\n"
 
         # any status update messages
-        if len(self.message_queue) == 0:
-            events = ""
-        else:
-            events = ""
-            for line in self.message_queue:
-                events += line + '\n'
-        self.message_queue = []
+        if include_board:
+            if len(self.message_queue) == 0:
+                events = ""
+            else:
+                events = ""
+                for line in self.message_queue:
+                    events += line + '\n'
 
-        string += events + "\n"
+            string += events + "\n"
 
         if include_board:
             string += "**Course:**\n"
@@ -165,7 +169,7 @@ class SingleHole:
             
 
         if self.over:
-            string += f"**Game over!** 🎉{self.compute_winner_name()} wins!🎉"
+            string += f"Game over! 🎉 **{self.compute_winner_name()}** wins! 🎉"
         return string
         
 
@@ -229,6 +233,7 @@ class SingleHole:
     def end(self, custom_winner_name=None):
         self.over = True
         self.custom_winner_name = custom_winner_name
+        self.send_message(f"Game over! {self.compute_winner_name()} wins!")
 
     def print_score(self):
         string = ""
@@ -301,7 +306,7 @@ class SingleHole:
         if np.linalg.norm(shot_vec) > 6:
             length = "really long"
 
-        message = f"{shooting_player.get_display_name()} hits a {length} {swing.name} {utils.choose_direction_emoji(shot_vec)}!"
+        message = f"{shooting_player.get_display_name()} hits a {length} {swing.name}! {ball.displayEmoji}{utils.choose_direction_emoji(shot_vec)}"
         if self.debug:
             message += f"{shot_vec}"
         print(message)
