@@ -4,6 +4,10 @@ import glolfer
 import numpy as np
 import copy
 import random
+import logging
+logger = logging.getLogger(__name__)
+
+
 import courses
 from players import default_player_names
 from swordfighting import SwordfightingDecree
@@ -20,6 +24,7 @@ class SingleHoleScoresheet:
 class SingleHole:
     def __init__(self, debug=False, glolfer_names=[], max_turns=60):
         self.debug = debug
+        self.id = random.randrange(1,100000)
 
         self.objects = []
         self.scores = {} #glolfer : SingleHoleScore(glolfer)
@@ -45,7 +50,7 @@ class SingleHole:
         self.objects.append(glolfer.Ball(self, position=self.course.random_position_on_course()))
 
         if len(glolfer_names) == 0:
-            print("No glolfers, choosing random...")
+            logger.info(f"Game {self.id}: No glolfers, choosing random...")
             glolfer_names.append(random.choice(default_player_names))
             glolfer_names.append(random.choice(default_player_names))     
 
@@ -295,22 +300,28 @@ class SingleHole:
         return False
 
     def send_message(self, message):
+        logger.info(f"Game {self.id}: {message}")
         self.message_queue.append(message)
 
     def report_hit(self,shooting_player, ball,swing,club,shot_vec):
-        length = "short"
-        if np.linalg.norm(shot_vec) > 2:
-            length = "medium"
-        if np.linalg.norm(shot_vec) > 3:
-            length = "long"
+
         if np.linalg.norm(shot_vec) > 6:
             length = "really long"
+        elif np.linalg.norm(shot_vec) > 3:
+            length = "long"
+        elif np.linalg.norm(shot_vec) > 2:
+            length = "medium"
+        elif np.linalg.norm(shot_vec) > 1:
+            length = "short"
+        else:
+            length = "terribly short"
+        
 
         message = f"{shooting_player.get_display_name()} hits a {length} {swing.name}! {ball.displayEmoji}{utils.choose_direction_emoji(shot_vec)}"
         if self.debug:
+            logging.debug(message + f"{shot_vec}")
             message += f"{shot_vec}"
-        print(message)
 
         self.scores[shooting_player].total_strokes += 1
 
-        self.message_queue.append(message)
+        self.send_message(message)

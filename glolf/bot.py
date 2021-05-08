@@ -68,9 +68,8 @@ async def newglolfgame(message, glolfer_names, header=None, max_turns=60):
     # start a round of glolf and return the winning player's name
 
     glolfgame = await message.channel.send("Beginning game...")
-    logging.info(f"Starting game between {glolfer_names}")
+    logging.info(f"Starting game between {glolfer_names} in channel #{message.channel} in server '{message.channel.guild.name}'")
     try:
-
         game = SingleHole(debug=debug,glolfer_names=glolfer_names,max_turns=max_turns)
         await asyncio.sleep(2)
         await glolfgame.edit(content=game.printgamestate(header=header))
@@ -295,7 +294,7 @@ def user_is_admin(message):
 client = discord.Client()
 @client.event
 async def on_ready():
-    print("The bot is ready!")
+    logging.info("The bot is ready!")
 
 
 @client.event

@@ -2,6 +2,9 @@ import collections, random, math
 import numpy as np
 import utils
 
+import logging
+logger = logging.getLogger(__name__)
+
 class Entity():
     displayEmoji = "❓"
     showOnBoard = True
@@ -49,7 +52,7 @@ class Ball(Entity):
     def check_if_ball_scored(self):
         if self.game.object_shares_tile_with(self, Hole):
             # Score!
-            print("Score!")
+            logger.debug("Score!")
             if self.last_hit_by is not None:
                 self.game.send_message(f"{self.last_hit_by.get_display_name()} scores 🎊! {utils.score_name(self.strokes,self.game.par)}!")
                 self.game.scores[self.last_hit_by].scored_strokes += self.strokes

@@ -114,7 +114,6 @@ class Course:
 
         terrain = [[] for line in lines]
         for y, line in enumerate(lines):
-            #print((repr(y),line))
             for x,tileEmoji in enumerate(line):
                 if x == len(terrain):
                     terrain.append([])

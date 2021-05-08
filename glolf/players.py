@@ -97,7 +97,6 @@ class Player(NamedTuple):
         #twirliness-boosting stances
         if self.stlats.stance in ("Feint","Tricky","Pop-Punk","Flashy","Spicy",       "Corecore","Wobble","Lefty"): # style-boosting stances
             weights[2] += 0.5
-        print(weights)
 
         weights = sorted(weights, reverse=True)
 
