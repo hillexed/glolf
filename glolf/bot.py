@@ -106,103 +106,72 @@ async def glolfcommand(message):
 def biggest_power_of_two_less_than(n):
     return 2 ** math.floor(math.log2(n))
 
-
-@disable_if_update_coming
-@limit_one_game_per_person
-async def one_v_one_glolftourney_oneround(message):
-
-    arguments = message.content.split("\n") #first line has "!glolf" on it
-    glolfer_names = []
-    if len(arguments) > 1: # 0 players is fine
-        glolfer_names = arguments[1:]
-        num_players = len(glolfer_names)
-        if num_players == 1:
-            await message.channel.send("That's a short tournament... I guess they win by default!")
-            return None
-        if num_players % 2 == 1:
-            await message.channel.send("I need an even number of players!")
-            return None
-
-    else:
-        await message.channel.send("To use, please specify a list of competitors, on one line each")
-        return
-
-    await message.channel.send(f"One round of {len(glolfer_names)} people starting...")
-
-    round_num = 1
-    move_onto_next_round = []
-    for index in range(0,len(glolfer_names)-1,2):
-        # go down the bracket
-        # competitors
-        glolfers = [glolfer_names[index],glolfer_names[index+1]]
-        await asyncio.sleep(2)
-
-        turns = 60
-        if debug:
-            turns = 3
-
-
-        winner = await newglolfgame(message, glolfer_names=glolfers, header=f"Match {int(index/2)+1}/{int(len(glolfer_names)/2)} of round {round_num}!",turns=turns)
-
-        if winner is not None:
-            move_onto_next_round.append(winner.name)
-        else:
-            winningname = random.choice(glolfers)
-            move_onto_next_round.append(winningname)
-            await message.channel.send(f"Tie game! {winningname} wins the tiebreaking swordfight to advance to the next round!")
-    glolfer_names = move_onto_next_round
-
-    if len(move_onto_next_round) > 1:
-        await message.channel.send(f"**Round results:** {len(move_onto_next_round)} contestants move on: {', '.join(move_onto_next_round)}.")
-        await asyncio.sleep(60)
-
 @disable_if_update_coming
 @limit_one_game_per_person
 async def one_v_one_glolftourney(message):
     arguments = message.content.split("\n") #first line has "!glolf" on it
     glolfer_names = []
-    if len(arguments) > 1: # 0 players is fine
+    if len(arguments) > 1:
         glolfer_names = arguments[1:]
         num_players = len(glolfer_names)
         if num_players == 1:
             await message.channel.send("That's a short tournament... I guess they win by default!")
             return None
-    else:
+    else: # 0 players
         await message.channel.send("To use, please specify a list of competitors, on one line each")
-        return
-
-    # ensure # of entrants is a power of two
-    if not len(glolfer_names) == biggest_power_of_two_less_than(len(glolfer_names)):
-        await message.channel.send(f"I need a power-of-two number of people. You have {len(glolfer_names)}")
         return
 
 
     await message.channel.send(f"{len(glolfer_names)}-person tournament starting...")
+    move_onto_next_round = []
 
+    random.shuffle(glolfer_names)
+
+    competitors_this_round = glolfer_names[:]
+
+    # If # of entrants isn't a power of two, give some contestants byes
+    if not len(glolfer_names) == biggest_power_of_two_less_than(len(glolfer_names)):
+        #await message.channel.send(f"I need a power-of-two number of people. You have {len(glolfer_names)}")
+        num_matches_required = len(glolfer_names) - biggest_power_of_two_less_than(len(glolfer_names))
+
+        competitors_this_round = glolfer_names[0:num_matches_required*2]
+        move_onto_next_round = glolfer_names[num_matches_required*2:]
+
+        print(len(competitors_this_round)/2 + len(move_onto_next_round))
+        await message.channel.send(f"{', '.join(move_onto_next_round)} randomly recieve byes and move onto the next round. Let's see who joins them!")
+
+    # actual tourney time!
     round_num = 0
-    while len(glolfer_names) > 1:
+    while len(competitors_this_round) > 1:
         round_num+= 1
-        move_onto_next_round = []
-        for index in range(0,len(glolfer_names)-1,2):
+
+        max_turns = 60
+        if debug:
+            max_turns = 3
+
+        round_name = f"round {round_num}"
+        if len(competitors_this_round) + len(move_onto_next_round) == 2:
+            round_name = "the finals"
+        if len(competitors_this_round) + len(move_onto_next_round) == 4 and round_num != 1:
+            round_name = "the almostfinals"
+        if len(competitors_this_round) + len(move_onto_next_round) == 8 and round_num != 1:
+            round_name = "the nearfinals"
+        if len(move_onto_next_round) > 0:
+            # this is right after move_onto_next_round should be []
+            #if it isn't [], we're in the first round of a tourney with a non-power-of-two number of entrants
+            round_name = "qualifiers"
+
+        for index in range(0,len(competitors_this_round)-1,2):
             # go down the bracket
             # competitors
-            glolfers = [glolfer_names[index],glolfer_names[index+1]]
+            glolfers = [competitors_this_round[index],competitors_this_round[index+1]]
             await asyncio.sleep(2)
 
-            max_turns = 60
-            if debug:
-                max_turns = 3
+            match_number = int(index/2)+1
+            total_matches = int(len(competitors_this_round)/2)
 
-            round_name = f"round {round_num}"
-            if len(glolfer_names) == 2:
-                round_name = "the finals"
-            if len(glolfer_names) == 4 and round_num != 1:
-                round_name = "the almostfinals"
-            if len(glolfer_names) == 8 and round_num != 1:
-                round_name = "the nearfinals"
-
-            match_name = f"Match {int(index/2)+1}/{int(len(glolfer_names)/2)}"
-            if int(index/2)+1 == int(len(glolfer_names)/2) and round_name != "the finals":
+            match_name = f"Match {match_number}/{total_matches}"
+            if match_number == total_matches and round_name != "the finals" and total_matches == 1:
                 match_name = "Final match"
 
             winner = await newglolfgame(message, glolfer_names=glolfers, header=f"{match_name} of {round_name}!",max_turns=max_turns)
@@ -213,7 +182,6 @@ async def one_v_one_glolftourney(message):
                 move_onto_next_round.append(winningname)
                 await message.channel.send(f"Tie game! {winningname} wins the tiebreaking duel to advance to the next round!")
                 await asyncio.sleep(5)
-        glolfer_names = move_onto_next_round
 
         if len(move_onto_next_round) > 1:
 
@@ -226,7 +194,10 @@ async def one_v_one_glolftourney(message):
             await message.channel.send(f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in one minute...")
             await asyncio.sleep(60)
 
-    await message.channel.send(f"**{glolfer_names[0]} wins the tournament!**")
+        competitors_this_round = move_onto_next_round
+        move_onto_next_round = []
+
+    await message.channel.send(f"**{competitors_this_round[0]} wins the tournament!**")
 
 async def get_glolfer_stats(message):
     try:
@@ -315,8 +286,6 @@ async def on_message(message):
 
         if message.content.startswith(prefix + "tourney 1v1"):
             await one_v_one_glolftourney(message)
-        elif message.content.startswith(prefix + "tourney oneround"):
-            await one_v_one_glolftourney_oneround(message)
         else:
             await message.channel.send("The llawn only allows 1v1 tourneys right now. try "+prefix+"tourney 1v1")
 
@@ -342,7 +311,7 @@ async def on_message(message):
 
             update_coming = True        
             await message.channel.send("New games are now disabled. use !countgames to see how many are running.")
-        elif "true" in message.content:
+        elif "false" in message.content:
             update_coming = False
             await message.channel.send("New games are enabled again.")
         logging.info(f"Changed update_coming to {update_coming}")
