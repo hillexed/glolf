@@ -6,6 +6,8 @@ import sys
 import asyncio
 import math
 import random
+import logging
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 import players
 from game import SingleHole
@@ -17,7 +19,7 @@ prefix = '!'
 if len(sys.argv) > 1:
     if sys.argv[1] == "debug":
         debug=True
-        print("Debug mode on!")
+        logging.info("Debug mode on!")
         prefix = 'd' + prefix
 
 users_with_games_active = []
@@ -38,6 +40,7 @@ def limit_one_game_per_person(func):
         try:
             return await func(message, *args, **kwargs)
         except (Exception, KeyboardInterrupt) as e:
+                logging.error(e)
                 await message.add_reaction('⚠️')
                 raise e
         finally:
@@ -46,10 +49,26 @@ def limit_one_game_per_person(func):
 
     return wrapper
 
+update_coming = False
+
+def disable_if_update_coming(func):
+    '''
+    A decorator to disable starting new games if updates are coming
+    '''
+    async def wrapper(message, *args, **kwargs):
+        global update_coming
+        if update_coming:
+            await message.channel.send(":loop: HANG TIGHT FOR A MOMENT, GOT SOME RADICAL RENOVATIONS COMIN' RIGHT UP\n:loop: PLEASE LEAVE A MESSAGE AFTER THE TONE")
+            return
+        return await func(message, *args, **kwargs)
+    return wrapper
+
+
 async def newglolfgame(message, glolfer_names, header=None, max_turns=60):
     # start a round of glolf and return the winning player's name
 
     glolfgame = await message.channel.send("Beginning game...")
+    logging.info(f"Starting game between {glolfer_names}")
     try:
 
         game = SingleHole(debug=debug,glolfer_names=glolfer_names,max_turns=max_turns)
@@ -70,6 +89,7 @@ async def newglolfgame(message, glolfer_names, header=None, max_turns=60):
             await glolfgame.add_reaction('⚠️')
             raise e
 
+@disable_if_update_coming
 @limit_one_game_per_person
 async def glolfcommand(message):
     # parse a glolf command
@@ -88,7 +108,7 @@ def biggest_power_of_two_less_than(n):
     return 2 ** math.floor(math.log2(n))
 
 
-
+@disable_if_update_coming
 @limit_one_game_per_person
 async def one_v_one_glolftourney_oneround(message):
 
@@ -137,7 +157,7 @@ async def one_v_one_glolftourney_oneround(message):
         await message.channel.send(f"**Round results:** {len(move_onto_next_round)} contestants move on: {', '.join(move_onto_next_round)}.")
         await asyncio.sleep(60)
 
-
+@disable_if_update_coming
 @limit_one_game_per_person
 async def one_v_one_glolftourney(message):
     arguments = message.content.split("\n") #first line has "!glolf" on it
@@ -227,7 +247,7 @@ Stance: **{newplayer.stlats.stance}**
 {newplayer.aerodynamics_rating()}
 **Self-Awareness:**
 {newplayer.self_awareness_rating()}
-{newplayer.modifications_string()}'''
+{newplayer.vk_stat_of_the_day()}'''
             await message.channel.send(newmessage)
 
     except (Exception, KeyboardInterrupt) as e:
@@ -266,7 +286,6 @@ def user_is_admin(message):
     return False
 
 
-users_with_games_active = []
 
 
 
@@ -281,6 +300,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    global users_with_games_active
     if message.author == client.user or message.webhook_id is not None:
         return
 
@@ -289,7 +309,7 @@ async def on_message(message):
 
 
     elif message.content.startswith(prefix + "glolf"):
-        print("glolf detected")
+        logging.info("glolf detected")
         await glolfcommand(message)
 
     elif message.content.startswith(prefix + "tourney"):
@@ -301,37 +321,40 @@ async def on_message(message):
         else:
             await message.channel.send("The llawn only allows 1v1 tourneys right now. try "+prefix+"tourney 1v1")
 
-    elif message.content.startswith(prefix + "discordid"):
-        print(message.author.id) # you should only be able to access this if you're an admin
 
-    # 'forceupdate' auto-updater
-    elif user_is_admin(message) and message.content.startswith(prefix + "forceupdate"):
-        if "yes" not in message.content:
-            return await message.channel.send("Are you sure? If so add 'yes' to the end of your message")
-        import subprocess
-        output = subprocess.check_output(["git", "stash"])
-        await message.channel.send(output)
-        await asyncio.sleep(3)
-        output = subprocess.check_output(["git", "pull","--force"])
-        await message.channel.send(output)
-        await message.channel.send(">_< Looks good! Restart me whenever you're ready!")
-        print("Update complete! Now I need to be restarted!")
+
+    elif message.content.startswith(prefix + "admincommands"):
+        return await message.channel.send("!discordid, !addtempmodification, !updatecoming <true/false>, !clear_game_list, !forcequit")
+
+    elif message.content.startswith(prefix + "discordid"):
+        logging.info(message.author.id) # you should only be able to access this if you're an admin
 
     elif user_is_admin(message) and message.content.startswith(prefix + "addtempmodification"):
         await add_temp_modification(message)
 
-    # "remove_from_active_game_list" command. just in case
+    elif user_is_admin(message) and message.content.startswith(prefix + "countgames"):
+        await message.channel.send(f"There are {len(users_with_games_active)} users with games active right now.")
+
+    elif user_is_admin(message) and message.content.startswith(prefix + "updatecoming"):
+        global update_coming
+        if "true" not in message.content and "false" not in message.content:
+            return await message.channel.send(f"New games are disabled because an update's coming: {update_coming}. Change this by adding 'true' or 'false' to the command")
+        elif "true" in message.content:
+
+            update_coming = True        
+            await message.channel.send("New games are now disabled. use !countgames to see how many are running.")
+        elif "true" in message.content:
+            update_coming = False
+            await message.channel.send("New games are enabled again.")
+        logging.info(f"Changed update_coming to {update_coming}")
+
+
+    # "clear_game_list" command. just in case
     elif user_is_admin(message) and message.content.startswith(prefix + "clear_game_list"):
-        global users_with_games_active
-        await message.channel.send(f"Cleared users with active games list. It was previously {users_with_games_active}. The games are still running but those players can now start new games.")
-
+        msg = f"Cleared users with active games list. It was previously {users_with_games_active}. The games are still running but those players can now start new games."
+        await message.channel.send(msg)
+        logging.info(msg)
         users_with_games_active = []
-
-    # forcequit command
-    elif user_is_admin(message) and message.content.startswith(prefix + "forcequit"):
-        if "yes" not in message.content:
-            return await message.channel.send("Are you sure? If so add 'yes' to the end of your message")
-        exit()
 
 # now run the bot
 token = config["TOKEN"]

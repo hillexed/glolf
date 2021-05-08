@@ -1,5 +1,6 @@
 import random, uuid, math
 from typing import NamedTuple
+from datetime import date
 
 default_player_names = ("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri","Load Bearing Coconut")
     
@@ -132,7 +133,21 @@ class Player(NamedTuple):
         if len(self.modifications) == 0:
             return ""
         else:
-            return "**Modifications**:\n" + ", ".join(self.modifications)
+            return f"**Modifications**:\n{', '.join(self.modifications)}"
+
+    def vk_stat_of_the_day(self):
+        stlat_choices = list(self.stlats._fields)
+        stlat_choices.remove("fav_tea")
+        stlat_choices.remove("stance")
+        stlat_choices.remove("polkadottedness")
+        today = date.today()
+        rng = random.Random(today) # seed rng with today's date
+
+        stlatname = rng.choice(stlat_choices)
+        stlat = getattr(self.stlats, stlatname, ':ghost:')
+
+        fancystlatname = stlatname.replace("_"," ").title()
+        return f"**Today's Verboten Knowledge Stlat:**\n||{fancystlatname}: {stlat:.2f}||"
 
 
 
