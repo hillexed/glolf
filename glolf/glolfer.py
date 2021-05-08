@@ -159,7 +159,7 @@ class Glolfer(Entity):
     def choose_swing_type(self, target_vector):
         # currently very simple. swing types defined in entities.py
         
-        if np.linalg.norm(target_vector) > 8:
+        if np.linalg.norm(target_vector) > 7:
             return SwingTypes["drive"]
         elif np.linalg.norm(target_vector) > 3:
             return SwingTypes["chip"]
