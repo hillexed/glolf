@@ -428,7 +428,24 @@ courses = [
 :white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
 :white_large_square::white_large_square::white_large_square::white_large_square::golf::white_large_square::white_large_square::mountain_cableway:
 :white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
+''',
+# yellowstone hotsprings by epix
 '''
+:evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree: 
+:bison::bison::brown_square::green_square::golf::green_square::brown_square::green_square::brown_square: 
+:bison::brown_square::brown_square::brown_square::green_square::brown_square::brown_square::brown_square::hotsprings: 
+:brown_square::brown_square::hotsprings::red_square::red_square::red_square::brown_square::brown_square::brown_square: 
+:brown_square::brown_square::red_square::yellow_square::yellow_square::yellow_square::red_square::brown_square::brown_square: 
+:green_square::red_square::yellow_square::blue_square::hotsprings::blue_square::yellow_square::red_square::camera_with_flash: 
+:hotsprings::red_square::yellow_square::hotsprings::fog::hotsprings::yellow_square::red_square::hotsprings:
+:camera_with_flash::red_square::yellow_square::blue_square::hotsprings::blue_square::yellow_square::red_square::green_square: 
+:brown_square::brown_square::red_square::yellow_square::yellow_square::yellow_square::red_square::brown_square::brown_square: 
+:brown_square::brown_square::brown_square::red_square::red_square::red_square::hotsprings::brown_square::brown_square: 
+:hotsprings::brown_square::brown_square::brown_square::green_square::brown_square::brown_square::brown_square::bison: 
+:brown_square::green_square::brown_square::green_square::golf::green_square::brown_square::bison::bison:
+:evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree:
+''',
+
 ]
 
 disabled_courses = [
