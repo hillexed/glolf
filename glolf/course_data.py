@@ -433,17 +433,43 @@ courses = [
 '''
 :evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree: 
 :bison::bison::brown_square::green_square::golf::green_square::brown_square::green_square::brown_square: 
-:bison::brown_square::brown_square::brown_square::green_square::brown_square::brown_square::brown_square::hotsprings: 
-:brown_square::brown_square::hotsprings::red_square::red_square::red_square::brown_square::brown_square::brown_square: 
+:bison::brown_square::brown_square::brown_square::green_square::brown_square::brown_square::brown_square::brown_square: 
+:brown_square::brown_square::fog::red_square::red_square::red_square::fog::brown_square::brown_square: 
 :brown_square::brown_square::red_square::yellow_square::yellow_square::yellow_square::red_square::brown_square::brown_square: 
-:green_square::red_square::yellow_square::blue_square::hotsprings::blue_square::yellow_square::red_square::camera_with_flash: 
-:hotsprings::red_square::yellow_square::hotsprings::fog::hotsprings::yellow_square::red_square::hotsprings:
-:camera_with_flash::red_square::yellow_square::blue_square::hotsprings::blue_square::yellow_square::red_square::green_square: 
+:brown_square::red_square::yellow_square::blue_square::fog::blue_square::yellow_square::red_square::brown_square: 
+:brown_square::red_square::yellow_square::fog::fog::fog::yellow_square::red_square::brown_square: 
+:brown_square::red_square::yellow_square::blue_square::fog::blue_square::yellow_square::red_square::brown_square: 
 :brown_square::brown_square::red_square::yellow_square::yellow_square::yellow_square::red_square::brown_square::brown_square: 
-:brown_square::brown_square::brown_square::red_square::red_square::red_square::hotsprings::brown_square::brown_square: 
-:hotsprings::brown_square::brown_square::brown_square::green_square::brown_square::brown_square::brown_square::bison: 
+:brown_square::brown_square::fog::red_square::red_square::red_square::fog::brown_square::brown_square: 
+:brown_square::brown_square::brown_square::brown_square::green_square::brown_square::brown_square::brown_square::bison: 
 :brown_square::green_square::brown_square::green_square::golf::green_square::brown_square::bison::bison:
 :evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree:
+''',
+
+#glolfball planet by hal 2000
+'''
+:milky_way::milky_way::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::milky_way::milky_way:
+:milky_way::white_large_square::white_large_square::white_large_square::golf::white_large_square::white_large_square::white_large_square::milky_way:
+:white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square:
+:white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square:
+:white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square::black_large_square::white_large_square:
+:milky_way::white_large_square::white_large_square::white_large_square::golf::white_large_square::white_large_square::white_large_square::milky_way:
+:milky_way::milky_way::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::milky_way::milky_way:
+''',
+
+# billiards table (six holes) by blamperer
+
+'''
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square:
+:brown_square::golf::green_square::green_square::green_square::green_square::green_square::green_square::golf::green_square::green_square::green_square::green_square::green_square::green_square::golf::brown_square:
+:brown_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::brown_square:
+:brown_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::brown_square:
+:brown_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::brown_square:
+:brown_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::brown_square:
+:brown_square::golf::green_square::green_square::green_square::green_square::green_square::green_square::golf::green_square::green_square::green_square::green_square::green_square::green_square::golf::brown_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square:
 ''',
 
 ]
@@ -481,7 +507,7 @@ special_case_emojis = { #these are emojis which aren't converted to unicode by e
 #"⚙":"⚙️", # emojize converts :gear: to this tiny non-fullwidth thing (it's the same character, but missing a variation selector)
 # ":one:":"1️⃣", #:one: works perfectly on discord but it's actually two emojis and a ZWJ, so python treats it as 3 characters.
 
-":beach_umbrella:":'🏖️',
+":beach_umbrella:":'🏖️', #this is treated as two characters
 ":salad:":'🥗',
 ":hotdog:":'🌭',
 ":notepad_spiral:":'🗒️',
