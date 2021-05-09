@@ -413,6 +413,21 @@ courses = [
 :purple_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::purple_square: 
 :purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square:
 :purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::headphones::purple_square:
+''',
+# ski resort by lazaretto
+'''
+:mountain_snow::mountain_snow::mountain_snow::mountain_snow::mountain_snow::mountain_snow::mountain_snow::mountain_snow:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
+:white_large_square::golf::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
+:white_large_square::evergreen_tree::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
+:white_large_square::white_large_square::white_large_square::white_large_square::snowman::evergreen_tree::white_large_square::mountain_cableway:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
+:white_large_square::snowman::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
+:white_large_square::evergreen_tree::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
+:white_large_square::white_large_square::white_large_square::white_large_square::golf::white_large_square::white_large_square::mountain_cableway:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
 '''
 ]
 
@@ -430,22 +445,6 @@ disabled_courses = [
 :white_large_square::one::blue_square::blue_square::blue_square::one::golf::one::blue_square::blue_square:
 :white_large_square::two::one::blue_square::blue_square::one::one::one::blue_square::blue_square:
 :white_large_square::white_large_square::one::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
-''',
-# disabled for being too visually confusing, new version is in
-# old hades tiger pit by syl
-'''
-:fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
-:black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square::black_large_square::orange_square:
-:black_large_square::orange_square::fire::orange_square::black_large_square::orange_square::golf::fire::black_large_square::orange_square::tiger2::orange_square:
-:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square:
-:black_large_square::orange_square::tiger2::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square:
-:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
-:black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::fire:
-:black_large_square::orange_square::black_large_square::orange_square::tiger2::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
-:black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
-:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::golf::orange_square::black_large_square::orange_square::tiger2::orange_square:
-:black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square::black_large_square::orange_square:
-:fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
 ''',
 ]
 
@@ -471,6 +470,9 @@ special_case_emojis = { #these are emojis which aren't converted to unicode by e
 ":notepad_spiral:":'🗒️',
 ":clock:":'🕰️',
 ":e_mail:":'📧',
+":snowman:":'⛄',
+":mountain_snow:":"🏔️",
+
 }
 
 
