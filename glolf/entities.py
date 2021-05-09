@@ -54,11 +54,11 @@ class Ball(Entity):
             # Score!
             logger.debug("Score!")
             if self.last_hit_by is not None:
-                self.game.send_message(f"{self.last_hit_by.get_display_name()} scores 🎊! {utils.score_name(self.strokes,self.game.par)}!")
+                self.game.send_message(f"**{self.last_hit_by.get_display_name()} scores 🎊! {utils.score_name(self.strokes,self.game.par)}!**")
                 self.game.scores[self.last_hit_by].scored_strokes += self.strokes
                 self.game.scores[self.last_hit_by].balls_scored += 1
             else:
-                self.game.send_message(f"The ball scores itself 🎊! {utils.score_name(self.strokes,self.game.par)}!")
+                self.game.send_message(f"**The ball scores itself 🎊! {utils.score_name(self.strokes,self.game.par)}!**")
 
             self.game.add_object(ScoreConfetti(self.game, self.position))
             self.reset_at_random_point()
