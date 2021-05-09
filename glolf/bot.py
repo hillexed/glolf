@@ -211,6 +211,7 @@ async def get_glolfer_stats(message):
             newmessage = f'''**{newplayer.name}**
 Signature: {newplayer.emoji}
 Stance: **{newplayer.stlats.stance}**
+Favorite Tea: **{newplayer.stlats.fav_tea}**
 **Driving:**
 {newplayer.driving_rating()}
 **Grip:**
@@ -219,7 +220,8 @@ Stance: **{newplayer.stlats.stance}**
 {newplayer.aerodynamics_rating()}
 **Self-Awareness:**
 {newplayer.self_awareness_rating()}
-{newplayer.vk_stat_of_the_day()}'''
+{newplayer.vk_stat_of_the_day()}
+{newplayer.modifications_string()}'''
             await message.channel.send(newmessage)
 
     except (Exception, KeyboardInterrupt) as e:
@@ -230,10 +232,10 @@ Stance: **{newplayer.stlats.stance}**
 async def add_temp_modification(message):
     # Add a modification to the player until the bot restarts. Admin-only
     try:
-
-        rest = message.content.replace(prefix + "glolfer","").strip()
+        print(message.content)
+        rest = message.content.replace(prefix + "addtempmodification","").strip()
         if len(rest) == 0:
-            await message.channel.send("Please add a glolfer's name to check their stlats!")
+            await message.channel.send("Please add a glolfer's name!")
         else:
             if len(rest.split("\n")) < 2:
                 return await message.channel.send("Please add a glolfer's name, then the modification on a new line.")
@@ -245,7 +247,7 @@ async def add_temp_modification(message):
             newplayer.modifications.append(modification)
             players.known_players[glolfername] = newplayer
 
-            return await message.channel.send("Added modification {} to player {}. It'll go away when you restart the bot, so make sure to edit the code!")
+            return await message.channel.send(f"Added modification {} to player {}. It'll go away when you restart the bot, so make sure to edit the code!")
 
     except (Exception, KeyboardInterrupt) as e:
             await message.add_reaction('⚠️')

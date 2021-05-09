@@ -2,7 +2,7 @@ import random, uuid, math
 from typing import NamedTuple
 from datetime import date
 
-default_player_names = ("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri","Load Bearing Coconut")
+default_player_names = ("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri","Load Bearing Coconut", "Frankle Knives")
     
 
 
@@ -246,8 +246,9 @@ known_players = {
         tentacles=4,
         ),emoji="😅"),
     "Simulacrum": Player(name="Simulacrum", id=2,emoji="🐂",stlats=generate_random_stlats_from_name("Simulacrum"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
-    "Solar Dies": Player(name="Solar Dies", id=3,emoji="🦞",stlats=generate_random_stlats_from_name("Solar Dies"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈","1️"]),
+    "Solar Dies": Player(name="Solar Dies", id=3,emoji="🦞",stlats=generate_random_stlats_from_name("Solar Dies"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
     "Load Bearing Coconut": Player(name="Load Bearing Coconut", id=3,emoji="🦊",stlats=generate_random_stlats_from_name("Load Bearing Coconut"), modifications=["🧥"]),
+    "Frankle Knives": Player(name="Frankle Knives", id=4,emoji="🦎",stlats=generate_random_stlats_from_name("Frankle Knives"), modifications=["🧥"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
 
