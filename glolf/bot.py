@@ -146,6 +146,8 @@ async def one_v_one_glolftourney(message):
         round_num+= 1
 
         max_turns = 60
+        if len(competitors_this_round) >= 16:
+            max_turns = 40
         if debug:
             max_turns = 3
 
