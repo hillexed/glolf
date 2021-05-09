@@ -340,8 +340,10 @@ class SwordfightingDecree():
 
 
     def handle_swordfight_result(self, winning_move, losing_move, winner, loser):
-        if winning_move == SWORDFIGHT_OPTIONS.kiss:
 
+        print_in_summary = False
+        if winning_move == SWORDFIGHT_OPTIONS.kiss:
+            print_in_summary = True
             if losing_move != SWORDFIGHT_OPTIONS.kiss: 
                 # one side asks to kiss. roll to see if the other one accepts
                 if random.random() > loser.stlats.aceness:
@@ -356,7 +358,7 @@ class SwordfightingDecree():
             message = "    " + self.get_emoji(winning_move) + "  " + message
 
         self.game.send_message(f"⚔️ {winner.get_display_name()} and {loser.get_display_name()} are Dueling! ⚔️")
-        self.game.send_message(message)
+        self.game.send_message(message, print_in_summary)
 
         # love wins
         if winning_move == losing_move and winning_move == SWORDFIGHT_OPTIONS.kiss:

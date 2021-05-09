@@ -69,6 +69,7 @@ class SingleHole:
             self.add_player(new_glolfer_pos, playername=name)
 
         self.message_queue = []
+        self.messages_to_report_in_summary = []
         self.new_objects = []
 
     def add_player(self, starting_position, playername):         
@@ -158,6 +159,13 @@ class SingleHole:
                 events = ""
                 for line in self.message_queue:
                     events += line + '\n'
+
+            string += events + "\n"
+
+        if self.over and len(self.messages_to_report_in_summary) > 0:
+            events = "**Notable Events**:"
+            for line in self.messages_to_report_in_summary:
+                events += line + '\n'
 
             string += events + "\n"
 
@@ -299,9 +307,11 @@ class SingleHole:
             return True
         return False
 
-    def send_message(self, message):
+    def send_message(self, message, print_in_summary=False):
         logger.info(f"Game {self.id}: {message}")
         self.message_queue.append(message)
+        if print_in_summary:
+            self.messages_to_report_in_summary.append(message)
 
     def report_hit(self,shooting_player, ball,swing,club,shot_vec):
 
