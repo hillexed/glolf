@@ -140,7 +140,7 @@ class Glolfer(Entity):
 
         if shot_speed > 20:
             # REALLY LONG SHOT ALERT
-            self.game.send_message(f"💥 {self.get_display_name()}'s stroke tears a crack in spacetime! The ball disintegrates! 3-stroke penalty! 💥!")
+            self.game.send_message(f"💥 **{self.get_display_name()}'s stroke tears a crack in spacetime! The ball disintegrates! 3-stroke penalty! 💥!**")
             for i in range(25):
                 self.game.add_object(RealityCrack(self.game, self.game.course.random_position_on_course())) #show where you hit
             self.game.scores[self].total_strokes += 3
