@@ -162,21 +162,6 @@ courses = [
 :black_large_square::blue_square::black_large_square::blue_square::black_large_square::blue_square::golf::black_large_square::black_large_square:
 :black_large_square::blue_square::black_large_square::blue_square::black_large_square::blue_square::blue_square::blue_square::blue_square:
 ''',
-# hades tiger pit by syl
-'''
-:fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
-:black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square::black_large_square::orange_square:
-:black_large_square::orange_square::fire::orange_square::black_large_square::orange_square::golf::fire::black_large_square::orange_square::tiger2::orange_square:
-:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square:
-:black_large_square::orange_square::tiger2::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square:
-:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
-:black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::fire:
-:black_large_square::orange_square::black_large_square::orange_square::tiger2::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
-:black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
-:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::golf::orange_square::black_large_square::orange_square::tiger2::orange_square:
-:black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square::black_large_square::orange_square:
-:fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
-''',
 # dale by hal 2000
 '''
 :blue_square::blue_square::blue_square::blue_square::blue_square::yellow_square::blue_square::blue_square::blue_square::blue_square::blue_square:
@@ -376,13 +361,13 @@ courses = [
 
 # boardwalk by lazaretto
 '''
-:sunrise_over_mountains::blue_car::truck::race_car::pickup_truck::pickup_truck::truck::blue_car::truck::crab::ocean:
-:yellow_square::beach_umbrella::golf::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::yellow_square::white_large_square::ocean:
-:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
-:yellow_square::beach_umbrella::yellow_square::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::white_large_square::dolphin:
-:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
-:yellow_square::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::golf::yellow_square::white_large_square::ocean:
-:yellow_square::yellow_square::beach_umbrella::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::beach_umbrella::white_large_square::ocean:
+:sunrise_over_mountains:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:beach_umbrella:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:crab:﻿:ocean:﻿
+﻿:yellow_square:﻿:beach_umbrella:﻿:golf:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:beach_umbrella:﻿:yellow_square:﻿:white_large_square:﻿:ocean:﻿
+﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:beach_umbrella:﻿:yellow_square:﻿:yellow_square:﻿:beach_umbrella:﻿:white_large_square:﻿:ocean:﻿
+﻿:yellow_square:﻿:beach_umbrella:﻿:yellow_square:﻿:beach_umbrella:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:white_large_square:﻿:dolphin:﻿
+﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:beach_umbrella:﻿:white_large_square:﻿:ocean:﻿
+﻿:yellow_square:﻿:beach_umbrella:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:beach_umbrella:﻿:golf:﻿:yellow_square:﻿:white_large_square:﻿:ocean:﻿
+﻿:yellow_square:﻿:yellow_square:﻿:beach_umbrella:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:yellow_square:﻿:beach_umbrella:﻿:white_large_square:﻿:ocean:
 ''',
 # rift chasm by hal 2000
 '''
@@ -395,7 +380,40 @@ courses = [
 :green_square::green_square::green_square::black_large_square::boom::black_large_square::black_large_square::black_large_square::green_square::green_square::green_square::green_square:
 :blue_square::green_square::green_square::black_large_square::black_large_square::black_large_square::boom::black_large_square::mailbox_closed::green_square::green_square::green_square:
 :blue_square::blue_square::green_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::brown_square::brown_square:
-:blue_square::blue_square::blue_square::black_large_square::black_large_square::black_large_square::black_large_square::green_square::green_square::green_square::green_square::green_square:'''
+:blue_square::blue_square::blue_square::black_large_square::black_large_square::black_large_square::black_large_square::green_square::green_square::green_square::green_square::green_square:''',
+
+# hades tiger pit by syl, revamped by hal
+'''
+:fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
+:tiger2::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::tiger2:
+:orange_square::black_large_square::orange_square::black_large_square::orange_square::golf::orange_square::black_large_square::orange_square::black_large_square::orange_square:
+:orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square:
+:orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square:
+:orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square:
+:orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square:
+:orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square:
+:orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square:
+:orange_square::black_large_square::orange_square::black_large_square::orange_square::golf::orange_square::black_large_square::orange_square::black_large_square::orange_square:
+:tiger2::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::tiger2:
+:fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
+''',
+
+#mills phone by lazaretto
+'''
+:purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square:
+:purple_square::notes::blue_square::blue_square::blue_square::blue_square::signal_strength::battery::purple_square:
+:purple_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::purple_square: 
+:purple_square::blue_square::golf::blue_square::clock::blue_square::camera_with_flash::blue_square::purple_square:
+:purple_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::purple_square:
+:purple_square::blue_square::notepad_spiral::blue_square::blue_book::blue_square::speech_balloon::blue_square::purple_square: 
+:purple_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::purple_square:
+:purple_square::blue_square::candy::blue_square::e_mail::blue_square::golf::blue_square::purple_square:
+:purple_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::purple_square: 
+:purple_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::purple_square:
+:purple_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::purple_square: 
+:purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square:
+:purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::headphones::purple_square:
+'''
 ]
 
 disabled_courses = [
@@ -412,6 +430,22 @@ disabled_courses = [
 :white_large_square::one::blue_square::blue_square::blue_square::one::golf::one::blue_square::blue_square:
 :white_large_square::two::one::blue_square::blue_square::one::one::one::blue_square::blue_square:
 :white_large_square::white_large_square::one::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+''',
+# disabled for being too visually confusing, new version is in
+# old hades tiger pit by syl
+'''
+:fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
+:black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square::black_large_square::orange_square:
+:black_large_square::orange_square::fire::orange_square::black_large_square::orange_square::golf::fire::black_large_square::orange_square::tiger2::orange_square:
+:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square:
+:black_large_square::orange_square::tiger2::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square:
+:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
+:black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::black_large_square::fire:
+:black_large_square::orange_square::black_large_square::orange_square::tiger2::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
+:black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square:
+:black_large_square::orange_square::black_large_square::orange_square::black_large_square::fire::golf::orange_square::black_large_square::orange_square::tiger2::orange_square:
+:black_large_square::fire::black_large_square::orange_square::black_large_square::orange_square::black_large_square::orange_square::fire::orange_square::black_large_square::orange_square:
+:fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
 ''',
 ]
 
@@ -434,6 +468,9 @@ special_case_emojis = { #these are emojis which aren't converted to unicode by e
 ":beach_umbrella:":'🏖️',
 ":salad:":'🥗',
 ":hotdog:":'🌭',
+":notepad_spiral:":'🗒️',
+":clock:":'🕰️',
+":e_mail:":'📧',
 }
 
 
