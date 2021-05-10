@@ -183,7 +183,7 @@ class SingleHole:
             
 
         if self.over:
-            string += f"Game over! 🎉 **{self.compute_winner_name()}** wins! 🎉"
+            string += f"Game over! 🎉 **{self.compute_winner_name()}** wins! 🎉\n_ _"
         return string
         
 
@@ -247,7 +247,7 @@ class SingleHole:
     def end(self, custom_winner_name=None):
         self.over = True
         self.custom_winner_name = custom_winner_name
-        self.send_message(f"Game over! {self.compute_winner_name()} wins!")
+        self.send_message(f"**Game over! {self.compute_winner_name()} wins!**")
 
     def print_score(self):
         string = ""

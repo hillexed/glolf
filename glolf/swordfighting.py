@@ -407,7 +407,7 @@ class SwordfightingDecree():
             self.game.add_object(HittingArrow(self.game, utils.copyvec(winner.position), hitvec))
             self.game.add_object(ScoreConfetti(self.game, utils.copyvec(farthesthole.position)))
 
-            self.game.send_message(f"⚔️ {first_message} {next_message} {utils.choose_direction_emoji(hitvec)}! Hole in one!")
+            self.game.send_message(f"⚔️ **{first_message} {next_message} {utils.choose_direction_emoji(hitvec)}! Hole in one!**")
 
         else:
             self.game.send_message("Wait. There's... no holes? {winner.get_display_name()} is a bit confused.")
