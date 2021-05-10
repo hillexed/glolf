@@ -41,7 +41,7 @@ def limit_one_game_per_person(func):
         try:
             return await func(message, *args, **kwargs)
         except (Exception, KeyboardInterrupt) as e:
-                logging.error(e)
+                logging.exception(e)
                 await message.add_reaction('⚠️')
                 raise e
         finally:
