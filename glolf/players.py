@@ -224,6 +224,10 @@ def generate_random_stlats_from_name(name="Random Player"):
 
     )
 
+def player_with_mods_but_random_stats(name, mods):
+    player = generate_random_player_from_name(name)
+    player.modifications = mods
+    return player
 
 
 # Easter egg: polkadot has max stats
@@ -251,10 +255,11 @@ known_players = {
         unworthiness=0,
         tentacles=4,
         ),emoji="😅"),
-    "Simulacrum": Player(name="Simulacrum", id=2,emoji="🐂",stlats=generate_random_stlats_from_name("Simulacrum"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
-    "Solar Dies": Player(name="Solar Dies", id=3,emoji="🦞",stlats=generate_random_stlats_from_name("Solar Dies"), modifications=["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
-    "Load Bearing Coconut": Player(name="Load Bearing Coconut", id=3,emoji="🦊",stlats=generate_random_stlats_from_name("Load Bearing Coconut"), modifications=["🧥"]),
-    "Frankle Knives": Player(name="Frankle Knives", id=4,emoji="🦎",stlats=generate_random_stlats_from_name("Frankle Knives"), modifications=["🧥"]),
+    "Simulacrum": player_with_mods_but_random_stats("Simulacrum",["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
+    "Solar Dies": player_with_mods_but_random_stats("Solar Dies",["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
+    "Load Bearing Coconut": player_with_mods_but_random_stats("Load Bearing Coconut",["🧥"]),
+    "Frankle Knives": player_with_mods_but_random_stats("Frankle Knives",["🧥"]),
+    "1": player_with_mods_but_random_stats("1",["🤝💖"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
 

@@ -246,9 +246,9 @@ async def add_temp_modification(message):
 
             newplayer = players.get_player_from_name(glolfername)
             newplayer.modifications.append(modification)
-            players.known_players[glolfername] = newplayer
+            players.known_players[glolfername.title()] = newplayer
 
-            return await message.channel.send("Added modification {modification} to player {glolfername}. It'll go away when you restart the bot, so make sure to edit the code!")
+            return await message.channel.send(f"Added modification {modification} to player {glolfername}. It'll go away when you restart the bot, so make sure to edit the code!")
 
     except (Exception, KeyboardInterrupt) as e:
             await message.add_reaction('⚠️')
