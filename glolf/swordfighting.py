@@ -10,27 +10,6 @@ class SWORDFIGHT_OPTIONS(Enum):
     stylish=3
     kiss=4
 
-
-
-def get_swordfight_move(player):
-
-    options = (SWORDFIGHT_OPTIONS.offensive, SWORDFIGHT_OPTIONS.defensive, SWORDFIGHT_OPTIONS.stylish, SWORDFIGHT_OPTIONS.kiss)
-    kiss_chance = 0.01
-    weights = [player.stlats.churliness, player.stlats.earliness, player.stlats.twirliness, kiss_chance/(player.stlats.aceness+1)]
-
-
-    # churliness-boosting stances
-    if player.stlats.stance in ("Aggro","Powerful","Hand to Hand","DPS","Explosive","Hardcore", "Wibble","Electric"): #offense-boosting stances
-        weights[0] += 0.5
-    # earliness-boosting stances
-    elif player.stlats.stance in ("Tanky","Twitchy","Repose","Reverse","Softcore",  "Cottagecore","Pomegranate"): # defense-boosting stances
-        weights[1] += 0.5
-    #twirliness-boosting stances
-    if player.stlats.stance in ("Feint","Tricky","Pop-Punk","Flashy","Spicy",       "Corecore","Wobble","Lefty"): # style-boosting stances
-        weights[2] += 0.5
-
-    return utils.random_weighted_choice(options, weights)
-
 pose_adjectives = ('menacing','disgusting','confusing','flat','2D','impressive','unflappable','flappable','owlish','goofy','light-hearted','clever','maniacal','majestic','limp','tight','tall','steel','sawtooth','fluttering','shivering','acidic',
 'harsh','dreaded','slim','spicy','painful','healing','one-of-a-kind','bootleg','bootleg','abhorrent','juicy','clumsy','spectacular','quizzical','breezy','familiar','coordinated','reverse','dimensional',
 'floating','invisible','compound','cute','socialist','dramatic')
@@ -196,15 +175,17 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
 class SwordfightingDecree():
     # handles all logic for swordfights, including inserting into glolfer.update()
 
-    player_hp = {}
     starting_hp = 3
-    current_swordfights = []
-    new_swordfights = []
-    stunned_from_swordfight = []
+    players_in_interdimensional_void = [] # shared among all games
+    dimensional_travel_chance = 0.05 # TODO: CHANGE
 
 
     def __init__(self, game):
         self.game = game
+        self.current_swordfights = []
+        self.new_swordfights = []
+        self.stunned_from_swordfight = []
+        self.player_hp = {}
 
     def on_glolfer_move(self, glolfer, target): #return a new target to move towards if needed
         return None
@@ -220,6 +201,30 @@ class SwordfightingDecree():
             if glolfer in fight:
                 in_swordfight = True
         return in_swordfight
+
+
+
+    def get_swordfight_move(self, player):
+
+        options = (SWORDFIGHT_OPTIONS.offensive, SWORDFIGHT_OPTIONS.defensive, SWORDFIGHT_OPTIONS.stylish, SWORDFIGHT_OPTIONS.kiss)
+        kiss_chance = 0.01
+        weights = [player.stlats.churliness, player.stlats.earliness, player.stlats.twirliness, kiss_chance/(player.stlats.aceness+1)]
+
+        if self.game.turn_number < 10:
+            weights[3] = 0 # no kissing until at least a little game has passed
+
+
+        # churliness-boosting stances
+        if player.stlats.stance in ("Aggro","Powerful","Hand to Hand","DPS","Explosive","Hardcore", "Wibble","Electric"): #offense-boosting stances
+            weights[0] += 0.5
+        # earliness-boosting stances
+        elif player.stlats.stance in ("Tanky","Twitchy","Repose","Reverse","Softcore",  "Cottagecore","Pomegranate"): # defense-boosting stances
+            weights[1] += 0.5
+        #twirliness-boosting stances
+        if player.stlats.stance in ("Feint","Tricky","Pop-Punk","Flashy","Spicy",       "Corecore","Wobble","Lefty"): # style-boosting stances
+            weights[2] += 0.5
+
+        return utils.random_weighted_choice(options, weights)
         
 
     def on_glolfer_move(self, glolfer, target):
@@ -276,6 +281,12 @@ class SwordfightingDecree():
         self.current_swordfights = self.current_swordfights + self.new_swordfights
         self.new_swordfights = []
 
+        if len(self.players_in_interdimensional_void) > 0:
+            player_name, source_game_id = random.choice(self.players_in_interdimensional_void)
+            if self.game.turn_number == 5 and self.game.id != source_game_id:
+                self.game.add_player(self.game.course.random_position_on_course(), player_name)
+                self.game.send_message(f"**💥 {player_name} tumbles out of a crack in reality onto the course!**", print_in_summary=True)
+
     def swordfight(self, glolfer1, glolfer2):
 
         # if one of the players got moved, stop fighting
@@ -283,6 +294,7 @@ class SwordfightingDecree():
             if (glolfer1, glolfer2) in self.current_swordfights:
                 self.current_swordfights.remove((glolfer1, glolfer2))   
                 self.game.send_message(f"⚔️ The Duel between {glolfer1.get_display_name()} and {glolfer2.get_display_name()} is called off!") 
+                return 
 
         # see who loses
         if self.player_hp[glolfer1] <= 0:
@@ -295,8 +307,8 @@ class SwordfightingDecree():
 
         self.game.add_object(SwordfightIndicator(self.game, glolfer1.position))
 
-        p1move = get_swordfight_move(glolfer1)
-        p2move = get_swordfight_move(glolfer2)
+        p1move = self.get_swordfight_move(glolfer1)
+        p2move = self.get_swordfight_move(glolfer2)
 
         winning_combos = (# move 1, the thing move 1 beats
             (SWORDFIGHT_OPTIONS.defensive,SWORDFIGHT_OPTIONS.offensive),
@@ -346,6 +358,7 @@ class SwordfightingDecree():
             print_in_summary = True
             if losing_move != SWORDFIGHT_OPTIONS.kiss: 
                 # one side asks to kiss. roll to see if the other one accepts
+
                 if random.random() > loser.stlats.aceness:
                     # asked to kiss, passed the ace check, partner reciprocates
                     losing_move = SWORDFIGHT_OPTIONS.kiss
@@ -398,6 +411,13 @@ class SwordfightingDecree():
 
         else:
             self.game.send_message("Wait. There's... no holes? {winner.get_display_name()} is a bit confused.")
+
+        if not self.game.is_tournament and random.random() < self.dimensional_travel_chance:
+            if game.scores[loser].balls_scored - game.scores[winner].balls_scored > 2 and random.random() > winner.needlethreadableness: #low-needlethreadableness players who are losing
+                # knocked into another game
+                self.players_in_interdimensional_void.append((loser.name, self.game.id))
+                self.game.objects.remove(loser)
+                self.game.send_message(f"💥 **Reality cracks! {winner.get_display_name()} knocks {loser.get_display_name()} out of reality!**", print_in_summary=True)
 
         if (winner, loser) in self.current_swordfights:
             self.current_swordfights.remove((winner, loser))

@@ -78,12 +78,17 @@ class PlayerStlats(NamedTuple):
     needlethreadableness: float = 0.8   # how well you thread the needle (multiplier for how much angle variance your shots have), lower = better
     left_handedness: float = 0.0        # how biased your shots are to the left or right. can go negative, 0 = best
 
-class Player(NamedTuple):
-    name: str
-    id: str
-    stlats: PlayerStlats 
-    emoji:str = "🏌️"
-    modifications:list = []
+class Player:
+    def __init__(self, name:str, stlats: PlayerStlats, emoji:str="🏌️", id:str="",modifications=None):
+        self.name = name
+        self.stlats = stlats
+        self.emoji = emoji
+        self.id = id
+
+        self.modifications = []
+        if modifications is not None:
+            self.modifications = modifications
+        
 
     def unpredictability(self): 
         # how much someone sticks to one swordfighting style. 0-1, 1 = better
@@ -201,6 +206,7 @@ def generate_random_stlats_from_name(name="Random Player"):
 
         earliness= rng.random(),
         twirliness= rng.random(),
+        churliness= rng.random(),
         aceness=rng.random(),
         marbles= rng.randrange(2,4),
 
