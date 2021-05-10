@@ -11,6 +11,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 import players
 from game import SingleHole
+from swordfighting import SwordfightingDecree
 
 
 debug = False
@@ -64,13 +65,13 @@ def disable_if_update_coming(func):
     return wrapper
 
 
-async def newglolfgame(message, glolfer_names, header=None, max_turns=60):
+async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tournament=False):
     # start a round of glolf and return the winning player's name
 
     glolfgame = await message.channel.send("Beginning game...")
     logging.info(f"Starting game between {glolfer_names} in channel #{message.channel} in server '{message.channel.guild.name}'")
     try:
-        game = SingleHole(debug=debug,glolfer_names=glolfer_names,max_turns=max_turns)
+        game = SingleHole(debug=debug,glolfer_names=glolfer_names,max_turns=max_turns,is_tournament=is_tournament)
         await asyncio.sleep(2)
         await glolfgame.edit(content=game.printgamestate(header=header))
         await asyncio.sleep(2)
@@ -176,7 +177,7 @@ async def one_v_one_glolftourney(message):
             if match_number == total_matches and round_name != "the finals" and total_matches == 1:
                 match_name = "Final match"
 
-            winner = await newglolfgame(message, glolfer_names=glolfers, header=f"{match_name} of {round_name}!",max_turns=max_turns)
+            winner = await newglolfgame(message, glolfer_names=glolfers, header=f"{match_name} of {round_name}!",max_turns=max_turns, is_tournament=True)
             if winner is not None:
                 move_onto_next_round.append(winner.name)
             else:
@@ -297,6 +298,11 @@ async def on_message(message):
         return await message.channel.send("!discordid, !addtempmodification, !updatecoming <true/false>, !clear_game_list, !forcequit")
 
     elif message.content.startswith(prefix + "discordid"):
+        logging.info(message.author.id) # you should only be able to access this if you're an admin
+
+    elif user_is_admin(message) and message.content.startswith(prefix + "void"):
+        
+        await message.channel.send(f"There are {len(SwordfightingDecree.players_in_interdimensional_void)} people in the interdimensional void right now: {SwordfightingDecree.players_in_interdimensional_void}")
         logging.info(message.author.id) # you should only be able to access this if you're an admin
 
     elif user_is_admin(message) and message.content.startswith(prefix + "addtempmodification"):

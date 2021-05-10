@@ -22,7 +22,7 @@ class SingleHoleScoresheet:
         self.balls_scored = 0
 
 class SingleHole:
-    def __init__(self, debug=False, glolfer_names=[], max_turns=60):
+    def __init__(self, debug=False, glolfer_names=[], max_turns=60, is_tournament=False):
         self.debug = debug
         self.id = random.randrange(1,100000)
 
@@ -33,6 +33,7 @@ class SingleHole:
 
         self.over = False
         self.custom_winner_name = None
+        self.is_tournament = is_tournament
 
         self.wind = random.choice(("Ominous","Pheasant","Fruity","Monsoon","Trade","Purple","Tasteless","Mechanical","Electric","Four-dimensional","Exact","Differential","Manifold","Change","Aggressively Normal")) #purely decorative for now
         self.windDirection = np.random.random(2) # [blah,blah] 0-1 each coord
@@ -163,7 +164,7 @@ class SingleHole:
             string += events + "\n"
 
         if self.over and len(self.messages_to_report_in_summary) > 0:
-            events = "**Notable Events**:"
+            events = "**Notable Events**:\n"
             for line in self.messages_to_report_in_summary:
                 events += line + '\n'
 
