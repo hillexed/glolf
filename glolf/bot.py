@@ -65,7 +65,7 @@ def disable_if_update_coming(func):
     return wrapper
 
 
-async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tournament=False):
+async def newglolfgame(message, glolfer_names, header=None, max_turns=30, is_tournament=False):
     # start a round of glolf and return the winning player's name
 
     glolfgame = await message.channel.send("Beginning game...")
@@ -101,6 +101,11 @@ async def glolfcommand(message):
         if len(glolfer_names) == 1:
             await message.channel.send("It's too dangerous to glolf alone. Bring an opponent.")
             return
+
+    if len(users_with_games_active) > 10:
+            await message.channel.send("There's too many games going on right now. To avoid lag, please wait a little bit till some games are done and try again later!")
+            return
+        
 
     await newglolfgame(message, glolfer_names)
 
