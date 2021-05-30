@@ -96,8 +96,8 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
                         f"{winner.get_display_name()} throws the attack aside!",))
 
                 rare_messages = (
-                    f"{winner.get_display_name()} swings! {random.choice(acrobatic_actions)}",
-                    f"{winner.get_display_name()} lunges! {random.choice(acrobatic_actions)}",
+                    f"{loser.get_display_name()} swings! {random.choice(acrobatic_actions)}",
+                    f"{loser.get_display_name()} lunges! {random.choice(acrobatic_actions)}",
                     f"{winner.get_display_name()} sees {loser.get_display_name()}'s advance coming! {random.choice(acrobatic_actions)}",
                     f"{winner.get_display_name()} talks {loser.get_display_name()} out of attacking for a second!",
                     f"{winner.get_display_name()} takes a yummy snack break!",

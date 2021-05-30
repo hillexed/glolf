@@ -68,7 +68,7 @@ class Glolfer(Entity):
 
         for modifier in self.get_relevant_modifiers():
             newtarget = modifier.on_glolfer_move(self, target)
-            if newtarget:
+            if newtarget is not None:
                 target = newtarget
 
         target_vec = target.position - self.position #todo: pathfinding

@@ -32,6 +32,12 @@ def glolfify(name):
     index = min([name.index(v) for v in vowels if v in name])
     return name[0:index] + 'l' + name[index:]
 
+def format_list_with_commas(alist):
+    if len(alist) < 3:
+        return ', '.join(alist)
+    else:
+        return ', '.join(alist[:-1]) + " and "+alist[-1]
+
 
 def score_name(strokes,par):
     if strokes == 1:
