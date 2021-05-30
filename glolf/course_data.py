@@ -412,7 +412,7 @@ courses = [
 :purple_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::purple_square:
 :purple_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::purple_square: 
 :purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square:
-:purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::headphones::purple_square:
+:purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square:
 ''',
 # ski resort by lazaretto
 '''
@@ -470,6 +470,34 @@ courses = [
 :brown_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::brown_square:
 :brown_square::golf::green_square::green_square::green_square::green_square::green_square::green_square::golf::green_square::green_square::green_square::green_square::green_square::green_square::golf::brown_square:
 :brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square:
+''',
+
+# sunset from a flotation device by lazaretto
+'''
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::cloud::yellow_square:
+:yellow_square::yellow_square::yellow_square::golf::yellow_square::yellow_square::yellow_square::yellow_square:
+:orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square:
+:red_square::cloud::red_square::red_square::red_square::red_square::red_square::red_square:
+:purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square:
+:ocean::ocean::ocean::ocean::ocean::ocean::ocean::ocean:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::golf::blue_square::blue_square::blue_square:
+:motorboat::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+''',
+
+# sand bird by hal 2000
+'''
+:blue_square::blue_square::blue_square::blue_square::blue_square::yellow_square::blue_square::blue_square::white_large_square::white_large_square::white_large_square:
+:white_large_square::white_large_square::white_large_square::blue_square::white_square_button::golf::white_square_button::blue_square::blue_square::white_large_square::white_large_square:
+:white_large_square::white_large_square::blue_square::blue_square::yellow_square::yellow_square::yellow_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::yellow_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::blue_square::blue_square::blue_square:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+:blue_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::yellow_square::yellow_square::yellow_square::blue_square::blue_square::blue_square::white_large_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::yellow_square::blue_square::blue_square::white_large_square::white_large_square::white_large_square:
+:white_large_square::blue_square::blue_square::yellow_square::yellow_square::golf::yellow_square::yellow_square::blue_square::white_large_square::white_large_square:
+:white_large_square::white_large_square::blue_square::blue_square::yellow_square::yellow_square::yellow_square::blue_square::blue_square::blue_square::blue_square:
 ''',
 
 ]

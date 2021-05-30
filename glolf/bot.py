@@ -7,6 +7,7 @@ import asyncio
 import math
 import random
 import logging
+import re
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 import players
@@ -113,10 +114,19 @@ async def glolfcommand(message):
 def biggest_power_of_two_less_than(n):
     return 2 ** math.floor(math.log2(n))
 
+def biggest_power_of_k_less_than(n, k=2):
+    return k ** math.floor(math.log2(n)/math.log2(k))
+
+
+battleRoyaleTypeRegex = re.compile("1(v1)+")
+
 @disable_if_update_coming
 @limit_one_game_per_person
-async def one_v_one_glolftourney(message):
-    arguments = message.content.split("\n") #first line has "!glolf" on it
+async def battle_royale_glolftourney(message, glolfers_per_game=2):
+    # a tourney where each game has multiple people, but only one can win each game
+    # if glolfers_per_game is 2, it's a 1v1, if glolfers_per_game is 3, each game is a 1v1v1, etc
+    assert glolfers_per_game > 1
+    arguments = message.content.split("\n") #first line has "!tourney" on it
     glolfer_names = []
     if len(arguments) > 1:
         glolfer_names = arguments[1:]
@@ -124,8 +134,11 @@ async def one_v_one_glolftourney(message):
         if num_players == 1:
             await message.channel.send("That's a short tournament... I guess they win by default!")
             return None
+        if num_players < glolfers_per_game:
+            await message.channel.send("There isn't enough players for even a single match. Everyone wins!")
+            return None
     else: # 0 players
-        await message.channel.send("To use, please specify a list of competitors, on one line each")
+        await message.channel.send("To use, please give a list of competitors after the command, each on a separate line.")
         return
 
     if len(users_with_games_active) > MAX_GAMES:
@@ -140,15 +153,17 @@ async def one_v_one_glolftourney(message):
 
     competitors_this_round = glolfer_names[:]
 
-    # If # of entrants isn't a power of two, give some contestants byes
-    if not len(glolfer_names) == biggest_power_of_two_less_than(len(glolfer_names)):
-        #await message.channel.send(f"I need a power-of-two number of people. You have {len(glolfer_names)}")
-        num_matches_required = len(glolfer_names) - biggest_power_of_two_less_than(len(glolfer_names))
+    # If # of entrants isn't a power of two, we don't have a full bracket, so give some contestants byes
+    full_bracket_size = biggest_power_of_k_less_than(len(glolfer_names), glolfers_per_game)
+    if not len(glolfer_names) == full_bracket_size:
+        if glolfers_per_game > 2:
+            return await message.channel.send(f"For this type of tourney I need a power-of-{glolfers_per_game} number of people. You have {len(glolfer_names)}")
+        num_matches_required = len(glolfer_names) - full_bracket_size
 
-        competitors_this_round = glolfer_names[0:num_matches_required*2]
-        move_onto_next_round = glolfer_names[num_matches_required*2:]
+        competitors_this_round = glolfer_names[0:num_matches_required*glolfers_per_game]
+        move_onto_next_round = glolfer_names[num_matches_required*glolfers_per_game:]
 
-        print(len(competitors_this_round)/2 + len(move_onto_next_round))
+        print(len(competitors_this_round)/glolfers_per_game + len(move_onto_next_round))
         await message.channel.send(f"{', '.join(move_onto_next_round)} randomly recieve byes and move onto the next round. Let's see who joins them!")
 
     # actual tourney time!
@@ -163,25 +178,25 @@ async def one_v_one_glolftourney(message):
             max_turns = 3
 
         round_name = f"round {round_num}"
-        if len(competitors_this_round) + len(move_onto_next_round) == 2:
+        if len(competitors_this_round) + len(move_onto_next_round) == glolfers_per_game:
             round_name = "the finals"
-        if len(competitors_this_round) + len(move_onto_next_round) == 4 and round_num != 1:
+        if len(competitors_this_round) + len(move_onto_next_round) == glolfers_per_game**2 and round_num != 1:
             round_name = "the almostfinals"
-        if len(competitors_this_round) + len(move_onto_next_round) == 8 and round_num != 1:
+        if len(competitors_this_round) + len(move_onto_next_round) == glolfers_per_game**3 and round_num != 1:
             round_name = "the nearfinals"
         if len(move_onto_next_round) > 0:
             # this is right after move_onto_next_round should be []
             #if it isn't [], we're in the first round of a tourney with a non-power-of-two number of entrants
             round_name = "qualifiers"
 
-        for index in range(0,len(competitors_this_round)-1,2):
+        for index in range(0,len(competitors_this_round)-1,glolfers_per_game):
             # go down the bracket
             # competitors
-            glolfers = [competitors_this_round[index],competitors_this_round[index+1]]
+            glolfers = [competitors_this_round[index+i] for i in range(glolfers_per_game) if index+i < len(competitors_this_round)]
             await asyncio.sleep(2)
 
-            match_number = int(index/2)+1
-            total_matches = int(len(competitors_this_round)/2)
+            match_number = int(index/glolfers_per_game)+1
+            total_matches = int(len(competitors_this_round)/glolfers_per_game)
 
             match_name = f"Match {match_number}/{total_matches}"
             if match_number == total_matches and round_name != "the finals" and total_matches == 1:
@@ -199,9 +214,9 @@ async def one_v_one_glolftourney(message):
         if len(move_onto_next_round) > 1:
 
             round_descriptor = f"Round {round_num} results:"
-            if len(move_onto_next_round) == 2 and round_num != 1:
+            if len(move_onto_next_round) == glolfers_per_game and round_num != 1:
                 round_descriptor = "Almostfinals results:"
-            if len(move_onto_next_round) == 4 and round_num != 1:
+            if len(move_onto_next_round) == glolfers_per_game**2 and round_num != 1:
                 round_descriptor = "Nearfinals results:"
 
             await message.channel.send(f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in one minute...")
@@ -211,6 +226,8 @@ async def one_v_one_glolftourney(message):
         move_onto_next_round = []
 
     await message.channel.send(f"**{competitors_this_round[0]} wins the tournament!**")
+
+
 
 async def get_glolfer_stats(message):
     try:
@@ -273,6 +290,25 @@ def user_is_admin(message):
 
 
 
+async def parse_tourney_message(message):
+    firstline = message.content.split("\n")[0]
+    tourneytype = firstline.replace(prefix + "tourney",'').strip()
+
+    if len(tourneytype) == 0:
+        return await message.channel.send("What type of tournament? Try "+prefix+"tourney 1v1")
+
+    is_battleroyale = battleRoyaleTypeRegex.match(tourneytype)
+    if is_battleroyale:
+        battletype = is_battleroyale.group(0)
+
+        num_participants_per_game = battletype.count("1")
+        if num_participants_per_game > 8:
+            return await message.channel.send("umm thats probably too many people")
+        return await battle_royale_glolftourney(message, num_participants_per_game)
+
+
+    return await message.channel.send("umm im not sure what that means. maybe you could try "+prefix+"tourney 1v1")
+
 
 
 
@@ -288,7 +324,6 @@ async def on_message(message):
     global users_with_games_active
     if message.author == client.user or message.webhook_id is not None:
         return
-
     if message.content.startswith(prefix + "glolfer"):
         await get_glolfer_stats(message)
 
@@ -297,14 +332,9 @@ async def on_message(message):
         logging.info("glolf detected")
         await glolfcommand(message)
 
+
     elif message.content.startswith(prefix + "tourney"):
-
-        if message.content.startswith(prefix + "tourney 1v1"):
-            await one_v_one_glolftourney(message)
-        else:
-            await message.channel.send("The llawn only allows 1v1 tourneys right now. try "+prefix+"tourney 1v1")
-
-
+        await parse_tourney_message(message)
 
     elif message.content.startswith(prefix + "admincommands"):
         return await message.channel.send("!discordid, !addtempmodification, !updatecoming <true/false>, !clear_game_list, !forcequit")
