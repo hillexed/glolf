@@ -259,6 +259,7 @@ known_players = {
     "Solar Dies": player_with_mods_but_random_stats("Solar Dies",["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
     "Load Bearing Coconut": player_with_mods_but_random_stats("Load Bearing Coconut",["🧥"]),
     "Frankle Knives": player_with_mods_but_random_stats("Frankle Knives",["🧥"]),
+    "Spooks McGee": player_with_mods_but_random_stats("Spooks McGee",["🧥"]),
     "1": player_with_mods_but_random_stats("1",["🤝💖"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
