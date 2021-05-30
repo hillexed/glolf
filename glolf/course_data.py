@@ -285,24 +285,7 @@ courses = [
 :spider_web::spider_web::spider_web::green_square::green_square::green_square::green_square::brown_square::brown_square::brown_square::spider_web:
 :spider_web::spider_web::spider_web::white_large_square::white_large_square::spider_web::white_large_square::white_large_square::brown_square::spider_web::spider_web:
 ''',
-#cursed madeleine by syl
-'''
-:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::black_large_square::black_large_square:
-:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
-:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
-:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
-:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::white_large_square::golf::white_large_square::golf::black_large_square::black_large_square:
-:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::black_large_square::black_large_square:
-:black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::brown_square::white_large_square::white_large_square::white_large_square::black_large_square::red_square::black_large_square:
-:black_large_square::black_large_square::brown_square::brown_square::brown_square::brown_square::blue_square::blue_square::brown_square::brown_square::black_large_square::black_large_square::black_large_square:
-:black_large_square::black_large_square::brown_square::brown_square::brown_square::blue_square::brown_square::blue_square::blue_square::blue_square::brown_square::black_large_square::black_large_square:
-:black_large_square::black_large_square::brown_square::brown_square::blue_square::blue_square::white_large_square::white_large_square::blue_square::blue_square::white_large_square::white_large_square::black_large_square:
-:black_large_square::black_large_square::brown_square::brown_square::brown_square::blue_square::white_large_square::white_large_square::blue_square::blue_square::white_large_square::white_large_square::black_large_square:
-:black_large_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::black_large_square::black_large_square:
-:black_large_square::brown_square::brown_square::brown_square::blue_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::black_large_square::black_large_square:
-:black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::brown_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square:
-:black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square:
-''',
+
 # wrong splort by zickery (it's a baseball diamond)
 '''
 :green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
@@ -516,6 +499,26 @@ disabled_courses = [
 :white_large_square::one::blue_square::blue_square::blue_square::one::golf::one::blue_square::blue_square:
 :white_large_square::two::one::blue_square::blue_square::one::one::one::blue_square::blue_square:
 :white_large_square::white_large_square::one::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+''',
+
+#cursed madeleine by syl
+# so big it cuts off the scoreboard
+'''
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::red_square::white_large_square::golf::white_large_square::golf::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::red_square::red_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::brown_square::white_large_square::white_large_square::white_large_square::black_large_square::red_square::black_large_square:
+:black_large_square::black_large_square::brown_square::brown_square::brown_square::brown_square::blue_square::blue_square::brown_square::brown_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::brown_square::brown_square::brown_square::blue_square::brown_square::blue_square::blue_square::blue_square::brown_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::brown_square::brown_square::blue_square::blue_square::white_large_square::white_large_square::blue_square::blue_square::white_large_square::white_large_square::black_large_square:
+:black_large_square::black_large_square::brown_square::brown_square::brown_square::blue_square::white_large_square::white_large_square::blue_square::blue_square::white_large_square::white_large_square::black_large_square:
+:black_large_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::black_large_square::black_large_square:
+:black_large_square::brown_square::brown_square::brown_square::blue_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::brown_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square:
 ''',
 ]
 
