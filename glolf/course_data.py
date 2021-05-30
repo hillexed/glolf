@@ -465,7 +465,7 @@ courses = [
 :ocean::ocean::ocean::ocean::ocean::ocean::ocean::ocean:
 :blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
 :blue_square::blue_square::blue_square::blue_square::golf::blue_square::blue_square::blue_square:
-:motorboat::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:speedboat::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
 ''',
 
 # sand bird by hal 2000
