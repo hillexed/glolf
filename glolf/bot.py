@@ -172,7 +172,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2):
         round_num+= 1
 
         max_turns = 60
-        if len(competitors_this_round) >= 16:
+        if len(competitors_this_round) >= 2*glolfers_per_game**3:
             max_turns = 40
         if debug:
             max_turns = 3
@@ -263,7 +263,7 @@ async def add_temp_modification(message):
         print(message.content)
         rest = message.content.replace(prefix + "addtempmodification","").strip()
         if len(rest) == 0:
-            await message.channel.send("Please add a glolfer's name!")
+            await message.channel.send("Please add a glolfer's name! It's !addtempmodification <glolfer>\n<modification>")
         else:
             if len(rest.split("\n")) < 2:
                 return await message.channel.send("Please add a glolfer's name, then the modification on a new line.")
@@ -337,7 +337,7 @@ async def on_message(message):
         await parse_tourney_message(message)
 
     elif message.content.startswith(prefix + "admincommands"):
-        return await message.channel.send("!discordid, !addtempmodification, !updatecoming <true/false>, !clear_game_list, !forcequit")
+        return await message.channel.send("!discordid, !addtempmodification, !updatecoming <true/false>, !clear_game_list, !forcequit, !countgames")
 
     elif message.content.startswith(prefix + "discordid"):
         logging.info(message.author.id) # you should only be able to access this if you're an admin
