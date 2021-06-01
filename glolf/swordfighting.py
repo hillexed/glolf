@@ -190,17 +190,23 @@ class SwordfightingDecree():
     def on_glolfer_move(self, glolfer, target): #return a new target to move towards if needed
         return None
 
-    def is_in_a_duel(self, glolfer):
 
-        in_swordfight = False
+    def get_current_duel(self, glolfer):
+
         for fight in self.current_swordfights:
             if glolfer in fight:
-                in_swordfight = True
+                return fight
 
         for fight in self.new_swordfights:
             if glolfer in fight:
-                in_swordfight = True
-        return in_swordfight
+                return fight
+
+        return None
+
+    def is_in_a_duel(self, glolfer):
+        if self.get_current_duel(glolfer) is not None:
+            return True
+        return False
 
 
 
@@ -208,6 +214,10 @@ class SwordfightingDecree():
 
         options = (SWORDFIGHT_OPTIONS.offensive, SWORDFIGHT_OPTIONS.defensive, SWORDFIGHT_OPTIONS.stylish, SWORDFIGHT_OPTIONS.kiss)
         kiss_chance = 0.01
+
+        if self.game.turn_number < self.game.max_turns/3:
+            kiss_chance = 0.00
+
         weights = [player.stlats.churliness, player.stlats.earliness, player.stlats.twirliness, kiss_chance/(player.stlats.aceness+1)]
 
         if self.game.turn_number < 10:
@@ -243,10 +253,10 @@ class SwordfightingDecree():
             
         if not in_swordfight:
             # should we start a swordfight?
-            glolfer2 = self.game.get_closest_object(glolfer, Glolfer)
+            target_glolfer = self.game.get_closest_object(glolfer, Glolfer)
             a_hole = self.game.get_closest_object(glolfer, Hole)
-            if glolfer2 is not None and self.game.on_same_tile(glolfer2, glolfer) and not self.game.on_same_tile(glolfer, a_hole) and random.random() < 0.5:
-                self.start_swordfight(glolfer, glolfer2)
+            if target_glolfer is not None and self.game.on_same_tile(target_glolfer, glolfer) and not self.game.on_same_tile(glolfer, a_hole) and random.random() < 0.5:
+                self.start_swordfight(glolfer, target_glolfer)
                 in_swordfight = True
 
         if in_swordfight:
@@ -257,26 +267,37 @@ class SwordfightingDecree():
             current_glolfer_action["action"] = "stunned" #stop the player from moving or hitting balls
             self.stunned_from_swordfight.remove(glolfer)
 
-    def start_swordfight(self, glolfer1, glolfer2):
+    def start_swordfight(self, initiating_glolfer, glolfer2):
         # start a swordfight
         # this means if there's 3 players on the same tile there'll be one player facing two swordfights
-        if glolfer1 not in self.player_hp:
-            self.player_hp[glolfer1] = glolfer1.stlats.marbles
+        if initiating_glolfer not in self.player_hp:
+            self.player_hp[initiating_glolfer] = initiating_glolfer.stlats.marbles
         if glolfer2 not in self.player_hp:
             self.player_hp[glolfer2] = glolfer2.stlats.marbles
 
-        if not self.is_in_a_duel(glolfer2):
-            self.game.send_message(f"⚔️ {glolfer1.get_display_name()} challenges {glolfer2.get_display_name()} to a Duel! En garde!")
-        else:
-            self.game.send_message(f"⚔️ {glolfer1.get_display_name()} joins the Duel, targeting {glolfer2.get_display_name()}! En garde!")
+        current_duel = self.get_current_duel(glolfer2) # a 'duel' is a list of multiple Players all dueling
 
-        self.new_swordfights.append((glolfer1, glolfer2))
-        self.game.add_object(SwordfightIndicator(self.game, glolfer1.position))
+        if current_duel is None:
+            self.game.send_message(f"⚔️ {initiating_glolfer.get_display_name()} challenges {glolfer2.get_display_name()} to a Duel! En garde!")
+            self.new_swordfights.append((initiating_glolfer, glolfer2))
+            self.game.add_object(SwordfightIndicator(self.game, initiating_glolfer.position))
+        else:
+            # join the duel that glolfer2 is in
+            self.remove_duel(current_duel)
+            self.new_swordfights.append(current_duel + (initiating_glolfer,))
+            self.game.send_message(f"⚔️ {initiating_glolfer.get_display_name()} joins the Duel between {self.format_participant_names(current_duel)}! En garde!")
+
+    def remove_duel(self, duel):
+        if duel in self.current_swordfights:
+            self.current_swordfights.remove(duel)
+        if duel in self.new_swordfights:
+            self.new_swordfights.remove(duel)
 
     def update(self):
 
-        for glolfer1, glolfer2 in self.current_swordfights[:]:
-            self.swordfight(glolfer1, glolfer2)
+        for duel in self.current_swordfights[:]:
+            glolfer1, glolfer2 = random.sample(duel, 2) 
+            self.swordfight(duel, glolfer1, glolfer2)
 
         self.current_swordfights = self.current_swordfights + self.new_swordfights
         self.new_swordfights = []
@@ -287,21 +308,25 @@ class SwordfightingDecree():
                 self.game.add_player(self.game.course.random_position_on_course(), player_name)
                 self.game.send_message(f"**💥 {player_name} tumbles out of a crack in reality onto the course!**", print_in_summary=True)
 
-    def swordfight(self, glolfer1, glolfer2):
+    def format_participant_names(self, duelist_list):
+        return utils.format_list_with_commas([p.get_display_name() for p in duelist_list])
+
+    def swordfight(self, current_duelists_list, glolfer1, glolfer2):
 
         # if one of the players got moved, stop fighting
         if not self.game.on_same_tile(glolfer1, glolfer2):
-            if (glolfer1, glolfer2) in self.current_swordfights:
-                self.current_swordfights.remove((glolfer1, glolfer2))   
-                self.game.send_message(f"⚔️ The Duel between {glolfer1.get_display_name()} and {glolfer2.get_display_name()} is called off!") 
+            if current_duelists_list in self.current_swordfights:
+                self.remove_duel(current_duelists_list)   
+                self.game.send_message(f"⚔️ The Duel between {self.format_participant_names(current_duelists_list)} is called off!")
+                # todo: if a 3-player duel loses one of its members, don't cancel the entire duel, but start a new one with just the remaining valid players 
                 return 
 
         # see who loses
         if self.player_hp[glolfer1] <= 0:
-            return self.lose_swordfight(loser=glolfer1,winner=glolfer2)
+            return self.lose_swordfight(current_duelists_list, loser=glolfer1,winner=glolfer2)
 
         elif self.player_hp[glolfer2] <= 0:
-            return self.lose_swordfight(loser=glolfer2,winner=glolfer1)
+            return self.lose_swordfight(current_duelists_list, loser=glolfer2,winner=glolfer1)
             # yes that does mean if p1 and p2 both have 0 hp at the same time for some reason, p1 dies from port priority.
 
 
@@ -324,17 +349,17 @@ class SwordfightingDecree():
         # p1 wins
         if (p1move, p2move) in winning_combos:
             # p1 won the point!
-            self.handle_swordfight_result(p1move, p2move, glolfer1, glolfer2)
+            self.handle_swordfight_result(current_duelists_list, p1move, p2move, glolfer1, glolfer2)
             self.player_hp[glolfer2] -= 1
 
         # p2 wins
         elif (p2move, p1move) in winning_combos:
             # p1 lost the point!
-            self.handle_swordfight_result(p2move, p1move, glolfer2, glolfer1)
+            self.handle_swordfight_result(current_duelists_list, p2move, p1move, glolfer2, glolfer1)
             self.player_hp[glolfer1] -= 1
         else: # tie
             
-            self.handle_swordfight_result(p1move, p2move, glolfer1, glolfer2)
+            self.handle_swordfight_result(current_duelists_list, p1move, p2move, glolfer1, glolfer2)
 
 
     def get_emoji(self, movetype):
@@ -351,7 +376,7 @@ class SwordfightingDecree():
 
 
 
-    def handle_swordfight_result(self, winning_move, losing_move, winner, loser):
+    def handle_swordfight_result(self, current_duelists_list, winning_move, losing_move, winner, loser):
 
         print_in_summary = False
         if winning_move == SWORDFIGHT_OPTIONS.kiss:
@@ -370,7 +395,7 @@ class SwordfightingDecree():
         else:
             message = "    " + self.get_emoji(winning_move) + "  " + message
 
-        self.game.send_message(f"⚔️ {winner.get_display_name()} and {loser.get_display_name()} are Dueling! ⚔️")
+        self.game.send_message(f"⚔️ {self.format_participant_names(current_duelists_list)} are Dueling! ⚔️")
         self.game.send_message(message, print_in_summary)
 
         # love wins
@@ -379,7 +404,7 @@ class SwordfightingDecree():
 
         return message
 
-    def lose_swordfight(self, loser, winner):
+    def lose_swordfight(self, current_duelists_list, loser, winner):
 
         first_message = random.choice((
             f"{winner.get_display_name()} sees their chance! They wind up... and swing!",
@@ -419,11 +444,9 @@ class SwordfightingDecree():
                 self.game.objects.remove(loser)
                 self.game.send_message(f"💥 **Reality cracks! {winner.get_display_name()} knocks {loser.get_display_name()} out of reality!**", print_in_summary=True)
 
-        if (winner, loser) in self.current_swordfights:
-            self.current_swordfights.remove((winner, loser))
-        if (loser, winner) in self.current_swordfights:
-            self.current_swordfights.remove((loser, winner))
+        self.remove_duel(current_duelists_list)
 
+        # just in case
         for fight in self.current_swordfights:
             if loser in fight:
                 self.current_swordfights.remove(fight)
@@ -443,5 +466,4 @@ if __name__ == "__main__":
     d.start_swordfight(glolfer1,glolfer2)
     for i in range(10):
         d.update()
-        print(d.current_swordfights)
 

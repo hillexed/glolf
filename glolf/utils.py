@@ -33,8 +33,8 @@ def glolfify(name):
     return name[0:index] + 'l' + name[index:]
 
 def format_list_with_commas(alist):
-    if len(alist) < 3:
-        return ', '.join(alist)
+    if len(alist) <= 2:
+        return ' and '.join(alist)
     else:
         return ', '.join(alist[:-1]) + " and "+alist[-1]
 
