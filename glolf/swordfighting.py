@@ -213,7 +213,7 @@ class SwordfightingDecree():
     def get_swordfight_move(self, player):
 
         options = (SWORDFIGHT_OPTIONS.offensive, SWORDFIGHT_OPTIONS.defensive, SWORDFIGHT_OPTIONS.stylish, SWORDFIGHT_OPTIONS.kiss)
-        kiss_chance = 0.01
+        kiss_chance = 0.01 * 2 / len(self.game.scores)
 
         if self.game.turn_number < self.game.max_turns/3:
             kiss_chance = 0.00
