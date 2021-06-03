@@ -483,6 +483,38 @@ courses = [
 :white_large_square::white_large_square::blue_square::blue_square::yellow_square::yellow_square::yellow_square::blue_square::blue_square::blue_square::blue_square:
 ''',
 
+# elsewhere waffle house by epix
+'''
+:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
+:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
+:fog::fog::yellow_square::yellow_square::yellow_square::yellow_square::door::yellow_square::yellow_square::yellow_square::fog::fog:
+:fog::fog::yellow_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::yellow_square::fog::fog:
+:fog::fog::window::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::yellow_square::fog::fog:
+:fog::fog::window::brown_square::brown_square::brown_square::golf::brown_square::brown_square::yellow_square::fog::fog:
+:fog::fog::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::door::yellow_square::fog::fog:
+:fog::fog::yellow_square::golf::brown_square::brown_square::brown_square::brown_square::brown_square::yellow_square::fog::fog:
+:fog::fog::yellow_square::control_knobs::control_knobs::control_knobs::waffle::waffle::brown_square::yellow_square::fog::fog:
+:fog::fog::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::door::yellow_square::fog::fog:
+:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
+:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
+''',
+
+# pride ball by warlock
+'''
+:rainbow_flag::rainbow_flag::black_large_square::black_large_square::black_large_square::red_square::red_square::black_large_square::black_large_square::black_large_square::rainbow_flag::rainbow_flag:
+:rainbow_flag::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square::black_large_square::rainbow_flag:
+:black_large_square::black_large_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::black_large_square::black_large_square:
+:black_large_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::black_large_square:
+:black_large_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::black_large_square:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+:green_square::green_square::green_square::golf::green_square::green_square::green_square::green_square::golf::green_square::green_square::green_square:
+:black_large_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::black_large_square:
+:black_large_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::black_large_square:
+:black_large_square::black_large_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::black_large_square::black_large_square:
+:rainbow_flag::black_large_square::black_large_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::black_large_square::black_large_square::rainbow_flag:
+:rainbow_flag::rainbow_flag::black_large_square::black_large_square::black_large_square::purple_square::purple_square::black_large_square::black_large_square::black_large_square::rainbow_flag::rainbow_flag:
+''',
+
 ]
 
 disabled_courses = [
