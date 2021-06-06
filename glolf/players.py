@@ -273,15 +273,28 @@ def get_player_from_name(name):
         return generate_random_player_from_name(name)
 
 def format_stlat_display(starcount: float):
-    num_stars = math.floor(starcount)
-    return_string = "🌕" * num_stars
-    remainder = starcount-num_stars
-    if remainder > 0.75:
-        return return_string + "🌖"
-    elif remainder > 0.5:
-        return return_string + "🌗"
-    elif remainder > 0.25:
-        return return_string + "🌘"
-    else: #remainder <= 0.25
-        return return_string
+    if starcount > 0:
+        num_stars = math.floor(starcount)
+        return_string = "🌕" * num_stars
+        remainder = starcount - num_stars
+        if remainder > 0.75:
+            return return_string + "🌖"
+        elif remainder > 0.5:
+            return return_string + "🌗"
+        elif remainder > 0.25:
+            return return_string + "🌘"
+        else: #remainder <= 0.25
+            return return_string
+    else:
+        num_stars = -math.ceil(starcount)
+        return_string = "🌕" * num_stars
+        remainder = starcount + num_stars
+        if remainder > -0.25:
+            return "🌒" + return_string
+        elif remainder > -0.5:
+            return "🌓" + return_string
+        elif remainder > -0.75:
+            return "🌔" + return_string
+        else:
+            return "🌝" + return_string
 
