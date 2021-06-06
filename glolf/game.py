@@ -1,18 +1,16 @@
 from typing import TypedDict
 import discord
-import glolfer
 import numpy as np
 import copy
 import random
 import logging
 logger = logging.getLogger(__name__)
 
-
-import courses
-from players import default_player_names
-from swordfighting import SwordfightingDecree
 import utils
-from courses import Course
+import entities
+from data.players import default_player_names
+from modifications.swordfighting import SwordfightingDecree
+import courses
 
 class SingleHoleScoresheet:
     def __init__(self, player):
@@ -46,9 +44,9 @@ class SingleHole:
         self.modifiers = [SwordfightingDecree(self)]
 
         # place three balls
-        self.objects.append(glolfer.Ball(self, position=self.course.random_position_on_course()))
-        self.objects.append(glolfer.Ball(self, position=self.course.random_position_on_course()))
-        self.objects.append(glolfer.Ball(self, position=self.course.random_position_on_course()))
+        self.objects.append(entities.Ball(self, position=self.course.random_position_on_course()))
+        self.objects.append(entities.Ball(self, position=self.course.random_position_on_course()))
+        self.objects.append(entities.Ball(self, position=self.course.random_position_on_course()))
 
         if len(glolfer_names) == 0:
             logger.info(f"Game {self.id}: No glolfers, choosing random...")
@@ -57,7 +55,7 @@ class SingleHole:
 
         # place one glolfer at each hole, in order, then any more are random
         placed_glolfers = 0
-        flags = [obj for obj in self.objects if type(obj) == glolfer.Hole]
+        flags = [obj for obj in self.objects if type(obj) == entities.Hole]
 
         for name in glolfer_names:
             if placed_glolfers < len(flags):
@@ -74,7 +72,7 @@ class SingleHole:
         self.new_objects = []
 
     def add_player(self, starting_position, playername):         
-        newglolfer = glolfer.Glolfer(self, position=starting_position, playername=playername)
+        newglolfer = entities.Glolfer(self, position=starting_position, playername=playername)
         self.objects.append(newglolfer)
         self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
 
@@ -285,7 +283,7 @@ class SingleHole:
         objectsSortedByDistance = sorted(consideredobjects, key=lambda object:np.linalg.norm(object.position-target.position))
         return objectsSortedByDistance
 
-    def get_closest_object(self, target : glolfer.Entity, object_type=None):
+    def get_closest_object(self, target : entities.Entity, object_type=None):
         objects = self.get_closest_objects(target, object_type)
         if len(objects) > 0:
             return objects[0]
@@ -318,6 +316,10 @@ class SingleHole:
         if print_in_summary:
             self.messages_to_report_in_summary.append(message)
 
+    def report_score(self, scoring_player, ball, hole_position):
+        for obj in self.modifiers:
+            obj.on_score(scoring_player, ball, hole_position)
+
     def report_hit(self,shooting_player, ball,swing,club,shot_vec):
 
         if np.linalg.norm(shot_vec) > 6:
@@ -336,6 +338,9 @@ class SingleHole:
         if self.debug:
             logging.debug(message + f"{shot_vec}")
             message += f"{shot_vec}"
+
+        for obj in self.modifiers:
+            obj.on_hit(shooting_player, ball, swing, club, shot_vec)
 
         self.scores[shooting_player].total_strokes += 1
 

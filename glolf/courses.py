@@ -1,10 +1,10 @@
 from typing import NamedTuple
 import random
-
-import course_data
-import entities
 import re
 
+
+from data import course_data
+import entities
 
 def get_random_course(game):
     return Course(game, course_data.get_random_course())

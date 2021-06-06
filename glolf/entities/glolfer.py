@@ -1,11 +1,14 @@
 import numpy as np
 import math
 import random
+import logging
+logger = logging.getLogger(__name__)
 
-import players
 import utils
+from data import players
+from .misc import *
+from .ball_and_hole import *
 
-from entities import *
 
 class Glolfer(Entity):
     type = "player"
