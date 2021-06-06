@@ -3,9 +3,6 @@ class Modification:
         self.game = game
 
     def on_glolfer_move(self, glolfer, target): #return a new target to move towards if needed
-        return None
-
-    def on_glolfer_move(self, glolfer, target):
         return None # don't change the target
 
     def on_glolfer_update(self, glolfer, current_glolfer_action):

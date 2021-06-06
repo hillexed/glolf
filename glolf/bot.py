@@ -10,9 +10,9 @@ import logging
 import re
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-import players
+from data import players
 from game import SingleHole
-from swordfighting import SwordfightingDecree
+from modifications.swordfighting import SwordfightingDecree
 
 
 debug = False

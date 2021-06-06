@@ -28,10 +28,12 @@ class Glolfer(Entity):
         self.displayEmoji = self.player_data.emoji
         self.stlats = self.player_data.stlats
 
+        self.modifiers = [] #an array of modification.Modification s
+
         self.team = "Undefined Team"
 
     def get_relevant_modifiers(self):
-        return self.game.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)
+        return self.game.modifiers + self.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)
 
     def get_display_name(self):
         return f"{self.name} {self.displayEmoji}"

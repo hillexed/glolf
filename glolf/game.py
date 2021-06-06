@@ -10,14 +10,22 @@ import utils
 import entities
 from data.players import default_player_names
 from modifications.swordfighting import SwordfightingDecree
+from modifications.eaglemod import EagleMaker
 import courses
 
 class SingleHoleScoresheet:
     def __init__(self, player):
-        self.player = player
+        self.player = player # can be either a Glolfer or a string
+        self.player_is_glolfer = type(self.player) == entities.Glolfer
         self.scored_strokes = 0
         self.total_strokes = 0
         self.balls_scored = 0
+
+    def printed_representation(self):
+        if self.player_is_glolfer:
+            return f"{self.player.get_display_name()}: {self.balls_scored} holes, {self.total_strokes} strokes"
+        else:
+            return f"{self.player}: {self.balls_scored} holes, {self.total_strokes} strokes"
 
 class SingleHole:
     def __init__(self, debug=False, glolfer_names=[], max_turns=60, is_tournament=False):
@@ -41,7 +49,7 @@ class SingleHole:
         self.objects += self.course.get_objects()
         self.par=3
 
-        self.modifiers = [SwordfightingDecree(self)]
+        self.modifiers = [SwordfightingDecree(self), EagleMaker(self)]
 
         # place three balls
         self.objects.append(entities.Ball(self, position=self.course.random_position_on_course()))
@@ -202,8 +210,8 @@ class SingleHole:
                 course[tile[0]][tile[1]] = obj.displayEmoji
 
         # board is stored internally as [x][y] but to print it we need to flip that and go [y][x]
-        for y in range(self.course.arraybounds[1]):
-            for x in range(self.course.arraybounds[0]):
+        for y in range(self.course.bounds[1]):
+            for x in range(self.course.bounds[0]):
                 if x < len(course) and y < len(course[x]):
                     string += "".join(course[x][y])   
             string += '\n'  
@@ -216,6 +224,9 @@ class SingleHole:
         winner = None
         tie = False
         for player in self.scores:
+            if type(player) != entities.Glolfer: #non-glolfers can't win
+                continue
+
             if winner is None: # start with the first player in the list
                 winner = player
                 continue
@@ -252,7 +263,7 @@ class SingleHole:
         current_winner = self.compute_winner()
         for player in self.scores:
             scorecard = self.scores[player]
-            scorecard_string = f"{scorecard.player.get_display_name()}: {scorecard.balls_scored} holes, {scorecard.total_strokes} strokes"
+            scorecard_string = scorecard.printed_representation()
             if player == current_winner and not self.over:
                 scorecard_string += " 👀"
             string += f"{scorecard_string} \n"
@@ -316,9 +327,16 @@ class SingleHole:
         if print_in_summary:
             self.messages_to_report_in_summary.append(message)
 
-    def report_score(self, scoring_player, ball, hole_position):
+    def on_score(self, scoring_player, ball, hole_position):
         for obj in self.modifiers:
             obj.on_score(scoring_player, ball, hole_position)
+
+    def increase_score(self, scoring_player, added_strokes=0, added_balls_scored=0, added_scored_strokes=0):
+        if scoring_player not in self.scores: 
+            self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
+        self.scores[scoring_player].scored_strokes += added_scored_strokes
+        self.scores[scoring_player].balls_scored += added_balls_scored
+        self.scores[scoring_player].total_strokes += added_strokes
 
     def report_hit(self,shooting_player, ball,swing,club,shot_vec):
 
@@ -342,6 +360,6 @@ class SingleHole:
         for obj in self.modifiers:
             obj.on_hit(shooting_player, ball, swing, club, shot_vec)
 
-        self.scores[shooting_player].total_strokes += 1
+        self.increase_score(shooting_player, added_strokes=1)
 
         self.send_message(message)
