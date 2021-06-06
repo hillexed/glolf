@@ -127,8 +127,7 @@ class Course:
                 terrain[x].append(tileEmoji)
 
         self.terrain = terrain
-        self.bounds = [len(self.terrain[0]),len(self.terrain)]
-        self.arraybounds = [len(self.terrain),len(self.terrain[0])]
+        self.bounds = [len(self.terrain),len(self.terrain[0])]
 
     def get_objects(self):
         return self.course_objects

@@ -608,7 +608,7 @@ special_case_emojis = { #these are emojis which aren't converted to unicode by e
 ":e_mail:":'📧',
 ":snowman:":'⛄',
 ":mountain_snow:":"🏔️",
-
+":cloud_lightning:":"🌩️",
 }
 
 
