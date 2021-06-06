@@ -499,21 +499,32 @@ courses = [
 :fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
 ''',
 
-# pride ball by warlock
+#office space by blamperer
 '''
-:rainbow_flag::rainbow_flag::black_large_square::black_large_square::black_large_square::red_square::red_square::black_large_square::black_large_square::black_large_square::rainbow_flag::rainbow_flag:
-:rainbow_flag::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square::black_large_square::rainbow_flag:
-:black_large_square::black_large_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::black_large_square::black_large_square:
-:black_large_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::black_large_square:
-:black_large_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::black_large_square:
-:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
-:green_square::green_square::green_square::golf::green_square::green_square::green_square::green_square::golf::green_square::green_square::green_square:
-:black_large_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::black_large_square:
-:black_large_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::black_large_square:
-:black_large_square::black_large_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::black_large_square::black_large_square:
-:rainbow_flag::black_large_square::black_large_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::black_large_square::black_large_square::rainbow_flag:
-:rainbow_flag::rainbow_flag::black_large_square::black_large_square::black_large_square::purple_square::purple_square::black_large_square::black_large_square::black_large_square::rainbow_flag::rainbow_flag:
+:file_cabinet::file_cabinet::file_cabinet::file_cabinet::file_cabinet::file_cabinet::brown_square::brown_square::brown_square::door::brown_square::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::telephone::computer::coffee::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::brown_square::golf::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::white_large_square::door::white_large_square::white_large_square:
+:couch::brown_square::golf::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::dart:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::fax:
 ''',
+
+'''
+:orange_square::orange_square::orange_square::cloud_lightning::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square:
+:orange_square::orange_square::orange_square::cloud_lightning::orange_square::low_brightness::orange_square::orange_square::orange_square::orange_square::orange_square:
+:orange_square::orange_square::orange_square::orange_square::orange_square::golf::orange_square::orange_square::orange_square::cloud_lightning::orange_square:
+:orange_square::cloud_lightning::orange_square::orange_square::black_large_square::black_large_square::black_large_square::orange_square::orange_square::orange_square::orange_square:
+:orange_square::orange_square::orange_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::orange_square::orange_square::orange_square:
+:orange_square::orange_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::orange_square::orange_square:
+:orange_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::orange_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::golf::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::cactus::yellow_square:
+:yellow_square::cactus::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+'''
 
 ]
 
@@ -552,6 +563,25 @@ disabled_courses = [
 :black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::brown_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square:
 :black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square:
 ''',
+
+
+# pride ball by warlock
+# rainbow flag emoji is a combination so it doesn't show up properly
+'''
+:rainbow_flag::rainbow_flag::black_large_square::black_large_square::black_large_square::red_square::red_square::black_large_square::black_large_square::black_large_square::rainbow_flag::rainbow_flag:
+:rainbow_flag::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square::black_large_square::rainbow_flag:
+:black_large_square::black_large_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::black_large_square::black_large_square:
+:black_large_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::black_large_square:
+:black_large_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::black_large_square:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+:green_square::green_square::green_square::golf::green_square::green_square::green_square::green_square::golf::green_square::green_square::green_square:
+:black_large_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::black_large_square:
+:black_large_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::black_large_square:
+:black_large_square::black_large_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::black_large_square::black_large_square:
+:rainbow_flag::black_large_square::black_large_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::black_large_square::black_large_square::rainbow_flag:
+:rainbow_flag::rainbow_flag::black_large_square::black_large_square::black_large_square::purple_square::purple_square::black_large_square::black_large_square::black_large_square::rainbow_flag::rainbow_flag:
+''',
+
 ]
 
 # to do: give each course a name

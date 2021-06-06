@@ -2,7 +2,7 @@ import random, uuid, math
 from typing import NamedTuple
 from datetime import date
 
-default_player_names = ("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri","Load Bearing Coconut", "Frankle Knives", "Spooks McGee")
+default_player_names = ("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri","Load Bearing Coconut", "Frankle Knives", "Spooks Mcgee", "Line Cook")
     
 
 
@@ -27,7 +27,7 @@ def random_player_emoji(rng):
     nonhumanoid=[
 "🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵",
 "🙈","🙉","🙊","🐒","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄",
-"🐝","🐛","🦋","🐌","🐞","🐜","🦟","🦗","🕷️","🦂","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐",
+"🐝","🐛","🦋","🐌","🐞","🐞","🦟","🦗","🐞","🦂","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐", #🐜 and 🕷️ have been replaced by 🐞 to stand out against discord's dark background better
 "🦞","🦀","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🦓","🦍","🦧","🐘","🦛","🦏",
 "🐪","🐫","🦒","🦘","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌","🐕","🐩","🦮","🐕‍🦺",
 "🐈","🐓","🦃","🦚","🦜","🦢","🦩","🕊️","🐇","🦝","🦨","🦡","🦦","🦥","🐁","🐀","🐿","🦔",
@@ -259,7 +259,8 @@ known_players = {
     "Solar Dies": player_with_mods_but_random_stats("Solar Dies",["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
     "Load Bearing Coconut": player_with_mods_but_random_stats("Load Bearing Coconut",["🧥"]),
     "Frankle Knives": player_with_mods_but_random_stats("Frankle Knives",["🧥"]),
-    "Spooks McGee": player_with_mods_but_random_stats("Spooks McGee",["🧥"]),
+    "Spooks Mcgee": player_with_mods_but_random_stats("Spooks Mcgee",["🧥"]),
+    "Line Cook": player_with_mods_but_random_stats("Line Cook",["🧥"]),
     "1": player_with_mods_but_random_stats("1",["🤝💖"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
