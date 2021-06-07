@@ -9,8 +9,7 @@ logger = logging.getLogger(__name__)
 import utils
 import entities
 from data.players import default_player_names
-from modifications.swordfighting import SwordfightingDecree
-from modifications.eaglemod import EagleMaker
+from modifications.current_rules import get_permanent_modifiers
 import courses
 
 class SingleHoleScoresheet:
@@ -23,7 +22,7 @@ class SingleHoleScoresheet:
 
     def printed_representation(self):
         if self.player_is_glolfer:
-            return f"{self.player.get_display_name()}: {self.balls_scored} holes, {self.total_strokes} strokes"
+            return f"{self.player.get_display_name(with_mods_in_parens=True)}: {self.balls_scored} holes, {self.total_strokes} strokes"
         else:
             return f"{self.player}: {self.balls_scored} holes, {self.total_strokes} strokes"
 
@@ -49,7 +48,7 @@ class SingleHole:
         self.objects += self.course.get_objects()
         self.par=3
 
-        self.modifiers = [SwordfightingDecree(self), EagleMaker(self)]
+        self.modifiers = modifications.decrees.get_permanent_modifiers(self)
 
         # place three balls
         self.objects.append(entities.Ball(self, position=self.course.random_position_on_course()))
@@ -333,7 +332,7 @@ class SingleHole:
 
     def increase_score(self, scoring_player, added_strokes=0, added_balls_scored=0, added_scored_strokes=0):
         if scoring_player not in self.scores: 
-            self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
+            self.scores[scoring_player] = SingleHoleScoresheet(scoring_player)
         self.scores[scoring_player].scored_strokes += added_scored_strokes
         self.scores[scoring_player].balls_scored += added_balls_scored
         self.scores[scoring_player].total_strokes += added_strokes

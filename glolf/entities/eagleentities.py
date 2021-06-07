@@ -13,7 +13,7 @@ import utils
 class FlyingEagle(Entity):
     displayEmoji = "🦅"
     showOnBoard = True
-    type = "eagle"
+    type = "animal"
     zIndex = 12
     def __init__(self, game, triggering_player):
         self.game = game
@@ -25,7 +25,6 @@ class FlyingEagle(Entity):
         self.position = np.array(position).astype(float)
 
         self.grabbed_thing = None
-
         self.swooped = False
         
 
@@ -69,7 +68,7 @@ class FlyingEagle(Entity):
 
             self.see_if_grabbed_player_frees_themself()
 
-    def see_if_grabbed_player_frees_themself():
+    def see_if_grabbed_player_frees_themself(self):
         if random.random() < self.grabbed_thing.stlats.wiggle/3:
 
             release_message = random.choice( [
@@ -84,20 +83,20 @@ class FlyingEagle(Entity):
             self.game.send_message(release_message)
             self.release_grabbed_thing()
 
-    def grab_but_theyre_far_away()
+    def grab_but_theyre_far_away(self):
         self.game.send_message("The eagle swoops! It comes up empty-clawed!")
         self.swooped = True
 
-    def attempt_to_grab(self, glolfer)
+    def attempt_to_grab(self, player):
         # don't grab an already grabbed player
-        if not any([type(mod) == eaglemod.GrabbedByEagle for mod in grabbed_glolfer.modifiers]):
-            self.grab_player(grabbed_glolfer)
-            self.game.send_message(f"The eagle swoops! It grabs {self.grabbed_thing.get_display_name()}!")
-            self.swooped = True
+        if not any([type(mod) == eaglemod.GrabbedByEagle for mod in player.modifiers]):
+            self.grab_player(player)
 
     def grab_player(self, player):
         self.grabbed_thing = player
         player.modifiers.append(eaglemod.GrabbedByEagle(self.game))
+        self.game.send_message(f"The eagle swoops! It grabs {player.get_display_name()}!")
+        self.swooped = True
 
     def release_grabbed_thing(self):
         # removed grabbed modifier
@@ -110,27 +109,23 @@ class FlyingEagle(Entity):
 class FlyingAlbatross(FlyingEagle):
     # flies onto the course and tries to grab a person
     # then hangs on their neck
-    displayEmoji = "🦅"
+    displayEmoji = "🦢"
     showOnBoard = True
-    type = "albatross"
+    type = "animal"
+    type = "temporary"
 
-    bird_name = "albatross"
-
-    def grab_but_theyre_far_away()
+    def grab_but_theyre_far_away(self):
         self.game.send_message("The albatross swoops! It comes up empty-clawed!")
         self.swooped = True
 
-    def attempt_to_grab(self, glolfer)
+    def attempt_to_grab(self, glolfer):
         # don't grab an already grabbed player
-        if not any([type(mod) == eaglemod.GrabbedByEagle for mod in grabbed_glolfer.modifiers]):
-            self.game.send_message(f"The albatross swoops! It hugs {self.grabbed_thing.get_display_name()}'s neck!")
-            self.swooped = True
-            self.grab_player(grabbed_glolfer)
+        if not any([type(mod) == eaglemod.GrabbedByEagle for mod in glolfer.modifiers]):
+            self.grab_player(glolfer)
 
     def grab_player(self, player):
+        self.game.send_message(f"The albatross swoops! It hugs {player.get_display_name()}'s neck!")
         self.grabbed_thing = player
-        player.modifiers.append(eaglemod.AlbatrossAroundNeck(self.game))
+        player.modifiers.append(eaglemod.AlbatrossAroundNeck(self.game, player))
         self.isDead = True
-
-todo: way for modifications to go away
-
+        self.swooped = True

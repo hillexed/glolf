@@ -35,8 +35,12 @@ class Glolfer(Entity):
     def get_relevant_modifiers(self):
         return self.game.modifiers + self.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)
 
-    def get_display_name(self):
-        return f"{self.name} {self.displayEmoji}"
+    def get_display_name(self, with_mods_in_parens = False):
+        if with_mods_in_parens and len(self.modifiers) > 0:
+            modList = ', '.join([mod.displayEmoji for mod in self.modifiers])
+            return f"{self.name} {self.displayEmoji} ({modList})"
+        else:
+            return f"{self.name} {self.displayEmoji}"
 
     def update(self):
         '''
@@ -56,6 +60,7 @@ class Glolfer(Entity):
 
         for modifier in self.get_relevant_modifiers():
             modifier.on_glolfer_update(self, current_action)
+        self.modifiers = [x for x in filter(lambda obj:not obj.isDead, self.modifiers)]
 
         if current_action["action"] == "hit":
             self.hit(current_action["target"])
