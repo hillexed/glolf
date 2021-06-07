@@ -436,7 +436,7 @@ class SwordfightingDecree(Modification):
             self.game.send_message("Wait. There's... no holes? {winner.get_display_name()} is a bit confused.")
 
         if not self.game.is_tournament and random.random() < self.dimensional_travel_chance:
-            if self.game.scores[loser].balls_scored - self.game.scores[winner].balls_scored > 2 and random.random() > winner.needlethreadableness: #low-needlethreadableness players who are losing
+            if self.game.scores[loser].balls_scored - self.game.scores[winner].balls_scored > 2 and random.random() > winner.stlats.needlethreadableness: #low-needlethreadableness players who are losing
                 # knocked into another game
                 self.players_in_interdimensional_void.append((loser.name, self.game.id))
                 self.game.objects.remove(loser)
