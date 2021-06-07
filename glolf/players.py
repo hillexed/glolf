@@ -260,6 +260,7 @@ known_players = {
     "Load Bearing Coconut": player_with_mods_but_random_stats("Load Bearing Coconut",["🧥"]),
     "Frankle Knives": player_with_mods_but_random_stats("Frankle Knives",["🧥"]),
     "Spooks Mcgee": player_with_mods_but_random_stats("Spooks McGee",["🧥"]),
+    "Line Cook": player_with_mods_but_random_stats("Line Cook",["🧥"]),
     "1": player_with_mods_but_random_stats("1",["🤝💖"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
