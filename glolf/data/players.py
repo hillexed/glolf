@@ -3,8 +3,6 @@ from typing import NamedTuple
 from datetime import date
 
 default_player_names = ("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri","Load Bearing Coconut", "Frankle Knives", "Spooks Mcgee", "Line Cook")
-    
-
 
 def random_player_emoji(rng):
     humanoid = ["👶","👧","🧒","👦","👩","🧑","👨","👩‍🦱","🧑‍🦱","👨‍🦱","👩‍🦰","🧑‍🦰","👨‍🦰","👱‍♀️",

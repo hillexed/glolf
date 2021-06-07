@@ -511,6 +511,7 @@ courses = [
 :brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::fax:
 ''',
 
+# dune eternal by zweihawke
 '''
 :orange_square::orange_square::orange_square::cloud_lightning::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square:
 :orange_square::orange_square::orange_square::cloud_lightning::orange_square::low_brightness::orange_square::orange_square::orange_square::orange_square::orange_square:
@@ -524,6 +525,20 @@ courses = [
 :yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::cactus::yellow_square:
 :yellow_square::cactus::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
 :yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+'''
+
+# trans flag by hal and epix
+'''
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus:
+:hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus:
+:white_large_square::white_large_square::golf::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::golf::white_large_square::white_large_square:
+:hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus:
+:hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
 '''
 
 ]
