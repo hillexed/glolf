@@ -112,7 +112,6 @@ class FlyingAlbatross(FlyingEagle):
     displayEmoji = "🦢"
     showOnBoard = True
     type = "animal"
-    type = "temporary"
 
     def grab_but_theyre_far_away(self):
         self.game.send_message("The albatross swoops! It comes up empty-clawed!")
