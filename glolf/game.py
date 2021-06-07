@@ -48,7 +48,7 @@ class SingleHole:
         self.objects += self.course.get_objects()
         self.par=3
 
-        self.modifiers = modifications.decrees.get_permanent_modifiers(self)
+        self.modifiers = get_permanent_modifiers(self)
 
         # place three balls
         self.objects.append(entities.Ball(self, position=self.course.random_position_on_course()))
