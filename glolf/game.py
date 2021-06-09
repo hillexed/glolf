@@ -253,9 +253,10 @@ class SingleHole:
         return "Everybody"
 
     def end(self, custom_winner_name=None):
-        self.over = True
-        self.custom_winner_name = custom_winner_name
-        self.send_message(f"**Game over! {self.compute_winner_name()} wins!**")
+        if not self.over:
+            self.over = True
+            self.custom_winner_name = custom_winner_name
+            self.send_message(f"**Game over! {self.compute_winner_name()} wins!**")
 
     def print_score(self):
         string = ""
