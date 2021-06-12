@@ -117,12 +117,14 @@ class Course:
             for x,tileEmoji in enumerate(line):
                 if x == len(terrain):
                     terrain.append([])
+
+                centerOfTile = [x+0.5,y+0.5]
                 if tileEmoji == "⛳":
-                    self.course_objects.append(entities.Hole(self.game,position=[x,y]))     
+                    self.course_objects.append(entities.Hole(self.game,position=centerOfTile))     
                     self.num_holes += 1  
                     tileEmoji = "🟩"
                 if tileEmoji == "💥":
-                    self.course_objects.append(entities.RealityCrack(self.game,position=[x,y],life=999))
+                    self.course_objects.append(entities.RealityCrack(self.game,position=centerOfTile,life=999))
                     tileEmoji = "⬛"
                 terrain[x].append(tileEmoji)
 
