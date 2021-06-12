@@ -29,12 +29,8 @@ class FlyingEagle(Entity):
         
 
     def choose_target(self, triggering_player):
-        player_in_lead = self.game.compute_winner()
-        if player_in_lead is not None:
-            return player_in_lead
-        else:
-            # game's tied
-            return triggering_player
+        target = self.game.compute_random_current_winner()
+        return target
 
     def update(self):
 

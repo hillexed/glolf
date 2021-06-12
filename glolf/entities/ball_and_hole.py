@@ -5,6 +5,7 @@ logger = logging.getLogger(__name__)
 
 
 from .entity import Entity
+from .NPCscorecards import get_NPC_scorecard
 from .misc import ScoreConfetti
 import utils
 
@@ -41,11 +42,13 @@ class Ball(Entity):
             if self.last_hit_by is not None:
                 scoring_player = self.last_hit_by
                 self.game.send_message(f"**{scoring_player.get_display_name()} scores 🎊! {utils.score_name(self.strokes,self.game.par)}!**")
-                self.game.increase_score(scoring_player, added_balls_scored=1, added_scored_strokes=self.strokes)
-                self.game.on_score(self.last_hit_by, self, self.position)
             else:
+                scoring_player = get_NPC_scorecard("The Ball")
                 self.game.send_message(f"**The ball scores itself 🎊! {utils.score_name(self.strokes,self.game.par)}!**")
-                self.game.increase_score("The Ball", added_balls_scored=1, added_scored_strokes=self.strokes, added_strokes = self.strokes)
+
+            self.game.increase_score(scoring_player, added_balls_scored=1, added_scored_strokes=self.strokes)
+            self.game.on_score(scoring_player, self, self.position)
+
             self.game.add_object(ScoreConfetti(self.game, self.position))
             self.reset_at_random_point()
 

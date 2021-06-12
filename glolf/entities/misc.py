@@ -7,7 +7,6 @@ from .entity import Entity
 import logging
 logger = logging.getLogger(__name__)
 
-
 class OneTurnParticle(Entity):
     # displayEmoji = "🎊" # override this in a subclass
     showOnBoard = True

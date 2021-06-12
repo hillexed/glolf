@@ -9,7 +9,6 @@ from data import players
 from .misc import *
 from .ball_and_hole import *
 
-
 class Glolfer(Entity):
     type = "player"
     displayEmoji = "🏌️" # will be overwritten
