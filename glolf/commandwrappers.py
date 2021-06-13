@@ -1,5 +1,8 @@
+import logging
+logger = logging.getLogger(__name__)
 
 users_with_games_active = []
+MAX_SIMULTANEOUS_GAMES = 10
 
 def limit_one_game_per_person(func):
     '''
@@ -17,7 +20,7 @@ def limit_one_game_per_person(func):
         try:
             return await func(message, *args, **kwargs)
         except (Exception, KeyboardInterrupt) as e:
-                logging.exception(e)
+                logger.exception(e)
                 await message.add_reaction('⚠️')
                 raise e
         finally:
@@ -25,6 +28,19 @@ def limit_one_game_per_person(func):
                 users_with_games_active.remove(message.author)
 
     return wrapper
+
+def get_users_with_games_active():
+    return users_with_games_active
+
+def clear_users_with_games_active():
+    global users_with_games_active
+    users_with_games_active = []
+
+def too_many_games_active():
+    return len(users_with_games_active) > MAX_SIMULTANEOUS_GAMES
+
+
+
 
 update_coming = False
 

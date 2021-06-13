@@ -1,12 +1,16 @@
-from commandwrappers import limit_one_game_per_person, disable_if_update_coming
+import re
+import asyncio
+import math
+import random
+
+from commandwrappers import limit_one_game_per_person, disable_if_update_coming, too_many_games_active
 from gamecommands import newglolfgame
 
-async def parse_tourney_message(message):
-    firstline = message.content.split("\n")[0]
-    tourneytype = firstline.replace(prefix + "tourney",'').strip()
+async def parse_tourney_message(message, command_body, debug=False):
+    tourneytype = command_body.split("\n")[0].strip()
 
     if len(tourneytype) == 0:
-        return await message.channel.send("What type of tournament? Try "+prefix+"tourney 1v1")
+        return await message.channel.send("What type of tournament? Try 'tourney 1v1'")
 
     is_battleroyale = battleRoyaleTypeRegex.match(tourneytype)
     if is_battleroyale:
@@ -15,10 +19,9 @@ async def parse_tourney_message(message):
         num_participants_per_game = battletype.count("1")
         if num_participants_per_game > 8:
             return await message.channel.send("umm thats probably too many people")
-        return await battle_royale_glolftourney(message, num_participants_per_game)
+        return await battle_royale_glolftourney(message, num_participants_per_game, debug=debug)
 
-
-    return await message.channel.send("umm im not sure what that means. maybe you could try "+prefix+"tourney 1v1")
+    return await message.channel.send("umm im not sure what that tourney type means. maybe you could try 'tourney 1v1'")
 
 
 
@@ -34,7 +37,7 @@ battleRoyaleTypeRegex = re.compile("1(v1)+")
 
 @disable_if_update_coming
 @limit_one_game_per_person
-async def battle_royale_glolftourney(message, glolfers_per_game=2):
+async def battle_royale_glolftourney(message, glolfers_per_game=2, debug=False):
     # a tourney where each game has multiple people, but only one can win each game
     # if glolfers_per_game is 2, it's a 1v1, if glolfers_per_game is 3, each game is a 1v1v1, etc
     assert glolfers_per_game > 1
@@ -47,13 +50,13 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2):
             await message.channel.send("That's a short tournament... I guess they win by default!")
             return None
         if num_players < glolfers_per_game:
-            await message.channel.send("There isn't enough players for even a single match. Everyone wins!")
+            await message.channel.send("There aren't enough players for even a single match. Everyone wins!")
             return None
     else: # 0 players
         await message.channel.send("To use, please give a list of competitors after the command, each on a separate line.")
         return
 
-    if len(users_with_games_active) > MAX_GAMES:
+    if too_many_games_active():
         await message.channel.send("There's too many games going on right now. To avoid lag, please wait a little bit till some games are done and try again later!")
         return
 
@@ -114,7 +117,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2):
             if match_number == total_matches and round_name != "the finals" and total_matches == 1:
                 match_name = "Final match"
 
-            winners = await newglolfgame(message, glolfer_names=glolfers, header=f"{match_name} of {round_name}!",max_turns=max_turns, is_tournament=True)
+            winners = await newglolfgame(message, glolfer_names=glolfers, header=f"{match_name} of {round_name}!",max_turns=max_turns, is_tournament=True, debug=debug)
             if len(winners) == 1:
                 move_onto_next_round.append(winners[0])
             else:

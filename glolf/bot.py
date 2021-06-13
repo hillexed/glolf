@@ -3,19 +3,15 @@ config = dotenv.dotenv_values(".env")
 
 import time
 import sys
-import asyncio
-import math
-import random
 import logging
-import re
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 from data import players
-from game import SingleHole
 from modifications.swordfighting import SwordfightingDecree
 
 from tourneycommands import parse_tourney_message
 from gamecommands import glolfcommand
+from clubs.clubcommands import save_club, view_club
 
 
 debug = False
@@ -31,25 +27,24 @@ if len(sys.argv) > 1:
 
 
 
-async def get_glolfer_stats(message):
+async def get_glolfer_stats(message, arguments):
     try:
-        rest = message.content.replace(prefix + "glolfer","").strip()
-        if len(rest) == 0:
+        if len(arguments) == 0:
             await message.channel.send("Please add a glolfer's name to check their stlats!")
         else:
-            newplayer = players.get_player_from_name(rest)
+            newplayer = players.get_player_from_name(arguments)
             newmessage = f'''**{newplayer.name}**
 Signature: {newplayer.emoji}
 Stance: **{newplayer.stlats.stance}**
 Favorite Tea: **{newplayer.stlats.fav_tea}**
 **Driving:**
-{newplayer.driving_rating()}
+{newplayer.compute_driving_moons()}
 **Grip:**
-{newplayer.precision_rating()}
+{newplayer.compute_precision_moons()}
 **Aerodynamics:**
-{newplayer.aerodynamics_rating()}
+{newplayer.compute_aerodynamics_moons()}
 **Self-Awareness:**
-{newplayer.self_awareness_rating()}
+{newplayer.compute_self_awareness_moons()}
 {newplayer.vk_stat_of_the_day()}
 {newplayer.modifications_string()}'''
             await message.channel.send(newmessage)
@@ -59,19 +54,17 @@ Favorite Tea: **{newplayer.stlats.fav_tea}**
             raise e
 
 
-async def add_temp_modification(message):
+async def add_temp_modification(message, command_body):
     # Add a modification to the player until the bot restarts. Admin-only
     try:
-        print(message.content)
-        rest = message.content.replace(prefix + "addtempmodification","").strip()
-        if len(rest) == 0:
+        if len(command_body) == 0:
             await message.channel.send("Please add a glolfer's name! It's !addtempmodification <glolfer>\n<modification>")
         else:
-            if len(rest.split("\n")) < 2:
+            if len(command_body.split("\n")) < 2:
                 return await message.channel.send("Please add a glolfer's name, then the modification on a new line.")
 
-            glolfername = rest.split("\n")[0].strip()
-            modification = rest.split("\n")[1].strip()
+            glolfername = command_body.split("\n")[0].strip()
+            modification = command_body.split("\n")[1].strip()
 
             newplayer = players.get_player_from_name(glolfername)
             newplayer.modifications.append(modification)
@@ -99,28 +92,30 @@ client = discord.Client()
 async def on_ready():
     logging.info("The bot is ready!")
 
+def get_command_body(message, command_name_to_remove):
+    return message.content.replace(prefix + command_name_to_remove,"").strip()
+
 
 @client.event
 async def on_message(message):
-    global users_with_games_active
     if message.author == client.user or message.webhook_id is not None:
         return
     if message.content.startswith(prefix + "glolfer"):
-        await get_glolfer_stats(message)
+        await get_glolfer_stats(message, get_command_body(message, "glolfer"))
 
 
     elif message.content.startswith(prefix + "glolf"):
         logging.info("glolf detected")
-        await glolfcommand(message)
+        await glolfcommand(message, get_command_body(message, "glolf"), debug=debug)
 
 
     elif message.content.startswith(prefix + "tourney"):
-        await parse_tourney_message(message)
+        await parse_tourney_message(message, get_command_body(message, "tourney"), debug=debug)
 
     elif message.content.startswith(prefix + "createclub"):
-        await create_club(message)
-    elif message.content.startswith(prefix + "deleteclub"):
-        await create_club(message)
+        await save_club(message, get_command_body(message, "createclub"), client=client)
+    elif message.content.startswith(prefix + "viewclub"):
+        await view_club(message, get_command_body(message, "viewclub"))
 
     elif message.content.startswith(prefix + "admincommands"):
         return await message.channel.send("!discordid, !addtempmodification, !updatecoming <true/false>, !clear_game_list, !forcequit, !countgames, !void")
@@ -137,7 +132,7 @@ async def on_message(message):
         await add_temp_modification(message)
 
     elif user_is_admin(message) and message.content.startswith(prefix + "countgames"):
-        await message.channel.send(f"There are {len(users_with_games_active)} users with games active right now.")
+        await message.channel.send(f"There are {len(get_users_with_games_active())} users with games active right now.")
 
     elif user_is_admin(message) and message.content.startswith(prefix + "updatecoming"):
         global update_coming
@@ -155,10 +150,10 @@ async def on_message(message):
 
     # "clear_game_list" command. just in case
     elif user_is_admin(message) and message.content.startswith(prefix + "clear_game_list"):
-        msg = f"Cleared users with active games list. It was previously {users_with_games_active}. The games are still running but those players can now start new games."
+        msg = f"Cleared users with active games list. It was previously {get_users_with_games_active()}. The games are still running but those players can now start new games."
         await message.channel.send(msg)
         logging.info(msg)
-        users_with_games_active = []
+        clear_users_with_games_active()
 
 # now run the bot
 token = config["TOKEN"]
