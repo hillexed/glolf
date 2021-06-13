@@ -53,6 +53,7 @@ class Glolfer(playerstlats.Player, Entity):
             current_action["target"] = ball
 
         for modifier in self.get_relevant_modifiers():
+            modifier.update()
             modifier.on_glolfer_update(self, current_action)
         self.modifiers = [x for x in filter(lambda obj:not obj.isDead, self.modifiers)]
 
