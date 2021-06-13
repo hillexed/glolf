@@ -119,7 +119,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, debug=False):
 
             winners = await newglolfgame(message, glolfer_names=glolfers, header=f"{match_name} of {round_name}!",max_turns=max_turns, is_tournament=True, debug=debug)
             if len(winners) == 1:
-                move_onto_next_round.append(winners[0])
+                move_onto_next_round.append(winners[0].name)
             else:
                 winningname = random.choice(winners)
                 move_onto_next_round.append(winningname)

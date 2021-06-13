@@ -129,7 +129,7 @@ async def on_message(message):
         logging.info(message.author.id) # you should only be able to access this if you're an admin
 
     elif user_is_admin(message) and message.content.startswith(prefix + "addtempmodification"):
-        await add_temp_modification(message)
+        await add_temp_modification(message, get_command_body(message, "addtempmodification"))
 
     elif user_is_admin(message) and message.content.startswith(prefix + "countgames"):
         await message.channel.send(f"There are {len(get_users_with_games_active())} users with games active right now.")
