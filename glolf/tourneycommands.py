@@ -123,7 +123,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, debug=False):
             else:
                 winningname = random.choice(winners)
                 move_onto_next_round.append(winningname.name)
-                await message.channel.send(f"Tie game! {winningname.name} wins the tiebreaking duel to advance to the next round!")
+                await message.channel.send(f"Tie game! **{winningname.name}** wins the tiebreaking duel to advance to the next round!")
                 await asyncio.sleep(5)
 
         if len(move_onto_next_round) > 1:

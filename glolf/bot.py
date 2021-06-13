@@ -6,7 +6,7 @@ import sys
 import logging
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-from data import players
+from data import players, playerstlats
 from modifications.swordfighting import SwordfightingDecree
 
 from tourneycommands import parse_tourney_message
@@ -51,6 +51,7 @@ Favorite Tea: **{newplayer.stlats.fav_tea}**
 
     except (Exception, KeyboardInterrupt) as e:
             await message.add_reaction('⚠️')
+            logging.exception(e)
             raise e
 
 
@@ -68,12 +69,13 @@ async def add_temp_modification(message, command_body):
 
             newplayer = players.get_player_from_name(glolfername)
             newplayer.modifications.append(modification)
-            players.known_players[glolfername.title()] = newplayer
+            playerstlats.known_players[glolfername.title()] = newplayer
 
             return await message.channel.send(f"Added modification {modification} to player {glolfername}. It'll go away when you restart the bot, so make sure to edit the code!")
 
     except (Exception, KeyboardInterrupt) as e:
             await message.add_reaction('⚠️')
+            logging.exception(e)
             raise e
 
 def user_is_admin(message):

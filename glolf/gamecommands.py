@@ -51,4 +51,5 @@ async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tou
         return game.compute_winners()
     except (Exception, KeyboardInterrupt) as e:
             await glolfgame.add_reaction('⚠️')
+            logger.exception(e)
             raise e
