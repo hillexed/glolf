@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 from commandwrappers import disable_if_update_coming, limit_one_game_per_person, too_many_games_active
 from game import SingleHole
-from clubgame import ClubGame
+#from clubgame import ClubGame
 
 @disable_if_update_coming
 @limit_one_game_per_person
@@ -32,10 +32,10 @@ async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tou
     glolfgame = await message.channel.send("Beginning game...")
     logger.info(f"Starting game between {glolfer_names} in channel #{message.channel} in server '{message.channel.guild.name}'")
     try:
-        if "club" in message.content.split("\n")[0]:
-            game = ClubGame(debug=debug,glolfer_names=glolfer_names,max_turns=max_turns,is_tournament=is_tournament)
-        else:
-            game = SingleHole(debug=debug,glolfer_names=glolfer_names,max_turns=max_turns,is_tournament=is_tournament)
+        #if "club" in message.content.split("\n")[0]:
+        #    game = ClubGame(debug=debug,glolfer_names=glolfer_names,max_turns=max_turns,is_tournament=is_tournament)
+        #else:
+        game = SingleHole(debug=debug,glolfer_names=glolfer_names,max_turns=max_turns,is_tournament=is_tournament)
         await asyncio.sleep(2)
         await glolfgame.edit(content=game.printgamestate(header=header))
         await asyncio.sleep(2)

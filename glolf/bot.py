@@ -110,12 +110,12 @@ async def on_message(message):
 
 
     elif message.content.startswith(prefix + "tourney"):
-        await parse_tourney_message(message, get_command_body(message, "tourney"), debug_on=debug)
+        await parse_tourney_message(message, get_command_body(message, "tourney"), debug=debug)
 
-    elif message.content.startswith(prefix + "createclub"):
-        await save_club(message, get_command_body(message, "createclub"), client=client)
-    elif message.content.startswith(prefix + "viewclub"):
-        await view_club(message, get_command_body(message, "viewclub"))
+    #elif message.content.startswith(prefix + "createclub"):
+    #    await save_club(message, get_command_body(message, "createclub"), client=client)
+    #elif message.content.startswith(prefix + "viewclub"):
+    #    await view_club(message, get_command_body(message, "viewclub"))
 
     elif message.content.startswith(prefix + "admincommands"):
         return await message.channel.send("!discordid, !addtempmodification, !updatecoming <true/false>, !clear_game_list, !forcequit, !countgames, !void")

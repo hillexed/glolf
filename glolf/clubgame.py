@@ -15,7 +15,7 @@ class NeedsToTagIn(Modification):
     def __init__(self, target_cart):
         self.target = target_cart
 
-    def on_glolfer_update(self, current_action)
+    def on_glolfer_update(self, current_action):
         current_action["action"] = "move"
 
     def on_glolfer_move(self, target):
@@ -26,7 +26,7 @@ class SubInNextPlayerOnceSomeoneScoresInAClubGame(Modification):
     def __init__(self, game):
         self.game = game
 
-    def on_score(scoring_player, ball, hole_position)
+    def on_score(scoring_player, ball, hole_position):
         scoring_team = scoring_player.team
         if scoring_team is not None:
             
@@ -76,12 +76,12 @@ class ClubGame(SingleHole):
         for team in self.scores:
             scorecard = self.scores[player]
             scorecard_string = scorecard.printed_representation()
-            if team in current_winners and and self.scores[team].total_strokes > 0 and not self.over:
+            if team in current_winners and self.scores[team].total_strokes > 0 and not self.over:
                 team_scorecard_string += " 👀"
 
             player_scorecard_string = ''
-            for current_active_player(team):
-                player_scorecard_string += self.player.get_display_name(with_mods_in_parens=True) + '\n'
+            #for player in current_active_player(team):
+            #    player_scorecard_string += self.player.get_display_name(with_mods_in_parens=True) + '\n'
 
             string += f"{team_scorecard_string} \n"
 
