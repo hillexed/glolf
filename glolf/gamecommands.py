@@ -14,7 +14,7 @@ async def glolfcommand(message, message_body, debug=False):
     arguments = message_body.split("\n") #first line has "!glolf" on it
     glolfer_names = []
     if len(arguments) > 1: # 0 players is fine
-        glolfer_names = arguments[1:]
+        glolfer_names = arguments
         if len(glolfer_names) == 1:
             await message.channel.send("It's too dangerous to glolf alone. Bring an opponent.")
             return
