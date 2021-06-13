@@ -7,10 +7,10 @@ from game import SingleHole
 
 @disable_if_update_coming
 @limit_one_game_per_person
-async def glolfcommand(message, debug=False):
+async def glolfcommand(message, message_body, debug=False):
     # parse a glolf command
 
-    arguments = message.content.split("\n") #first line has "!glolf" on it
+    arguments = message_body.split("\n") #first line has "!glolf" on it
     glolfer_names = []
     if len(arguments) > 1: # 0 players is fine
         glolfer_names = arguments[1:]
@@ -23,7 +23,7 @@ async def glolfcommand(message, debug=False):
         return
         
 
-    await newglolfgame(message, glolfer_names)
+    await newglolfgame(message, glolfer_names,debug=debug)
 
 async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tournament=False, debug=False):
     # start a round of glolf and return the winning players's names

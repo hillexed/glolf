@@ -110,7 +110,7 @@ async def on_message(message):
 
 
     elif message.content.startswith(prefix + "tourney"):
-        await parse_tourney_message(message, get_command_body(message, "tourney"), debug=debug)
+        await parse_tourney_message(message, get_command_body(message, "tourney"), debug_on=debug)
 
     elif message.content.startswith(prefix + "createclub"):
         await save_club(message, get_command_body(message, "createclub"), client=client)

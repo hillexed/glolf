@@ -266,11 +266,11 @@ class SingleHole:
 
     def print_score(self):
         string = ""
-        current_winner = self.compute_winner()
+        current_winners = self.compute_winners()
         for player in self.scores:
             scorecard = self.scores[player]
             scorecard_string = scorecard.printed_representation()
-            if player == current_winner and not self.over:
+            if player in current_winners and and self.scores[player].total_strokes > 0 and not self.over:
                 scorecard_string += " 👀"
             string += f"{scorecard_string} \n"
 
