@@ -16,6 +16,7 @@ from clubs.clubcommands import save_club, view_club
 
 debug = False
 prefix = '!'
+version = '4.0'
 MAX_GAMES = 10
 
 if len(sys.argv) > 1:
@@ -102,6 +103,7 @@ def get_command_body(message, command_name_to_remove):
 async def on_message(message):
     if message.author == client.user or message.webhook_id is not None:
         return
+
     if message.content.startswith(prefix + "glolfer"):
         await get_glolfer_stats(message, get_command_body(message, "glolfer"))
 
@@ -109,6 +111,9 @@ async def on_message(message):
     elif message.content.startswith(prefix + "glolf"):
         logging.info("glolf detected")
         await glolfcommand(message, get_command_body(message, "glolf"), debug=debug)
+
+    elif message.content.startswith(prefix + "version"):
+        await message.channel.send(str(version))
 
 
     elif message.content.startswith(prefix + "tourney"):
@@ -124,6 +129,9 @@ async def on_message(message):
 
     elif message.content.startswith(prefix + "discordid"):
         logging.info(message.author.id) # you should only be able to access this if you're an admin
+
+    elif user_is_admin(message) and message.content.startswith(prefix + "countservers"):
+        await message.channel.send(client.guilds)
 
     elif user_is_admin(message) and message.content.startswith(prefix + "void"):
         

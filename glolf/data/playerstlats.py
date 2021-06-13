@@ -284,6 +284,7 @@ known_players = {
     "Frankle Knives": player_with_mods_but_random_stats("Frankle Knives",["🧥"]),
     "Spooks Mcgee": player_with_mods_but_random_stats("Spooks McGee",["🧥"]),
     "Line Cook": player_with_mods_but_random_stats("Line Cook",["🧥"]),
+    "The 12th Herb And Spice": player_with_mods_but_random_stats("The 12th Herb And Spice",["🧥"]),
     "1": player_with_mods_but_random_stats("1",["🤝💖"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
