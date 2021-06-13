@@ -1,10 +1,10 @@
 from typing import NamedTuple
 import random
-
-import course_data
-import entities
 import re
 
+
+from data import course_data
+import entities
 
 def get_random_course(game):
     return Course(game, course_data.get_random_course())
@@ -117,18 +117,19 @@ class Course:
             for x,tileEmoji in enumerate(line):
                 if x == len(terrain):
                     terrain.append([])
+
+                centerOfTile = [x+0.5,y+0.5]
                 if tileEmoji == "⛳":
-                    self.course_objects.append(entities.Hole(self.game,position=[x,y]))     
+                    self.course_objects.append(entities.Hole(self.game,position=centerOfTile))     
                     self.num_holes += 1  
                     tileEmoji = "🟩"
                 if tileEmoji == "💥":
-                    self.course_objects.append(entities.RealityCrack(self.game,position=[x,y],life=999))
+                    self.course_objects.append(entities.RealityCrack(self.game,position=centerOfTile,life=999))
                     tileEmoji = "⬛"
                 terrain[x].append(tileEmoji)
 
         self.terrain = terrain
-        self.bounds = [len(self.terrain[0]),len(self.terrain)]
-        self.arraybounds = [len(self.terrain),len(self.terrain[0])]
+        self.bounds = [len(self.terrain),len(self.terrain[0])]
 
     def get_objects(self):
         return self.course_objects

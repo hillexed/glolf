@@ -1,18 +1,18 @@
 from typing import TypedDict
-import discord
-import glolfer
 import numpy as np
 import copy
 import random
 import logging
 logger = logging.getLogger(__name__)
 
-
-import courses
-from players import default_player_names
-from swordfighting import SwordfightingDecree
 import utils
-from courses import Course
+import entities
+from data.players import default_player_names
+from modifications.current_rules import get_permanent_modifiers
+import courses
+
+
+
 
 class SingleHoleScoresheet:
     def __init__(self, player):
@@ -20,6 +20,9 @@ class SingleHoleScoresheet:
         self.scored_strokes = 0
         self.total_strokes = 0
         self.balls_scored = 0
+
+    def printed_representation(self):
+        return f"{self.player.get_display_name(with_mods_in_parens=True)}: {self.balls_scored} holes, {self.total_strokes} strokes"
 
 class SingleHole:
     def __init__(self, debug=False, glolfer_names=[], max_turns=60, is_tournament=False):
@@ -43,13 +46,28 @@ class SingleHole:
         self.objects += self.course.get_objects()
         self.par=3
 
-        self.modifiers = [SwordfightingDecree(self)]
+        self.modifiers = get_permanent_modifiers(self)
 
         # place three balls
-        self.objects.append(glolfer.Ball(self, position=self.course.random_position_on_course()))
-        self.objects.append(glolfer.Ball(self, position=self.course.random_position_on_course()))
-        self.objects.append(glolfer.Ball(self, position=self.course.random_position_on_course()))
+        self.objects.append(entities.Ball(self, position=self.course.random_position_on_course()))
+        self.objects.append(entities.Ball(self, position=self.course.random_position_on_course()))
+        self.objects.append(entities.Ball(self, position=self.course.random_position_on_course()))
 
+        self.setup_first_glolfers(glolfer_names)
+
+        self.message_queue = []
+        self.messages_to_report_in_summary = []
+        self.new_objects = []
+
+    def add_player_by_name(self, starting_position, playername):
+        newglolfer = entities.Glolfer(self, position=starting_position, playername=playername)
+        self.add_player(newglolfer)
+
+    def add_player(self, newglolfer):         
+        self.objects.append(newglolfer)
+        self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
+
+    def setup_first_glolfers(self, glolfer_names):
         if len(glolfer_names) == 0:
             logger.info(f"Game {self.id}: No glolfers, choosing random...")
             glolfer_names.append(random.choice(default_player_names))
@@ -57,7 +75,7 @@ class SingleHole:
 
         # place one glolfer at each hole, in order, then any more are random
         placed_glolfers = 0
-        flags = [obj for obj in self.objects if type(obj) == glolfer.Hole]
+        flags = [obj for obj in self.objects if type(obj) == entities.Hole]
 
         for name in glolfer_names:
             if placed_glolfers < len(flags):
@@ -67,16 +85,7 @@ class SingleHole:
             else:
                 # Out of flags, throw em anywhere
                 new_glolfer_pos = self.course.random_position_on_course()         
-            self.add_player(new_glolfer_pos, playername=name)
-
-        self.message_queue = []
-        self.messages_to_report_in_summary = []
-        self.new_objects = []
-
-    def add_player(self, starting_position, playername):         
-        newglolfer = glolfer.Glolfer(self, position=starting_position, playername=playername)
-        self.objects.append(newglolfer)
-        self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
+            self.add_player_by_name(new_glolfer_pos, playername=name)
 
     def update(self):
         self.message_queue = []
@@ -133,7 +142,7 @@ class SingleHole:
             
 
         if game_over:
-            embed.add_field(name="Game over!", value=f"🎉 {self.compute_winner_name()} wins! 🎉")
+            embed.add_field(name="Game over!", value=f"🎉 {self.compute_winner_name(include_NPC_scorecards=True)} wins! 🎉")
 
         embed.set_footer(text="Brought to you by Instigator Hillexed#8194.")
         return embed
@@ -183,7 +192,7 @@ class SingleHole:
             
 
         if self.over:
-            string += f"Game over! 🎉 **{self.compute_winner_name()}** wins! 🎉\n_ _"
+            string += f"Game over! 🎉 **{self.compute_winner_name(include_NPC_scorecards=True)}** wins! 🎉\n_ _"
         return string
         
 
@@ -204,58 +213,69 @@ class SingleHole:
                 course[tile[0]][tile[1]] = obj.displayEmoji
 
         # board is stored internally as [x][y] but to print it we need to flip that and go [y][x]
-        for y in range(self.course.arraybounds[1]):
-            for x in range(self.course.arraybounds[0]):
+        for y in range(self.course.bounds[1]):
+            for x in range(self.course.bounds[0]):
                 if x < len(course) and y < len(course[x]):
                     string += "".join(course[x][y])   
             string += '\n'  
         return string
 
-    def compute_winner(self):
+    
+
+    def compute_winners(self, include_NPC_scorecards = False):
         '''
-            The winner is the player who scored the most holes! Otherwise, lowest strokes wins
+            The winner is the players who scored the most holes! Otherwise, lowest strokes wins
         '''
-        winner = None
+        winners = None
         tie = False
         for player in self.scores:
-            if winner is None: # start with the first player in the list
-                winner = player
+            if type(player) != entities.Glolfer and not include_NPC_scorecards: #non-glolfers can't win
                 continue
-            if self.scores[player].balls_scored > self.scores[winner].balls_scored:
-                winner = player # more holes? winner
+            if winners is None: # start with the first player in the list
+                winners = [player]
                 tie = False
-            elif self.scores[player].balls_scored == self.scores[winner].balls_scored:
-                if self.scores[player].total_strokes < self.scores[winner].total_strokes:
-                    winner = player #same holes? lowest strokes wins
+                continue
+            if self.scores[player].balls_scored > self.scores[winners[0]].balls_scored:
+                winners = [player] # more holes? winner
+                tie = False
+            elif self.scores[player].balls_scored == self.scores[winners[0]].balls_scored:
+                if self.scores[player].total_strokes < self.scores[winners[0]].total_strokes:
+                    winners = [player] #same holes? lowest strokes wins
                     tie = False
-                elif self.scores[player].total_strokes == self.scores[winner].total_strokes:
+                elif self.scores[player].total_strokes == self.scores[winners[0]].total_strokes:
+                    winners.append(player) # tie
                     tie = True
-        if tie:
-            return None
-        else:
-            return winner
+        return winners
 
-    def compute_winner_name(self):
+    def is_tied(self):
+        return len(self.compute_winning_players()) > 1
+
+    def compute_winner_name(self, include_NPC_scorecards=False):
         if self.custom_winner_name is not None:
             return self.custom_winner_name
 
-        winner = self.compute_winner()
-        if winner is not None:
-            return winner.get_display_name()
+        winners = self.compute_winners(include_NPC_scorecards)
+        if len(winners) == 1:
+            return winners[0].get_display_name()
         return "Everybody"
 
+    def compute_random_current_winner(self):
+        # return the winner if one winner exists, or a randomly-chosen winner if there's a tie
+        return random.choice(self.compute_winners(include_NPC_scorecards = False))
+
     def end(self, custom_winner_name=None):
-        self.over = True
-        self.custom_winner_name = custom_winner_name
-        self.send_message(f"**Game over! {self.compute_winner_name()} wins!**")
+        if not self.over:
+            self.over = True
+            self.custom_winner_name = custom_winner_name
+            self.send_message(f"**Game over! {self.compute_winner_name(include_NPC_scorecards=True)} wins!**")
 
     def print_score(self):
         string = ""
-        current_winner = self.compute_winner()
+        current_winners = self.compute_winners()
         for player in self.scores:
             scorecard = self.scores[player]
-            scorecard_string = f"{scorecard.player.get_display_name()}: {scorecard.balls_scored} holes, {scorecard.total_strokes} strokes"
-            if player == current_winner and not self.over:
+            scorecard_string = scorecard.printed_representation()
+            if player in current_winners and self.scores[player].total_strokes > 0 and not self.over:
                 scorecard_string += " 👀"
             string += f"{scorecard_string} \n"
 
@@ -285,7 +305,7 @@ class SingleHole:
         objectsSortedByDistance = sorted(consideredobjects, key=lambda object:np.linalg.norm(object.position-target.position))
         return objectsSortedByDistance
 
-    def get_closest_object(self, target : glolfer.Entity, object_type=None):
+    def get_closest_object(self, target : entities.Entity, object_type=None):
         objects = self.get_closest_objects(target, object_type)
         if len(objects) > 0:
             return objects[0]
@@ -318,6 +338,17 @@ class SingleHole:
         if print_in_summary:
             self.messages_to_report_in_summary.append(message)
 
+    def on_score(self, scoring_player, ball, hole_position):
+        for mod in self.modifiers:
+            mod.on_score(scoring_player, ball, hole_position)
+
+    def increase_score(self, scoring_player, added_strokes=0, added_balls_scored=0, added_scored_strokes=0):
+        if scoring_player not in self.scores: 
+            self.scores[scoring_player] = SingleHoleScoresheet(scoring_player)
+        self.scores[scoring_player].scored_strokes += added_scored_strokes
+        self.scores[scoring_player].balls_scored += added_balls_scored
+        self.scores[scoring_player].total_strokes += added_strokes
+
     def report_hit(self,shooting_player, ball,swing,club,shot_vec):
 
         if np.linalg.norm(shot_vec) > 6:
@@ -337,6 +368,12 @@ class SingleHole:
             logging.debug(message + f"{shot_vec}")
             message += f"{shot_vec}"
 
-        self.scores[shooting_player].total_strokes += 1
+        for obj in self.modifiers:
+            obj.on_hit(shooting_player, ball, swing, club, shot_vec)
+
+        self.increase_score(shooting_player, added_strokes=1)
 
         self.send_message(message)
+
+
+

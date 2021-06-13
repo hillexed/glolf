@@ -1,17 +1,19 @@
 import numpy as np
 import math
 import random
+import logging
+logger = logging.getLogger(__name__)
 
-import players
 import utils
+from data import players, playerstlats
+from .misc import *
+from .ball_and_hole import *
 
-from entities import *
-
-class Glolfer(Entity):
+class Glolfer(playerstlats.Player, Entity):
     type = "player"
     displayEmoji = "🏌️" # will be overwritten
     zIndex = 10 # show below players
-    def __init__(self, game, position = [0,0], playername=None):
+    def __init__(self, game, position = [0,0], playername=None, team=None):
         self.game = game
         self.position = np.array(position).astype(float)
 
@@ -22,16 +24,17 @@ class Glolfer(Entity):
 
         # get stlats
         self.player_data = players.get_player_from_name(self.name)
-        self.displayEmoji = self.player_data.emoji
+
+        self.emoji = self.player_data.emoji # shows up in scorecard
+        self.displayEmoji = self.player_data.emoji # can be changed if shenanigans happen
         self.stlats = self.player_data.stlats
 
-        self.team = "Undefined Team"
+        self.modifiers = [] #an array of modification.Modification s
+
+        self.team = team
 
     def get_relevant_modifiers(self):
-        return self.game.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)
-
-    def get_display_name(self):
-        return f"{self.name} {self.displayEmoji}"
+        return self.game.modifiers + self.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)
 
     def update(self):
         '''
@@ -51,6 +54,7 @@ class Glolfer(Entity):
 
         for modifier in self.get_relevant_modifiers():
             modifier.on_glolfer_update(self, current_action)
+        self.modifiers = [x for x in filter(lambda obj:not obj.isDead, self.modifiers)]
 
         if current_action["action"] == "hit":
             self.hit(current_action["target"])

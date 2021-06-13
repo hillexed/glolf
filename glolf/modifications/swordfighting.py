@@ -1,8 +1,10 @@
-import utils
+
 import random
 from enum import Enum
-from entities import Hole
-from glolfer import Glolfer, HittingArrow, ScoreConfetti, SwordfightIndicator
+
+import utils
+from .modification import Modification
+from entities import Entity, Hole, Glolfer, HittingArrow, ScoreConfetti, SwordfightIndicator
 
 class SWORDFIGHT_OPTIONS(Enum):
     offensive=1
@@ -172,7 +174,7 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
         return kiss_string
 
 
-class SwordfightingDecree():
+class SwordfightingDecree(Modification):
     # handles all logic for swordfights, including inserting into glolfer.update()
 
     starting_hp = 3
@@ -186,10 +188,6 @@ class SwordfightingDecree():
         self.new_swordfights = []
         self.stunned_from_swordfight = []
         self.player_hp = {}
-
-    def on_glolfer_move(self, glolfer, target): #return a new target to move towards if needed
-        return None
-
 
     def get_current_duel(self, glolfer):
 

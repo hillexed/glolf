@@ -2,10 +2,6 @@ import random, uuid, math
 from typing import NamedTuple
 from datetime import date
 
-default_player_names = ("Meteor Heartfelt","Razor Defrost","Jasper Groove","Thalia Soliloque","Benedict Dicetower","Bingo Polaroid","Pumpernickel Fan","Baby Bop","Tantalus Chewed","Freddie Missouri","Load Bearing Coconut", "Frankle Knives", "Spooks McGee")
-    
-
-
 def random_player_emoji(rng):
     humanoid = ["👶","👧","🧒","👦","👩","🧑","👨","👩‍🦱","🧑‍🦱","👨‍🦱","👩‍🦰","🧑‍🦰","👨‍🦰","👱‍♀️",
 "👱","👱‍♂️","👩‍🦳","🧑‍🦳","👨‍🦳","👩‍🦲","🧑‍🦲","👨‍🦲","🧔","👵","🧓","👴","👲","👳‍♀️",
@@ -27,7 +23,7 @@ def random_player_emoji(rng):
     nonhumanoid=[
 "🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵",
 "🙈","🙉","🙊","🐒","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄",
-"🐝","🐛","🦋","🐌","🐞","🐜","🦟","🦗","🕷️","🦂","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐",
+"🐝","🐛","🦋","🐌","🐞","🐞","🦟","🦗","🐞","🦂","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐", #🐜 and 🕷️ have been replaced by 🐞 to stand out against discord's dark background better
 "🦞","🦀","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🦓","🦍","🦧","🐘","🦛","🦏",
 "🐪","🐫","🦒","🦘","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌","🐕","🐩","🦮","🐕‍🦺",
 "🐈","🐓","🦃","🦚","🦜","🦢","🦩","🕊️","🐇","🦝","🦨","🦡","🦦","🦥","🐁","🐀","🐿","🦔",
@@ -45,7 +41,7 @@ class PlayerStlats(NamedTuple):
 
     # unused for now except for fun
     tofu: float = 4
-    wiggle: float = 0.5 # chance someone about to bump into a swordfight holds back instead
+    wiggle: float = 0.5 # chance someone breaks out of a bird / someone about to bump into a swordfight holds back instead
     ritualism: float = 2
 
     unworthiness: float = 0.5
@@ -76,7 +72,7 @@ class PlayerStlats(NamedTuple):
 
     # shot angle stats
     needlethreadableness: float = 0.8   # how well you thread the needle (multiplier for how much angle variance your shots have), lower = better
-    left_handedness: float = 0.0        # how biased your shots are to the left or right. can go negative, 0 = best
+    left_handedness: float = 0.0        # how biased your shots are to the left or right. can go negative, 0 = best, away from 0 = worse
 
 class Player:
     def __init__(self, name:str, stlats: PlayerStlats, emoji:str="🏌️", id:str="",modifications=None):
@@ -112,26 +108,48 @@ class Player:
         return 1-(chanceOfBiggest-minChance)/(1-minChance)
 
 
+    def compute_driving_moons(self):
+        return format_stlat_display(self.driving_rating())
+
     def driving_rating(self): # "Driving": hitting, and driving a kart
         # +disco + tankitude
         rating_number = (self.stlats.musclitude + self.stlats.tofu)*5/2
-        return format_stlat_display(rating_number)
+        return rating_number
+
+    def compute_precision_moons(self):
+        return format_stlat_display(self.precision_rating())
 
     def precision_rating(self):
         # +pettability + splortsmanship +tentacles
         rating_number = (self.stlats.needlethreadableness*0.5 + self.stlats.finesse + self.stlats.estimation*0.2) * 5/(1+0.2+0.5) - abs(self.stlats.left_handedness)
-        return format_stlat_display(rating_number)
+        return rating_number
+
+    def compute_aerodynamics_moons(self):
+        return format_stlat_display(self.aerodynamics_rating())
 
     def aerodynamics_rating(self):
         # +ritualism +softness +owlishness - unworthiness
 
         rating_number = (self.stlats.ritualism + self.stlats.owlishness + self.stlats.softness) * 5/3 #unused for now, need more stlats
-        return format_stlat_display(rating_number)
+        return rating_number
+
+    def compute_self_awareness_moons(self):
+        return format_stlat_display(self.self_awareness_rating())
 
     def self_awareness_rating(self):
         # - self.stlats.pettiness - capitalism + improv + tentacles
         rating_number = (self.stlats.wiggle*0.5 + (self.stlats.marbles-2)/2 + self.unpredictability()*0.8) * 5/(0.5+1+0.8) + self.stlats.polkadottedness * 5 #means nothing for now
-        return format_stlat_display(rating_number)
+        return rating_number
+
+    def get_biggest_stlat_rating(self):
+        ratings = [
+            ("Driving", self.driving_rating()),
+            ("Precision", self.precision_rating()),
+            ("Aerodynamics", self.aerodynamics_rating()),
+            ("Self-Awareness", self.self_awareness_rating()),
+        ]
+        ratings.sort(key=lambda item:item[1], reverse=True)
+        return ratings[0]
 
     def modifications_string(self):
         if len(self.modifications) == 0:
@@ -153,7 +171,12 @@ class Player:
         fancystlatname = stlatname.replace("_"," ").title()
         return f"**Today's Verboten Knowledge Stlat:**\n||{fancystlatname}: {stlat:.2f}||"
 
-
+    def get_display_name(self, with_mods_in_parens = False):
+        if with_mods_in_parens and len(self.modifiers) > 0:
+            modList = ', '.join([mod.displayEmoji for mod in self.modifiers])
+            return f"{self.name} {self.emoji} ({modList})"
+        else:
+            return f"{self.name} {self.emoji}"
 
 
 
@@ -187,13 +210,13 @@ def generate_random_stlats_from_name(name="Random Player"):
 
     return PlayerStlats(
         nyoomability = max(rng.gauss(0,0.3),1.4),
-        tofu=           rng.random(), # unused
-        wiggle=         rng.random(), # unused
-        ritualism=   rng.random(), # unused
+        tofu=           rng.random(), 
+        wiggle=         rng.random(), 
+        ritualism=   rng.random(), 
         musclitude=     rng.random(),
         finesse=        rng.random(),
         needlethreadableness=   rng.random(), 
-        left_handedness=        rng.gauss(0,0.3), #how often shots are biased to the left or right of what you want
+        left_handedness=        rng.gauss(0,0.3), 
         stance= rng.choice(["Tricky","Flashy","Aggro","Tanky","Twitchy","Powerful",
             "Wibble","Wobble","Reverse","Feint","Electric","Spicy","Pomegranate",
             "Explosive","Cottagecore","Corecore","Hardcore","Softcore",
@@ -265,9 +288,10 @@ known_players = {
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
 
-def get_player_from_name(name):
-    # generate a player from their name with random stats
-    # ...or if they're polkadot, return a maxed person
+
+def generate_player_from_name(name):
+    # if they're not there, generate a player from their name with random stats
+    # or, if it's a known player, generate them with known stuff
     if name.title() in known_players:
         return known_players[name.title()]
     else:

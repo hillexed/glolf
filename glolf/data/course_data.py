@@ -1,7 +1,7 @@
 import random
 import emoji
 
-courses = [
+fancy_courses = [
 #The Llawn
 '''
         🕸️🕸️🟩🟩🟩🟩🟩🟩🟩🕸️🕸️
@@ -412,7 +412,7 @@ courses = [
 :white_large_square::white_large_square::white_large_square::white_large_square::golf::white_large_square::white_large_square::mountain_cableway:
 :white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::mountain_cableway:
 ''',
-# yellowstone hotsprings by epix
+# yellowstone hotsprings by Crash!
 '''
 :evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree::evergreen_tree: 
 :bison::bison::brown_square::green_square::golf::green_square::brown_square::green_square::brown_square: 
@@ -483,7 +483,7 @@ courses = [
 :white_large_square::white_large_square::blue_square::blue_square::yellow_square::yellow_square::yellow_square::blue_square::blue_square::blue_square::blue_square:
 ''',
 
-# elsewhere waffle house by epix
+# elsewhere waffle house by Crash!
 '''
 :fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
 :fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
@@ -499,23 +499,161 @@ courses = [
 :fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
 ''',
 
-# pride ball by warlock
+#office space by blamperer
 '''
-:rainbow_flag::rainbow_flag::black_large_square::black_large_square::black_large_square::red_square::red_square::black_large_square::black_large_square::black_large_square::rainbow_flag::rainbow_flag:
-:rainbow_flag::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square::black_large_square::rainbow_flag:
-:black_large_square::black_large_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::black_large_square::black_large_square:
-:black_large_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::black_large_square:
-:black_large_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::black_large_square:
-:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
-:green_square::green_square::green_square::golf::green_square::green_square::green_square::green_square::golf::green_square::green_square::green_square:
-:black_large_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::black_large_square:
-:black_large_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::black_large_square:
-:black_large_square::black_large_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::black_large_square::black_large_square:
-:rainbow_flag::black_large_square::black_large_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::black_large_square::black_large_square::rainbow_flag:
-:rainbow_flag::rainbow_flag::black_large_square::black_large_square::black_large_square::purple_square::purple_square::black_large_square::black_large_square::black_large_square::rainbow_flag::rainbow_flag:
+:file_cabinet::file_cabinet::file_cabinet::file_cabinet::file_cabinet::file_cabinet::brown_square::brown_square::brown_square::door::brown_square::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::telephone::computer::coffee::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::brown_square::golf::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::white_large_square::door::white_large_square::white_large_square:
+:couch::brown_square::golf::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::dart:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::fax:
+''',
+
+# dune eternal by zweihawke
+'''
+:orange_square::orange_square::orange_square::cloud_lightning::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square:
+:orange_square::orange_square::orange_square::cloud_lightning::orange_square::low_brightness::orange_square::orange_square::orange_square::orange_square::orange_square:
+:orange_square::orange_square::orange_square::orange_square::orange_square::golf::orange_square::orange_square::orange_square::cloud_lightning::orange_square:
+:orange_square::cloud_lightning::orange_square::orange_square::black_large_square::black_large_square::black_large_square::orange_square::orange_square::orange_square::orange_square:
+:orange_square::orange_square::orange_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::orange_square::orange_square::orange_square:
+:orange_square::orange_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::orange_square::orange_square:
+:orange_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::orange_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::golf::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::cactus::yellow_square:
+:yellow_square::cactus::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+'''
+
+# trans flag by hal and Crash!
+'''
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus:
+:hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus:
+:white_large_square::white_large_square::golf::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::golf::white_large_square::white_large_square:
+:hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus:
+:hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus::hibiscus:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+''',
+]
+
+
+mundane_courses = [
+# Midway by Crash!
+'''
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
+:deciduous_tree::deciduous_tree::green_square::green_square::blue_square::yellow_square::blue_square::green_square::green_square::deciduous_tree::deciduous_tree:
+:deciduous_tree::green_square::green_square::blue_square::blue_square::green_square::blue_square::blue_square::green_square::green_square::deciduous_tree:
+:deciduous_tree::green_square::green_square::blue_square::golf::green_square::golf::blue_square::green_square::green_square::deciduous_tree:
+:deciduous_tree::green_square::green_square::blue_square::blue_square::green_square::blue_square::blue_square::green_square::green_square::deciduous_tree:
+:deciduous_tree::deciduous_tree::green_square::green_square::blue_square::yellow_square::blue_square::green_square::green_square::deciduous_tree::deciduous_tree:
+:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+''',
+
+# the monkeys toe by Crash!
+'''
+:blue_square::blue_square::blue_square::blue_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::green_square::green_square::green_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::green_square::golf::green_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::green_square::green_square::green_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::green_square::green_square::green_square::green_square::green_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::green_square::green_square::green_square::golf::green_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::green_square::green_square::green_square::green_square::green_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square:
+:blue_square::blue_square::blue_square::blue_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square:
+''',
+
+# monkeyyyy by Crash!
+'''
+:blue_square::blue_square::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::blue_square::blue_square:
+:blue_square::green_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::green_square::blue_square:
+:yellow_square::green_square::golf::yellow_square::yellow_square::yellow_square::golf::green_square::blue_square:
+:yellow_square::green_square::yellow_square::yellow_square::green_square::yellow_square::yellow_square::green_square::blue_square:
+:yellow_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::blue_square:
+:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::blue_square:
+:green_square::green_square::yellow_square::green_square::green_square::green_square::green_square::yellow_square::blue_square:
+:green_square::green_square::green_square::yellow_square::green_square::green_square::green_square::green_square::yellow_square:
+:green_square::green_square::green_square::yellow_square::green_square::green_square::green_square::green_square::yellow_square:
+:green_square::yellow_square::yellow_square::yellow_square::green_square::green_square::yellow_square::yellow_square::yellow_square:
+:deciduous_tree::deciduous_tree::deciduous_tree::green_square::green_square::green_square::deciduous_tree::deciduous_tree::deciduous_tree:
+''',
+
+# "somchai pogostick" by Crash!
+'''
+
+:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
+:green_square::yellow_square::yellow_square::blue_square::green_square::green_square::blue_square::yellow_square::yellow_square::green_square:
+:green_square::yellow_square::golf::blue_square::green_square::green_square::blue_square::blue_square::yellow_square::green_square:
+:green_square::blue_square::blue_square::blue_square::green_square::green_square::blue_square::blue_square::blue_square::green_square:
+:green_square::blue_square::green_square::green_square::green_square::green_square::green_square::green_square::blue_square::green_square:
+:green_square::blue_square::blue_square::blue_square::green_square::green_square::blue_square::blue_square::blue_square::green_square:
+:green_square::yellow_square::blue_square::blue_square::green_square::green_square::blue_square::golf::yellow_square::green_square:
+:green_square::yellow_square::yellow_square::blue_square::green_square::green_square::blue_square::yellow_square::yellow_square::green_square:
+:green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square:
+''',
+
+
+]
+
+wii_sports_courses = [
+# golf courses from wii sports, recreated by hal 2000
+'''
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::yellow_square::yellow_square::green_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::green_square::golf::green_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::green_square::yellow_square::green_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::deciduous_tree::green_square::green_square::green_square::deciduous_tree::black_large_square::black_large_square:
+:black_large_square::black_large_square::deciduous_tree::green_square::green_square::green_square::deciduous_tree::black_large_square::black_large_square:
+:black_large_square::black_large_square::deciduous_tree::yellow_square::green_square::green_square::deciduous_tree::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::yellow_square::green_square::green_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::green_square::green_square::green_square::green_square::yellow_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::green_square::green_square::green_square::green_square::yellow_square::green_square::black_large_square:
+:black_large_square::deciduous_tree::deciduous_tree::green_square::golf::green_square::deciduous_tree::deciduous_tree::deciduous_tree:
+:deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree:
+''',
+# wii sports course 2
+'''
+:black_large_square::black_large_square::black_large_square::black_large_square::green_square::green_square::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::green_square::yellow_square::green_square::green_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::green_square::green_square::green_square::golf::green_square::green_square::black_large_square:
+:black_large_square::green_square::green_square::green_square::yellow_square::yellow_square::blue_square::blue_square::green_square:
+:black_large_square::green_square::green_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square:
+:black_large_square::green_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:green_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:green_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:green_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:green_square::green_square::green_square::green_square::blue_square::blue_square::blue_square::blue_square::blue_square:
+:deciduous_tree::deciduous_tree::golf::green_square::green_square::green_square::green_square::deciduous_tree::deciduous_tree:
+:deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree:
+''',
+# wii sports golf course 3
+'''
+:deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree:
+:deciduous_tree::deciduous_tree::deciduous_tree::green_square::deciduous_tree::deciduous_tree::blue_square::blue_square::deciduous_tree:
+:deciduous_tree::deciduous_tree::yellow_square::golf::yellow_square::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree:
+:deciduous_tree::deciduous_tree::green_square::yellow_square::green_square::green_square::green_square::green_square::deciduous_tree:
+:deciduous_tree::deciduous_tree::deciduous_tree::green_square::green_square::green_square::green_square::deciduous_tree::deciduous_tree:
+:deciduous_tree::green_square::green_square::deciduous_tree::green_square::green_square::green_square::deciduous_tree::deciduous_tree:
+:deciduous_tree::green_square::green_square::deciduous_tree::green_square::green_square::green_square::green_square::deciduous_tree:
+:deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::green_square::green_square::green_square::green_square::deciduous_tree:
+:deciduous_tree::deciduous_tree::deciduous_tree::green_square::green_square::green_square::green_square::blue_square::deciduous_tree:
+:deciduous_tree::deciduous_tree::green_square::green_square::deciduous_tree::deciduous_tree::blue_square::blue_square::deciduous_tree:
+:deciduous_tree::golf::green_square::green_square::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree:
+:deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree::deciduous_tree:
 ''',
 
 ]
+
+courses = fancy_courses + mundane_courses # + wii_sports_courses
 
 disabled_courses = [
 # minesweeper by blamperer
@@ -552,6 +690,25 @@ disabled_courses = [
 :black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::brown_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square:
 :black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::black_large_square::black_large_square:
 ''',
+
+
+# pride ball by warlock
+# rainbow flag emoji is a combination so it doesn't show up properly
+'''
+:rainbow_flag::rainbow_flag::black_large_square::black_large_square::black_large_square::red_square::red_square::black_large_square::black_large_square::black_large_square::rainbow_flag::rainbow_flag:
+:rainbow_flag::black_large_square::black_large_square::red_square::red_square::red_square::red_square::red_square::red_square::black_large_square::black_large_square::rainbow_flag:
+:black_large_square::black_large_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::black_large_square::black_large_square:
+:black_large_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::orange_square::black_large_square:
+:black_large_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::black_large_square:
+:yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square:
+:green_square::green_square::green_square::golf::green_square::green_square::green_square::green_square::golf::green_square::green_square::green_square:
+:black_large_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::green_square::black_large_square:
+:black_large_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::black_large_square:
+:black_large_square::black_large_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::black_large_square::black_large_square:
+:rainbow_flag::black_large_square::black_large_square::purple_square::purple_square::purple_square::purple_square::purple_square::purple_square::black_large_square::black_large_square::rainbow_flag:
+:rainbow_flag::rainbow_flag::black_large_square::black_large_square::black_large_square::purple_square::purple_square::black_large_square::black_large_square::black_large_square::rainbow_flag::rainbow_flag:
+''',
+
 ]
 
 # to do: give each course a name
@@ -578,7 +735,7 @@ special_case_emojis = { #these are emojis which aren't converted to unicode by e
 ":e_mail:":'📧',
 ":snowman:":'⛄',
 ":mountain_snow:":"🏔️",
-
+":cloud_lightning:":"🌩️",
 }
 
 
