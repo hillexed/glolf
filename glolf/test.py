@@ -11,5 +11,5 @@ def testgame():
         if i > 1000:
             raise ValueError("Game went on too long!")
 
-for i in range(5):
+for i in range(50):
     testgame()

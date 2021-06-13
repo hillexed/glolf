@@ -256,7 +256,7 @@ class SingleHole:
 
     def compute_random_current_winner(self):
         # return the winner if one winner exists, or a randomly-chosen winner if there's a tie
-        return random.choice(self.compute_winning_players(include_NPC_scorecards = False))
+        return random.choice(self.compute_winners(include_NPC_scorecards = False))
 
     def end(self, custom_winner_name=None):
         if not self.over:

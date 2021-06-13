@@ -5,11 +5,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 import utils
-from data import players
+from data import players, playerstlats
 from .misc import *
 from .ball_and_hole import *
 
-class Glolfer(Entity):
+class Glolfer(playerstlats.Player, Entity):
     type = "player"
     displayEmoji = "🏌️" # will be overwritten
     zIndex = 10 # show below players
@@ -24,7 +24,9 @@ class Glolfer(Entity):
 
         # get stlats
         self.player_data = players.get_player_from_name(self.name)
-        self.displayEmoji = self.player_data.emoji
+
+        self.emoji = self.player_data.emoji # shows up in scorecard
+        self.displayEmoji = self.player_data.emoji # can be changed if shenanigans happen
         self.stlats = self.player_data.stlats
 
         self.modifiers = [] #an array of modification.Modification s
@@ -33,13 +35,6 @@ class Glolfer(Entity):
 
     def get_relevant_modifiers(self):
         return self.game.modifiers + self.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)
-
-    def get_display_name(self, with_mods_in_parens = False):
-        if with_mods_in_parens and len(self.modifiers) > 0:
-            modList = ', '.join([mod.displayEmoji for mod in self.modifiers])
-            return f"{self.name} {self.displayEmoji} ({modList})"
-        else:
-            return f"{self.name} {self.displayEmoji}"
 
     def update(self):
         '''
