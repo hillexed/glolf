@@ -6,6 +6,7 @@ class Modification:
         return None # don't change the target
 
     def on_glolfer_update(self, glolfer, current_glolfer_action):
+        # called every glolfer.update()
         pass
 
     def on_hit(self, shooting_player, ball, swing, club, shot_vec):
@@ -15,4 +16,13 @@ class Modification:
         pass
 
     def update(self):
+        # called by game modifications, not on player modifications
         pass
+
+class PlayerModification(Modification):
+    displayEmoji = "?"
+    type = "permanent"
+    isDead=False
+    def __init__(self, game, attached_player):
+        self.game = game
+        self.player = attached_player

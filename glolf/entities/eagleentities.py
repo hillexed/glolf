@@ -26,6 +26,7 @@ class FlyingEagle(Entity):
 
         self.grabbed_thing = None
         self.swooped = False
+        self.is_flying_off = False
         
 
     def choose_target(self, triggering_player):
@@ -85,7 +86,7 @@ class FlyingEagle(Entity):
 
     def attempt_to_grab(self, player):
         # don't grab an already grabbed player
-        if not any([type(mod) == eaglemod.GrabbedByEagle for mod in player.modifiers]):
+        if not self.is_flying_off and not any([type(mod) == eaglemod.GrabbedByEagle for mod in player.modifiers]):
             self.grab_player(player)
 
     def grab_player(self, player):
@@ -93,6 +94,7 @@ class FlyingEagle(Entity):
         player.modifiers.append(eaglemod.GrabbedByEagle(self.game))
         self.game.send_message(f"The eagle swoops! It grabs {player.get_display_name()}!")
         self.swooped = True
+        self.is_flying_off = True
 
     def release_grabbed_thing(self):
         # removed grabbed modifier

@@ -1,10 +1,4 @@
-class PlayerModification(Modification):
-    displayEmoji = " "
-    type = "permanent"
-    def __init__(self, game, attached_player):
-        self.game = game
-        self.player = attached_player
-
+from .modification import PlayerModification
 # good mods
 
 class Attractor(PlayerModification):

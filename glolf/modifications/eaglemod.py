@@ -43,8 +43,7 @@ class AlbatrossAroundNeck(Modification):
             current_glolfer_action["action"] = "nothing you're grabbed lol"
             self.game.send_message(f"{self.player.get_display_name()} pets the albatross around their neck!")
 
-    def update():
-        if random.random() < 0.25:
+        elif random.random() < 0.25:
             # todo: remove modification from player
             self.isDead = True
             self.game.send_message(f"The albatross lets go of {self.player.get_display_name()} and flies away!") 
