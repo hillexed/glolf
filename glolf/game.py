@@ -1,5 +1,4 @@
 from typing import TypedDict
-import discord
 import numpy as np
 import copy
 import random
@@ -54,6 +53,21 @@ class SingleHole:
         self.objects.append(entities.Ball(self, position=self.course.random_position_on_course()))
         self.objects.append(entities.Ball(self, position=self.course.random_position_on_course()))
 
+        self.setup_first_glolfers(glolfer_names)
+
+        self.message_queue = []
+        self.messages_to_report_in_summary = []
+        self.new_objects = []
+
+    def add_player_by_name(self, starting_position, playername):
+        newglolfer = entities.Glolfer(self, position=starting_position, playername=playername)
+        self.add_player(newglolfer)
+
+    def add_player(self, newglolfer):         
+        self.objects.append(newglolfer)
+        self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
+
+    def setup_first_glolfers(self, glolfer_names):
         if len(glolfer_names) == 0:
             logger.info(f"Game {self.id}: No glolfers, choosing random...")
             glolfer_names.append(random.choice(default_player_names))
@@ -71,16 +85,7 @@ class SingleHole:
             else:
                 # Out of flags, throw em anywhere
                 new_glolfer_pos = self.course.random_position_on_course()         
-            self.add_player(new_glolfer_pos, playername=name)
-
-        self.message_queue = []
-        self.messages_to_report_in_summary = []
-        self.new_objects = []
-
-    def add_player(self, starting_position, playername):         
-        newglolfer = entities.Glolfer(self, position=starting_position, playername=playername)
-        self.objects.append(newglolfer)
-        self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
+            self.add_player_by_name(new_glolfer_pos, playername=name)
 
     def update(self):
         self.message_queue = []
@@ -270,7 +275,7 @@ class SingleHole:
         for player in self.scores:
             scorecard = self.scores[player]
             scorecard_string = scorecard.printed_representation()
-            if player in current_winners and and self.scores[player].total_strokes > 0 and not self.over:
+            if player in current_winners and self.scores[player].total_strokes > 0 and not self.over:
                 scorecard_string += " 👀"
             string += f"{scorecard_string} \n"
 
@@ -334,8 +339,8 @@ class SingleHole:
             self.messages_to_report_in_summary.append(message)
 
     def on_score(self, scoring_player, ball, hole_position):
-        for obj in self.modifiers:
-            obj.on_score(scoring_player, ball, hole_position)
+        for mod in self.modifiers:
+            mod.on_score(scoring_player, ball, hole_position)
 
     def increase_score(self, scoring_player, added_strokes=0, added_balls_scored=0, added_scored_strokes=0):
         if scoring_player not in self.scores: 
@@ -369,3 +374,6 @@ class SingleHole:
         self.increase_score(shooting_player, added_strokes=1)
 
         self.send_message(message)
+
+
+

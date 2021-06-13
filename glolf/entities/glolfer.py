@@ -13,7 +13,7 @@ class Glolfer(playerstlats.Player, Entity):
     type = "player"
     displayEmoji = "🏌️" # will be overwritten
     zIndex = 10 # show below players
-    def __init__(self, game, position = [0,0], playername=None):
+    def __init__(self, game, position = [0,0], playername=None, team=None):
         self.game = game
         self.position = np.array(position).astype(float)
 
@@ -31,7 +31,7 @@ class Glolfer(playerstlats.Player, Entity):
 
         self.modifiers = [] #an array of modification.Modification s
 
-        self.team = "Undefined Team"
+        self.team = team
 
     def get_relevant_modifiers(self):
         return self.game.modifiers + self.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)

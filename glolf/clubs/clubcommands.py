@@ -1,12 +1,15 @@
 import db
 import asyncio
 
-from .clubs import GlolfClubData
+from .clubdata import GlolfClubData
 
-async def save_club(message, command_body, client):
-    template='''!saveclub <Club Name>
+async def save_club(message, command_body, client):\
+
+    secret_full_template_ssshhhhh_dont_tell_anyone='''!saveclub <Club Name>
 <team emoji> "<motto here>"
 Cheer: "We're cool!" (optional)
+Friends: A, B, C (optional)
+Rivals: A, B, C (optional)
 player1
 player2
 player3
@@ -14,31 +17,39 @@ player3
 caddy1
 caddy2
 '''
+
+    template='''!saveclub <Club Name>
+<team emoji> "<motto here>"
+Cheer: "We're cool!" (optional)
+player1
+player2
+player3
+'''
     if len(command_body) == 0:
-        return message.channel.send("Usage: \n" + template)
+        return message.channel.send("umm use the command like this: \n" + template)
 
     lines = command_body.split("\n")
 
     club_name = lines[0].strip()
     if command_body.count("\n") < 2:
-        return message.channel.send('On a new line, please fill out emoji and motto! They should look like this:\n<team emoji> "<motto here>"')
+        return message.channel.send('on a new line, please give me a team emoji and motto! they should look like this:\n<team emoji> "<motto here>"')
 
     line2words = lines[1].split(" ")
     emoji = line2words[0]
     motto = " ".join(line2words[1:])
 
     if len(emoji) == 0:
-        return message.channel.send("On line 2, please provide an emoji at the start of the line!")
+        return message.channel.send("on line 2, please give me a team emoji at the start of the line!")
     if len(motto) == 0:
-        return message.channel.send("On line 2, please provide a club motto after the emoji!")
+        return message.channel.send("on line 2, please give me a club motto after the emoji!")
     if (len(emoji) > 5 and ":" not in emoji) or len(emoji) > 40:
         if len(motto) == 0:
-            return await message.channel.send(f"{emoji} as an emoji? That doesn't look right...")
+            return await message.channel.send(f"umm are you sure {emoji} is the right emoji? looks a bit weird to me")
         else:
-            return await message.channel.send(f"Er, was that a team with emoji {emoji} and motto {motto}? I don't think I understood that correctly...") 
+            return await message.channel.send(f"um was that a team with emoji {emoji} and motto {motto}? i don't think i understood that correctly...") 
 
     if command_body.count("\n") <= 2:
-        return await message.channel.send("This club has no players in it! Name each player in the club on its own new line.")
+        return await message.channel.send("umm your club doesnt have any players. thats kinda lonely. give it some players by saying each players name on a new line")
 
     cheer = None
     friends = []
@@ -78,7 +89,7 @@ caddy2
         else:
             return await message.channel.send("There's too many blank lines!")
             
-
+    # sanity checking
     if len(player_names) > 12:
         return await message.channel.send("oh umm wow thats too many players to keep track of. can you stick to umm 12 or less")
 
@@ -87,6 +98,17 @@ caddy2
         
     if len(motto) > 80:
         return await message.channel.send("umm thats a really long motto can you choose something shorter and easier to remember")
+    if ':' in club_name:
+        return await message.channel.send("sorry but club names cant have ':' in them. its verboten")
+
+    for player in player_names:
+        if player_names.count(player) > 1:
+            return await message.channel.send(f"sorry but i think theres a duplicate of {player}")
+
+    for caddy in caddy_names:
+        if caddy_names.count(caddy) > 1:
+            return await message.channel.send(f"sorry but i think theres a duplicate of {caddy}")
+            
     
 
     new_club_data = GlolfClubData(name=club_name, emoji=emoji, motto=motto, player_names=player_names, cheer=cheer, caddy_names=caddy_names,
