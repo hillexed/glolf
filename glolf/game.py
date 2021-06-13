@@ -44,7 +44,7 @@ class SingleHole:
         # parse course
         self.course = courses.get_random_course(self)
         self.objects += self.course.get_objects()
-        self.par=3
+        self.par=4
 
         self.modifiers = get_permanent_modifiers(self)
 
