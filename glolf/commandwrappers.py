@@ -43,6 +43,11 @@ def too_many_games_active():
 
 
 update_coming = False
+def set_update_coming(value):
+    update_coming = value
+
+def is_update_coming():
+    return update_coming
 
 def disable_if_update_coming(func):
     '''

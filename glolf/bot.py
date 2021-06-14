@@ -11,13 +11,13 @@ from modifications.swordfighting import SwordfightingDecree
 
 from tourneycommands import parse_tourney_message
 from gamecommands import glolfcommand
-from commandwrappers import get_users_with_games_active
+from commandwrappers import get_users_with_games_active, set_update_coming, is_update_coming
 from clubs.clubcommands import save_club, view_club
 
 
 debug = False
 prefix = '!'
-version = '4.0'
+version = '4.1'
 MAX_GAMES = 10
 
 if len(sys.argv) > 1:
@@ -146,17 +146,15 @@ async def on_message(message):
         await message.channel.send(f"There are {len(get_users_with_games_active())} users with games active right now.")
 
     elif user_is_admin(message) and message.content.startswith(prefix + "updatecoming"):
-        global update_coming
         if "true" not in message.content and "false" not in message.content:
             return await message.channel.send(f"New games are disabled because an update's coming: {update_coming}. Change this by adding 'true' or 'false' to the command")
         elif "true" in message.content:
-
-            update_coming = True        
+            set_update_coming(True)     
             await message.channel.send("New games are now disabled. use !countgames to see how many are running.")
         elif "false" in message.content:
-            update_coming = False
+            set_update_coming(True)
             await message.channel.send("New games are enabled again.")
-        logging.info(f"Changed update_coming to {update_coming}")
+        logging.info(f"Changed update_coming to {is_update_coming()}")
 
 
     # "clear_game_list" command. just in case
