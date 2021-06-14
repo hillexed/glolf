@@ -11,6 +11,7 @@ from modifications.swordfighting import SwordfightingDecree
 
 from tourneycommands import parse_tourney_message
 from gamecommands import glolfcommand
+from commandwrappers import get_users_with_games_active
 from clubs.clubcommands import save_club, view_club
 
 
