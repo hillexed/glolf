@@ -285,7 +285,9 @@ known_players = {
     "Spooks Mcgee": player_with_mods_but_random_stats("Spooks McGee",["🧥"]),
     "Line Cook": player_with_mods_but_random_stats("Line Cook",["🧥"]),
     "The 12th Herb And Spice": player_with_mods_but_random_stats("The 12th Herb And Spice",["🧥"]),
+    "Caldera Clembons": player_with_mods_but_random_stats("Caldera Clembons",["💪"]),
     "1": player_with_mods_but_random_stats("1",["🤝💖"]),
+    "Test Robot": player_with_mods_but_random_stats("Solar Dies",["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
 

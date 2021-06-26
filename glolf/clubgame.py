@@ -67,7 +67,7 @@ class ClubGame(SingleHole):
                 # Out of flags, throw em anywhere
                 new_glolfer_pos = self.course.random_position_on_course()   
             newglolfer = entities.Glolfer(self, position=starting_position, playername=playername)      
-            self.add_player(new_glolfer_pos, playername=name)
+            self.add_player_by_name(new_glolfer_pos, playername=name)
 
     def print_score(self):
         string = ""
