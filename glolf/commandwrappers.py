@@ -44,6 +44,7 @@ def too_many_games_active():
 
 update_coming = False
 def set_update_coming(value):
+    global update_coming
     update_coming = value
 
 def is_update_coming():
@@ -54,8 +55,8 @@ def disable_if_update_coming(func):
     A decorator to disable starting new games if updates are coming
     '''
     async def wrapper(message, *args, **kwargs):
-        global update_coming
-        if update_coming:
+        print(is_update_coming())
+        if is_update_coming():
             await message.channel.send(":loop: HANG TIGHT FOR A MOMENT, GOT SOME RADICAL RENOVATIONS COMIN' RIGHT UP\n:loop: PLEASE LEAVE A MESSAGE AFTER THE TONE")
             return
         return await func(message, *args, **kwargs)
