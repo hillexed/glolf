@@ -438,7 +438,7 @@ class SwordfightingDecree(Modification):
         if not self.game.is_tournament and random.random() < self.dimensional_travel_chance:
             if self.game.scores[loser].balls_scored - self.game.scores[winner].balls_scored > 2 and random.random() > winner.stlats.needlethreadableness: #low-needlethreadableness players who are losing
                 # knocked into another game
-                self.players_in_interdimensional_void.append((loser.name, self.game.id))
+                self.add_to_interdimensional_void(loser.name, self.game.id)
                 self.game.objects.remove(loser)
                 self.game.send_message(f"💥 **Reality cracks! {winner.get_display_name()} knocks {loser.get_display_name()} out of reality!**", print_in_summary=True)
 
@@ -450,6 +450,8 @@ class SwordfightingDecree(Modification):
                 self.current_swordfights.remove(fight)
 
         self.stunned_from_swordfight.append(loser)
+    def add_to_interdimensional_void(self, playername, sourcegameid = -1):
+        self.players_in_interdimensional_void.append((playername, sourcegameid))
 
 
 

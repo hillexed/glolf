@@ -11,7 +11,7 @@ from modifications.swordfighting import SwordfightingDecree
 
 from tourneycommands import parse_tourney_message
 from gamecommands import glolfcommand
-from commandwrappers import get_users_with_games_active, set_update_coming, is_update_coming
+from commandwrappers import get_users_with_games_active, clear_users_with_games_active, set_update_coming, is_update_coming
 from clubs.clubcommands import save_club, view_club
 
 
@@ -30,12 +30,11 @@ if len(sys.argv) > 1:
 
 
 async def get_glolfer_stats(message, arguments):
-    try:
-        if len(arguments) == 0:
-            await message.channel.send("Please add a glolfer's name to check their stlats!")
-        else:
-            newplayer = players.get_player_from_name(arguments)
-            newmessage = f'''**{newplayer.name}**
+    if len(arguments) == 0:
+        await message.channel.send("Please add a glolfer's name to check their stlats!")
+    else:
+        newplayer = players.get_player_from_name(arguments)
+        newmessage = f'''**{newplayer.name}**
 Signature: {newplayer.emoji}
 Stance: **{newplayer.stlats.stance}**
 Favorite Tea: **{newplayer.stlats.fav_tea}**
@@ -49,36 +48,24 @@ Favorite Tea: **{newplayer.stlats.fav_tea}**
 {newplayer.compute_self_awareness_moons()}
 {newplayer.vk_stat_of_the_day()}
 {newplayer.modifications_string()}'''
-            await message.channel.send(newmessage)
-
-    except (Exception, KeyboardInterrupt) as e:
-            await message.add_reaction('⚠️')
-            logging.exception(e)
-            raise e
-
+        await message.channel.send(newmessage)
 
 async def add_temp_modification(message, command_body):
     # Add a modification to the player until the bot restarts. Admin-only
-    try:
-        if len(command_body) == 0:
-            await message.channel.send("Please add a glolfer's name! It's !addtempmodification <glolfer>\n<modification>")
-        else:
-            if len(command_body.split("\n")) < 2:
-                return await message.channel.send("Please add a glolfer's name, then the modification on a new line.")
+    if len(command_body) == 0:
+        await message.channel.send("Please add a glolfer's name! It's !addtempmodification <glolfer>\n<modification>")
+    else:
+        if len(command_body.split("\n")) < 2:
+            return await message.channel.send("Please add a glolfer's name, then the modification on a new line.")
 
-            glolfername = command_body.split("\n")[0].strip()
-            modification = command_body.split("\n")[1].strip()
+        glolfername = command_body.split("\n")[0].strip()
+        modification = command_body.split("\n")[1].strip()
 
-            newplayer = players.get_player_from_name(glolfername)
-            newplayer.modifications.append(modification)
-            playerstlats.known_players[glolfername.title()] = newplayer
+        newplayer = players.get_player_from_name(glolfername)
+        newplayer.modifications.append(modification)
+        playerstlats.known_players[glolfername.title()] = newplayer
 
-            return await message.channel.send(f"Added modification {modification} to player {glolfername}. It'll go away when you restart the bot, so make sure to edit the code!")
-
-    except (Exception, KeyboardInterrupt) as e:
-            await message.add_reaction('⚠️')
-            logging.exception(e)
-            raise e
+        return await message.channel.send(f"Added modification {modification} to player {glolfername}. It'll go away when you restart the bot, so make sure to edit the code!")
 
 def user_is_admin(message):
     if "ADMIN_IDS" in config:
@@ -104,6 +91,14 @@ def get_command_body(message, command_name_to_remove):
 async def on_message(message):
     if message.author == client.user or message.webhook_id is not None:
         return
+    try:
+        await handle_commands(message)
+    except (Exception, KeyboardInterrupt) as e:
+            await message.add_reaction('⚠️')
+            logging.exception(e)
+            raise e
+
+async def handle_commands(message):
 
     if message.content.startswith(prefix + "glolfer"):
         await get_glolfer_stats(message, get_command_body(message, "glolfer"))
@@ -134,10 +129,17 @@ async def on_message(message):
     elif user_is_admin(message) and message.content.startswith(prefix + "countservers"):
         await message.channel.send(client.guilds)
 
+    elif user_is_admin(message) and message.content.startswith(prefix + "voidadd"):
+        playername = message.content[len(prefix + "voidadd"):].strip()
+        mockdecree = SwordfightingDecree(None)
+        mockdecree.add_to_interdimensional_void(playername)
+        await message.channel.send(f"Added {playername} to interdimensional void")
+
     elif user_is_admin(message) and message.content.startswith(prefix + "void"):
         
         await message.channel.send(f"There are {len(SwordfightingDecree.players_in_interdimensional_void)} people in the interdimensional void right now: {SwordfightingDecree.players_in_interdimensional_void}")
         logging.info(message.author.id) # you should only be able to access this if you're an admin
+
 
     elif user_is_admin(message) and message.content.startswith(prefix + "addtempmodification"):
         await add_temp_modification(message, get_command_body(message, "addtempmodification"))
@@ -152,7 +154,7 @@ async def on_message(message):
             set_update_coming(True)     
             await message.channel.send("New games are now disabled. use !countgames to see how many are running.")
         elif "false" in message.content:
-            set_update_coming(True)
+            set_update_coming(False)
             await message.channel.send("New games are enabled again.")
         logging.info(f"Changed update_coming to {is_update_coming()}")
 
