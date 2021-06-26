@@ -131,6 +131,8 @@ async def handle_commands(message):
 
     elif user_is_admin(message) and message.content.startswith(prefix + "voidadd"):
         playername = message.content[len(prefix + "voidadd"):].strip()
+        if len(playername) == 0:
+            await message.channel.send("Please specify a player name after the command!")
         mockdecree = SwordfightingDecree(None)
         mockdecree.add_to_interdimensional_void(playername)
         await message.channel.send(f"Added {playername} to interdimensional void")
