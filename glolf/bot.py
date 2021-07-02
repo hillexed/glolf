@@ -13,10 +13,11 @@ from tourneycommands import parse_tourney_message
 from gamecommands import glolfcommand
 from commandwrappers import get_users_with_games_active, clear_users_with_games_active, set_update_coming, is_update_coming
 from clubs.clubcommands import save_club, view_club
+from help import parse_help_command
 
 
 debug = False
-prefix = '!'
+prefix = 'g!'
 version = '4.1'
 MAX_GAMES = 10
 
@@ -100,6 +101,15 @@ async def on_message(message):
 
 async def handle_commands(message):
 
+    # temp code to handle the ! -> g! migration
+    if message.content.startswith("!glolfer"):
+        return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
+    if message.content.startswith("!glolf"):
+        return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
+    if message.content.startswith("!tourney"):
+        return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
+
+
     if message.content.startswith(prefix + "glolfer"):
         await get_glolfer_stats(message, get_command_body(message, "glolfer"))
 
@@ -110,6 +120,9 @@ async def handle_commands(message):
 
     elif message.content.startswith(prefix + "version"):
         await message.channel.send(str(version))
+
+    elif message.content.startswith(prefix + "help"):
+        await parse_help_command(message, get_command_body(message, "help"), client)
 
 
     elif message.content.startswith(prefix + "tourney"):
