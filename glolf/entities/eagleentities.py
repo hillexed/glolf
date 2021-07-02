@@ -58,12 +58,15 @@ class FlyingEagle(Entity):
             if not self.swooped and abs(self.target.position[0] - self.position[0]) < 0.5:
                 self.grab_but_theyre_far_away()
 
-        else:
+        elif self.is_flying_off:
             # we've grabbed someone
             self.grabbed_thing.position = self.position
             self.position[1] -= 1 # fly upwards
 
             self.see_if_grabbed_player_frees_themself()
+        else:
+            # only here if we grabbed a glolfer and let go            
+            self.position[1] -= 1 # fly up
 
     def see_if_grabbed_player_frees_themself(self):
         if random.random() < self.grabbed_thing.stlats.wiggle/3:
