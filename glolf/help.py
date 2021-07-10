@@ -111,13 +111,8 @@ Each glolfer uses different dueling techniques, and might be more or less effect
 When a glolfer wins a duel, they'll launch the other glolfer into the air! They'll land in the farthest hole, allowing the winner of the duel the chance to score. Of course, that's not be the only way a duel can end...
 ''', ["basics2"])
 
-scoring=HelpTopic("scoring",'🎊','''
-**Scoring**
-
-Glolf scoring is similar to golf scoring. In glolf, the player who has hit the most balls into holes wins. (This is technically true in golf too, but glolfers don't have time to wait for their opponents to finish the course). If two glolfers score the same number of balls, the player with the least strokes wins (like golf).
-
-Taking Posession of other players' balls is perfectly legal.
-
+scorenames=HelpTopic("scorenames",'📛','''
+**Score Names**
 There are different names for scores depending on how many strokes a ball recieves before reaching a hole. Each course has a "par" - a number that measures how many strokes a Competent Player should be able to score the ball using. A "hole in one" is hitting a ball into a hole in one stroke. Here are some other common score names:
 
 4 below par: "Condor"
@@ -137,6 +132,14 @@ There are different names for scores depending on how many strokes a ball reciev
 10 above par: "Disappointment"
 
 ''', ["basics2"])
+
+scoring=HelpTopic("scoring",'🎊','''
+**Scoring**
+
+Glolf scoring is similar to golf scoring. In glolf, the player who has hit the most balls into holes wins. (This is technically true in golf too, but glolfers don't have time to wait for their opponents to finish the course). If two glolfers score the same number of balls, the player with the least strokes wins (like golf).
+
+Taking Posession of other players' balls is perfectly legal.
+''', ["basics2","scorenames"])
 
 gods=HelpTopic("gods","💰",'''The IGA, the Internet Glolf Association, appears to be run by mysterious beings. So far there have been confirmed sightings of a being known as the Manager :moneybag:, an Intern occasionally called the Sliced One :octopus:, and the mysterious and so-far unreachable Support :loop:. Every so often they run the Internet Open, a huge community glolf tournament with Prizes and Consequences. They show up from time to time in 
 https://discord.gg/Qjvr2wMbsu in the #glolf-announcements channel to chat, announce, or threaten.''', [])

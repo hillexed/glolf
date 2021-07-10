@@ -43,6 +43,7 @@ def score_name(strokes,par):
     if strokes == 1:
         return "Hole in one"
 
+    # golf terms
     if strokes-par == -4:
         return "Condor"
     elif strokes-par == -3:
@@ -59,5 +60,15 @@ def score_name(strokes,par):
         return "Double bogey"
     elif strokes-par == 3:
         return "Triple bogey"
+
+    # glolf terms
+    elif strokes-par == -0.5:
+        return "Wing"
+    elif strokes-par == -1.5:
+        return "Falcon"
+    elif abs(strokes-par - 3.1415) < 0.01:
+        return "Delicacy"
+    elif strokes-par == 10:
+        return "Disappointment"
     else:
         return str(strokes-par) + " over par"
