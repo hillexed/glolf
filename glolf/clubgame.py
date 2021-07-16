@@ -70,10 +70,25 @@ class ClubGame(SingleHole):
             self.add_player_by_name(new_glolfer_pos, playername=name)
 
     def print_score(self):
+        # one way to do it: by team
+        # another way to do it:
+        '''
+Team 1: 5 holes, 28 strokes
+- Player 1: 1 holes, 5 cards
+- Player 2: 2 holes, 5 cards
+- Next: Player 3
+
+Team 1: 5 holes, 28 strokes
+- Player 1: 1 holes, 5 cards
+- Player 2: 2 holes, 5 cards
+- Next: Player 3
+
+'''
         string = ""
         current_winners = self.compute_winners()
 
         for team in self.scores:
+            team
             scorecard = self.scores[player]
             scorecard_string = scorecard.printed_representation()
             if team in current_winners and self.scores[team].total_strokes > 0 and not self.over:
