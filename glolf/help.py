@@ -83,7 +83,6 @@ Glolf games take plase on a glolf course, represented by a grid of emojis. Durin
 Jasper Groove :woman_kneeling: 5 holes, 13 strokes :eyes: 
 Freddie Missouri :see_no_evil: 4 holes, 8 strokes 
 
-
 The most important part of a glolf game is the scorecard, at the bottom. There you can see each glolfer's name, their score, and their signature emoji (and modifications, if any, in parentheses). The player(s) in the lead will have an :eyes: emoji next to their scorecard.
 
 Above the scorecard is the course, a 2D grid of emojis. A glolfer's position on the course will be marked by their signature emoji (the emoji next to their name on the scorecard) - so in the above example,  Jasper Groove :woman_kneeling: is near the top middle, while Freddie Missouri :see_no_evil: is in the bottom left, close to the ball 🟠 . Players can move anywhere on the course to reach the ball, and even outside of bounds.
