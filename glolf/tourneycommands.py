@@ -32,6 +32,63 @@ def biggest_power_of_two_less_than(n):
 def biggest_power_of_k_less_than(n, k=2):
     return k ** math.floor(math.log2(n)/math.log2(k))
 
+async def tourney_series(message, 
+                wins_required=1,
+                glolfer_names=glolfers,
+                max_turns=max_turns,
+                round_name = 'a round',
+                match_name = 'the important game',
+                debug=False):
+
+    winningname=None
+
+    win_counts = {name:0 for name in glolfer_names} # todo: handle clones of the same name
+    series_over = False
+    
+    game_number = 0
+    while not series_over:
+        # do a game
+        game_number += 1
+
+        header = f"{match_name} of {round_name}!"
+        if wins_required > 1:
+            header = f"Game {game_number} (First to {wins_required}) - {match_name} of {round_name}!"
+            
+
+        winners = await newglolfgame(message, glolfer_names=glolfers, header=header,max_turns=max_turns, is_tournament=True, debug=debug)
+        for winner in winners:
+            win_counts[winner.name] += 1 # also assumes entrant names are unique. and that whoever wins is a Glolfer or thing with a .name
+            if win_counts[winner.name] >= wins_required:
+                series_over = True
+
+    # find winning names
+    winning_names = [name for name in win_counts if win_counts[name] >= wins_required]
+    if len(winning_names) == 1:
+        return winning_names[0]
+    else
+        winningname = random.choice(winning_names)
+        await message.channel.send(f"Tie game! **{winningname.name}** wins the tiebreaking duel to advance to the next round!")
+        await asyncio.sleep(5)
+        return winningname
+
+def compute_round_name(competitors_this_round, move_onto_next_round, glolfers_per_game, round_num):
+
+        total_competitors = len(competitors_this_round) + len(move_onto_next_round) # not sure this is needed
+
+        if len(move_onto_next_round) > 0:
+            # this is right after move_onto_next_round should be []
+            # if it isn't [], we're in the first round of a tourney with a non-power-of-two number of entrants
+            return "qualifiers"
+
+        if total_competitors == glolfers_per_game:
+            return "the finals"
+        if total_competitors == glolfers_per_game**2 and round_num != 1:
+            return "the almostfinals"
+        if total_competitors == glolfers_per_game**3 and round_num != 1:
+            return "the nearfinals"
+
+        return f"round {round_num}"
+
 
 battleRoyaleTypeRegex = re.compile("1(v1)+")
 
@@ -92,17 +149,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, debug=False):
         if debug:
             max_turns = 3
 
-        round_name = f"round {round_num}"
-        if len(competitors_this_round) + len(move_onto_next_round) == glolfers_per_game:
-            round_name = "the finals"
-        if len(competitors_this_round) + len(move_onto_next_round) == glolfers_per_game**2 and round_num != 1:
-            round_name = "the almostfinals"
-        if len(competitors_this_round) + len(move_onto_next_round) == glolfers_per_game**3 and round_num != 1:
-            round_name = "the nearfinals"
-        if len(move_onto_next_round) > 0:
-            # this is right after move_onto_next_round should be []
-            #if it isn't [], we're in the first round of a tourney with a non-power-of-two number of entrants
-            round_name = "qualifiers"
+        round_name = compute_round_name(competitors_this_round, move_onto_next_round, glolfers_per_game, round_num)
 
         for index in range(0,len(competitors_this_round)-1,glolfers_per_game):
             # go down the bracket
@@ -116,15 +163,15 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, debug=False):
             match_name = f"Match {match_number}/{total_matches}"
             if match_number == total_matches and round_name != "the finals" and total_matches == 1:
                 match_name = "Final match"
-
-            winners = await newglolfgame(message, glolfer_names=glolfers, header=f"{match_name} of {round_name}!",max_turns=max_turns, is_tournament=True, debug=debug)
-            if len(winners) == 1:
-                move_onto_next_round.append(winners[0].name)
-            else:
-                winningname = random.choice(winners)
-                move_onto_next_round.append(winningname.name)
-                await message.channel.send(f"Tie game! **{winningname.name}** wins the tiebreaking duel to advance to the next round!")
-                await asyncio.sleep(5)
+            
+            winning_name = await tourney_series(message, wins_required=1,
+                glolfer_names=glolfers,
+                round_name=round_name,
+                match_name=match_name,
+                max_turns=max_turns,
+                debug=debug,
+                wins_required=1)
+            move_onto_next_round.append(winningname.name)
 
         if len(move_onto_next_round) > 1:
 
@@ -134,8 +181,8 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, debug=False):
             if len(move_onto_next_round) == glolfers_per_game**2 and round_num != 1:
                 round_descriptor = "Nearfinals results:"
 
-            await message.channel.send(f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in one minute...")
-            await asyncio.sleep(60)
+            await message.channel.send(f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in five minutes...")
+            await asyncio.sleep(60*5)
 
         competitors_this_round = move_onto_next_round
         move_onto_next_round = []
