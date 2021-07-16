@@ -74,6 +74,8 @@ class PlayerStlats(NamedTuple):
     needlethreadableness: float = 0.8   # how well you thread the needle (multiplier for how much angle variance your shots have), lower = better
     left_handedness: float = 0.0        # how biased your shots are to the left or right. can go negative, 0 = best, away from 0 = worse
 
+    sin_rating = None
+
 class Player:
     def __init__(self, name:str, stlats: PlayerStlats, emoji:str="🏌️", id:str="",modifications=None):
         self.name = name
@@ -162,6 +164,7 @@ class Player:
         stlat_choices.remove("fav_tea")
         stlat_choices.remove("stance")
         stlat_choices.remove("polkadottedness")
+        stlat_choices.remove("sin_rating")
         today = date.today()
         rng = random.Random(today) # seed rng with today's date
 
@@ -287,6 +290,7 @@ known_players = {
     "The 12th Herb And Spice": player_with_mods_but_random_stats("The 12th Herb And Spice",["🧥"]),
     "Caldera Clembons": player_with_mods_but_random_stats("Caldera Clembons",["💪"]),
     "1": player_with_mods_but_random_stats("1",["🤝💖"]),
+    "Hands Scoresburg": player_with_mods_but_random_stats("Hands Scoresburg",["🖊️🏄"]),
     "Test Robot": player_with_mods_but_random_stats("Test Robot",["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
