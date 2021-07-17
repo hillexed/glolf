@@ -22,6 +22,9 @@ class GlolfClubData(NamedTuple):
     rivals: list[str]
     sponsors: list[str]
 
+    displayed_loft_education: list[str] # a list of academic degrees
+    loft_degrees: float = 10
+
     theme_song = None
     tenacity: float = 0
     weight: float = 0
@@ -51,6 +54,11 @@ class GlolfClubData(NamedTuple):
                 player_string += player.get_display_name() + '\n'
         player_string += '\n'
 
+        loft_section = ''
+        if self.loft_degrees != 0:
+            loft_section += f'\n**Loft:** {int(self.loft_degrees)} degrees'
+            if len(self.displayed_loft_education) > 0:
+                loft_section += f' (Most recent: {utils.format_list_with_commas(self.displayed_loft_education)})'
 
         modification_section = ""
         if len(self.modifications) > 0:
@@ -70,6 +78,6 @@ class GlolfClubData(NamedTuple):
         return f'''
 **{self.emoji} {self.name}**
 _{self.motto}_
-{cheer_string}
+{cheer_string}{loft_section}
 {player_string}{modification_section}{relationships_section}
 '''.strip()

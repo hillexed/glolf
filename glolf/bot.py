@@ -102,12 +102,13 @@ async def on_message(message):
 async def handle_commands(message):
 
     # temp code to handle the ! -> g! migration
-    if message.content.startswith("!glolfer"):
-        return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
-    if message.content.startswith("!glolf"):
-        return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
-    if message.content.startswith("!tourney"):
-        return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
+    if not debug:
+        if message.content.startswith(prefix.replace("g",'') + "glolfer"):
+            return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
+        if message.content.startswith(prefix.replace("g",'') + "glolf"):
+            return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
+        if message.content.startswith(prefix.replace("g",'') + "tourney"):
+            return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
 
 
     if message.content.startswith(prefix + "glolfer"):
@@ -128,10 +129,10 @@ async def handle_commands(message):
     elif message.content.startswith(prefix + "tourney"):
         await parse_tourney_message(message, get_command_body(message, "tourney"), debug=debug)
 
-    #elif message.content.startswith(prefix + "createclub"):
-    #    await save_club(message, get_command_body(message, "createclub"), client=client)
-    #elif message.content.startswith(prefix + "viewclub"):
-    #    await view_club(message, get_command_body(message, "viewclub"))
+    elif message.content.startswith(prefix + "createclub"):
+        return await save_club(message, get_command_body(message, "createclub"), client=client)
+    elif message.content.startswith(prefix + "viewclub"):
+        return await view_club(message, get_command_body(message, "viewclub"))
 
     elif message.content.startswith(prefix + "admincommands"):
         return await message.channel.send("!discordid, !addtempmodification, !updatecoming <true/false>, !clear_game_list, !forcequit, !countgames, !void")

@@ -1,11 +1,13 @@
 import db
 import asyncio
+import random
 
 from .clubdata import GlolfClubData
+from data.degrees import generate_degree_based_on_name
 
-async def save_club(message, command_body, client):\
+async def save_club(message, command_body, client):
 
-    secret_full_template_ssshhhhh_dont_tell_anyone='''!saveclub <Club Name>
+    secret_full_template_ssshhhhh_dont_tell_anyone='''g!createclub <Club Name>
 <team emoji> "<motto here>"
 Cheer: "We're cool!" (optional)
 Friends: A, B, C (optional)
@@ -26,22 +28,25 @@ player2
 player3
 '''
     if len(command_body) == 0:
-        return message.channel.send("umm use the command like this: \n" + template)
+        return await message.channel.send("umm use the command like this: \n" + template)
 
     lines = command_body.split("\n")
 
     club_name = lines[0].strip()
+    if len(club_name) == 0:
+        return await message.channel.send('umm what do you want to call the club? put it on the first line')
+
     if command_body.count("\n") < 2:
-        return message.channel.send('on a new line, please give me a team emoji and motto! they should look like this:\n<team emoji> "<motto here>"')
+        return await message.channel.send('on a new line, please give me a team emoji and motto! they should look like this:\n<team emoji> "<motto here>"')
 
     line2words = lines[1].split(" ")
     emoji = line2words[0]
     motto = " ".join(line2words[1:])
 
     if len(emoji) == 0:
-        return message.channel.send("on line 2, please give me a team emoji at the start of the line!")
+        return await message.channel.send("on line 2, please give me a team emoji at the start of the line!")
     if len(motto) == 0:
-        return message.channel.send("on line 2, please give me a club motto after the emoji!")
+        return await message.channel.send("on line 2, please give me a club motto after the emoji!")
     if (len(emoji) > 5 and ":" not in emoji) or len(emoji) > 40:
         if len(motto) == 0:
             return await message.channel.send(f"umm are you sure {emoji} is the right emoji? looks a bit weird to me")
@@ -54,6 +59,7 @@ player3
     cheer = None
     friends = []
     rivals = []
+    degrees = None
 
     player_names = []
     caddy_names = []
@@ -68,6 +74,10 @@ player3
         # optional things
         if remaining_line.lower().startswith("cheer:"):
             cheer = remaining_line[len("cheer:"):]
+            continue
+
+        if remaining_line.lower().startswith("degrees:"):
+            degrees = remaining_line[len("degrees:"):].strip()
             continue
 
         if remaining_line.lower().startswith("friends:"):
@@ -98,6 +108,13 @@ player3
         
     if len(motto) > 80:
         return await message.channel.send("umm thats a really long motto can you choose something shorter and easier to remember")
+
+    if degrees is not None:
+        if not degrees.isnumeric():
+            return await message.channel.send("umm that club's degrees needs to be a number. sorry")
+        elif degrees is not None and (int(degrees) < 1 or int(degrees) >= 180):
+            return await message.channel.send("umm that amount of degrees doesnt make sense for a club. sorry. keep it between 1 and 180 ")
+
     if ':' in club_name:
         return await message.channel.send("sorry but club names cant have ':' in them. its verboten")
 
@@ -108,10 +125,15 @@ player3
     for caddy in caddy_names:
         if caddy_names.count(caddy) > 1:
             return await message.channel.send(f"sorry but i think theres a duplicate of {caddy}")
-            
-    
 
-    new_club_data = GlolfClubData(name=club_name, emoji=emoji, motto=motto, player_names=player_names, cheer=cheer, caddy_names=caddy_names,
+    if degrees is None:
+        rng = random.Random(club_name) # seeded by club_name so it's deterministic
+        loft_degrees = rng.randrange(5,180)
+    else:
+        loft_degrees = int(degrees)
+    displayed_loft_education = [generate_degree_based_on_name(club_name)]
+
+    new_club_data = GlolfClubData(name=club_name, emoji=emoji, motto=motto, player_names=player_names, cheer=cheer, loft_degrees=loft_degrees, displayed_loft_education =displayed_loft_education,   caddy_names=caddy_names,
         friends = friends, rivals = rivals, sponsors = [], modifications = [], owner_ids = [message.author.id])
 
     await message.channel.send(new_club_data.printTeamInfo())
