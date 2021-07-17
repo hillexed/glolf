@@ -10,16 +10,19 @@ from modifications.current_rules import get_permanent_modifiers
 from modifications.modification import Modification
 
 from clubs.player_subbing_in import GlolferInGlolfCartSubbingIn
+from clubs.clubs import get_club
 
 class NeedsToTagIn(Modification):
+    # will move 
     def __init__(self, target_cart):
-        self.target = target_cart
+        self.target_cart = target_cart
 
     def on_glolfer_update(self, current_action):
         current_action["action"] = "move"
+        # ensure they cannot hit the ball
 
     def on_glolfer_move(self, target):
-        return self.target
+        return self.target_cart
 
 
 class SubInNextPlayerOnceSomeoneScoresInAClubGame(Modification):
@@ -41,6 +44,10 @@ class SubInNextPlayerOnceSomeoneScoresInAClubGame(Modification):
 class ClubGame(SingleHole):
     def __init__(self, debug=False, club_names=[], max_turns=60, is_tournament=False):
         super().__init__(self, debug, glolfer_names=club_names, max_turns, is_tournament)
+        
+        self.clubs = []        
+        for club_name in club_names:
+            self.clubs.append(get_club(club_name)) # may raise a NoSuchClubError
 
         self.modifications += [SubInNextPlayerOnceSomeoneScoresInAClubGame(self)]
 
