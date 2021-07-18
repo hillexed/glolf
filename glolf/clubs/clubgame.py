@@ -75,7 +75,7 @@ class ClubGame(SingleHole):
 
             if type(scoring_thing) == CompetingClub:
                 for player in scoring_thing.glolfers:
-                    if self.over or (len(player.modifiers) > 1 or player in self.objects): # limit scorecard to active players
+                    if self.over or (len(player.modifiers) > 0 or player in self.objects): # limit scorecard to active players
                         scorecard = self.player_scorecards[player]
                         scorecard_string = scorecard.printed_representation()
                         string += f"- {scorecard_string} \n"
