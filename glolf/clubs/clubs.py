@@ -1,29 +1,41 @@
 from data.players import get_player_from_name
 import db
+from .clubdata import GlolfClubData
+from entities import Glolfer
+import random
 
-class Club:
+class CompetingClub:
     # ingame version
-    def __init__(self, data: GlolfClubData):
+    def __init__(self, game, data: GlolfClubData):
         self.data = data
         self.name = self.data.name
 
-        self.players = [get_player_from_name(player_name) for player_name in self.data.player_names]
+        self.glolfers = [Glolfer(game, playername=player_name, club=self) for player_name in self.data.player_names]
 
-    def get_next_player(self, player_name)
-        index = self.data.player_names.index(playername) # raises ValueError if not found
-        next_index = (index+1) % len(self.data.player_names)
-        return self.data.players[next_index]
+    def choose_first_glolfer(self):
+        return random.choice(self.glolfers)
 
+    def get_next_glolfer(self, glolfer):
+        #if glolfer not in self.glolfers:
+        #    return self.glolfers[0]
+        index = self.glolfers.index(glolfer) # raises ValueError if not found
+        next_index = (index+1) % len(self.glolfers)
+        return self.glolfers[next_index]
+
+    def get_display_name(self, with_mods_in_parens=True):
+        # This shows up on the scoresheet. with_mods_in_parens ignored
+        return f"{self.data.emoji} {self.name}"
 
 class NoSuchClubError(ValueError):
     pass
 
-def get_club(club_name):
-    clubdata = db.get_club_data(club_name)
-    if clubdata is None:
-        return NoSuchClubError()
+def create_competing_club(game, club_name):
+    # given a club name and a SingleHole, fetch the data from the DB and create a CompetingClub to compete in this game
+    club_dict = db.get_club_data(club_name)
+    if club_dict is None:
+        raise NoSuchClubError(club_dict)
 
-    club = GlolfClubData(*clubdata)
-    return Club(clubdata)
+    clubdata = GlolfClubData(*club_dict)
+    return CompetingClub(game, clubdata)
 
 
