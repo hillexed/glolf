@@ -73,7 +73,7 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
 
         self.has_subbed_in = False
 
-        self.game.send_message(f"{self.displayEmoji}  {self.currently_driving_player.get_display_name()} drives onto the course to tag in!")
+        self.game.send_message(f"{self.displayEmoji} {self.currently_driving_player.get_display_name()}, the next member of the {self.currently_driving_player.club.name} drives onto the course to tag in!")
 
     def update(self):
         if self.game.on_same_tile(self, self.target):
@@ -124,7 +124,8 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
 
         otherplayer = self.game.get_closest_object(checklocation, entities.Glolfer)
         if self.game.on_same_tile(checklocation, self.target) and otherplayer != self.target:
-            self.game.send_message(f"🛺 {self.currently_driving_player.get_display_name()} rams {otherplayer.get_display_name()}!")
+            
+            self.game.send_message(f"**🛺 {self.currently_driving_player.get_display_name()} rams {otherplayer.get_display_name()}!**", True)
             otherplayer.displayEmoji = '🐏'
 
     def draw_dust_trail(self, start, finish):
