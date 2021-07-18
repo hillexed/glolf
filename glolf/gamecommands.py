@@ -23,9 +23,50 @@ async def glolfcommand(message, message_body, debug=False):
     if too_many_games_active():
         await message.channel.send("There's too many games going on right now. To avoid lag, please wait a little bit till some games are done and try again later!")
         return
-        
 
-    await newglolfgame(message, glolfer_names,debug=debug)
+    if 'bo3' in arguments[0]:
+        return await best_of_n_glolfgame(message, glolfer_names, wins_required=2, debug=debug)
+    if 'bo5' in arguments[0]:
+        return await best_of_n_glolfgame(message, glolfer_names, wins_required=3, debug=debug)
+    if 'bo7' in arguments[0]:
+        return await best_of_n_glolfgame(message, glolfer_names, wins_required=4, debug=debug)
+    return await newglolfgame(message, glolfer_names,debug=debug)
+
+async def best_of_n_glolfgame(message, glolfer_names, wins_required=3, max_turns=3, debug=False):
+
+    winningname=None
+
+    win_counts = {name:0 for name in glolfer_names} # todo: handle clones of the same name
+    series_over = False
+    
+    game_number = 0
+    while not series_over:
+        # do a game
+        game_number += 1
+
+        header = ""
+        if wins_required > 1:
+            header = f"Game {game_number}, {'-'.join(f'{win_counts[name]}' for name in win_counts)} (First to {wins_required})!"
+
+        winners = await newglolfgame(message, glolfer_names=glolfer_names, header=header,max_turns=max_turns, is_tournament=True, debug=debug)
+
+        for winner in winners:
+            win_counts[winner.name] += 1 # also assumes entrant names are unique. and that whoever wins is a Glolfer or thing with a .name
+            if win_counts[winner.name] >= wins_required:
+                series_over = True
+        if wins_required > 1:            
+            await message.channel.send(f"The series is now {', '.join([f'{name} {win_counts[name]}' for name in win_counts])}!")
+
+    # find winning names
+    winning_names = [name for name in win_counts if win_counts[name] >= wins_required]
+
+    if len(winning_names) > 1:
+        random_winner = random.choice(winning_names)
+        await message.channel.send(f"{random_winner} wins the tiebreaking duel to win the series!")
+        return random_winner
+    else:
+        await message.channel.send(f"{random_winner} wins the series!")
+        return winning_names[0]
 
 async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tournament=False, debug=False):
     # start a round of glolf and return the winning players's names
