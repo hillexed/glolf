@@ -176,7 +176,7 @@ class Player:
 
     def get_display_name(self, with_mods_in_parens = False):
         if with_mods_in_parens and len(self.modifiers) > 0:
-            modList = ', '.join([mod.displayEmoji for mod in self.modifiers])
+            modList = ', '.join([mod.displayEmoji for mod in self.modifiers if mod.display_in_mod_list])
             return f"{self.name} {self.emoji} ({modList})"
         else:
             return f"{self.name} {self.emoji}"
