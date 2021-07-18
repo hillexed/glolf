@@ -61,6 +61,12 @@ Start a 1v1 tourney! Each new line after tourney 1v1 will be treated as a player
 
 `g!tourney 1v1v1`
 Start a 1v1v1 tourney, where each match will have 3 entrants competing and only one advancing to the next round!
+
+`g!viewclub <clubname>`
+See information about a glolf club someone has created, such as the players in the club, their loft, and their best stlats!
+
+`g!createclub <clubname>`
+Create a new glolf club
 ''', ["invite","all"],)
 
 basics = HelpTopic("glolf basics","ℹ️", '''
@@ -138,6 +144,8 @@ scoring=HelpTopic("scoring",'🎊','''
 Glolf scoring is similar to golf scoring. In glolf, the player who has hit the most balls into holes wins. (This is technically true in golf too, but glolfers don't have time to wait for their opponents to finish the course). If two glolfers score the same number of balls, the player with the least strokes wins (like golf).
 
 Taking Posession of other players' balls is perfectly legal.
+
+After a player scores in a club game, they must hand off the club to a teammate. Their teammate will drive onto the field in a glolf cart 🛺 to tag in! No guarantees they won't ram anybody, though...
 ''', ["basics2","scorenames"])
 
 gods=HelpTopic("gods","💰",'''The IGA, the Internet Glolf Association, appears to be run by mysterious beings. So far there have been confirmed sightings of a being known as the Manager :moneybag:, an Intern occasionally called the Sliced One :octopus:, and the mysterious and so-far unreachable Support :loop:. Every so often they run the Internet Open, a huge community glolf tournament with Prizes and Consequences. They show up from time to time in https://discord.gg/Qjvr2wMbsu in the #glolf-announcements channel to chat, announce, or threaten.''', ['all'])

@@ -156,7 +156,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
         round_num+= 1
 
         if is_club_game:
-            max_turns = 150
+            max_turns = 100
         else: # regular people competing
             max_turns = 60
             if len(competitors_this_round) >= 2*glolfers_per_game**3:
@@ -164,7 +164,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
 
         wins_required = 1
         if is_club_game:
-            wins_required = 5
+            wins_required = 3
 
         if debug:
             max_turns = 3

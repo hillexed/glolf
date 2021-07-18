@@ -39,7 +39,7 @@ class Glolfer(playerstlats.Player, Entity):
 
         emojistring = ''
         if self in self.game.objects:
-            emojistring = f' {self.emoji}'
+            emojistring = f' {self.displayEmoji}'
 
         if with_mods_in_parens and len(displayed_mod_list) > 0:
             modList = ', '.join([mod.displayEmoji for mod in displayed_mod_list])

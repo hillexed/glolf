@@ -73,7 +73,7 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
 
         self.has_subbed_in = False
 
-        self.game.send_message(f"{self.displayEmoji} {self.currently_driving_player.get_display_name()}, the next member of the {self.currently_driving_player.club.name}, drives onto the course to tag in!")
+        self.game.send_message(f"**{self.displayEmoji} {self.currently_driving_player.get_display_name()}, the next member of the {self.currently_driving_player.club.name}, drives onto the course to tag in!**")
 
     def update(self):
         if self.game.on_same_tile(self, self.target):
@@ -86,9 +86,7 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
 
         self.move_somewhere()
         
-        otherplayer = self.game.get_closest_object(self, entities.Glolfer) #head to whatever's closest
-        if self.game.on_same_tile(self, self.target) and otherplayer != self.target:
-            self.game.send_message(f"🛺 {self.currently_driving_player.get_display_name()} rams {otherplayer.get_display_name()}!")
+        self.check_if_anything_rammed(self.position)
 
     def move_somewhere(self):
         '''
@@ -123,7 +121,7 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
         checklocation = entities.Entity(self.game, int_position + np.array([0.5,0.5]))
 
         otherplayer = self.game.get_closest_object(checklocation, entities.Glolfer)
-        if self.game.on_same_tile(checklocation, self.target) and otherplayer != self.target:
+        if self.game.on_same_tile(checklocation, otherplayer) and otherplayer != self.target and otherplayer.club != self.currently_driving_player.club:
             
             self.game.send_message(f"**🛺 {self.currently_driving_player.get_display_name()} rams {otherplayer.get_display_name()}!**", True)
             otherplayer.displayEmoji = '🐏'
