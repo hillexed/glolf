@@ -317,7 +317,7 @@ class SingleHole:
 
 
     def get_closest_object_to_position(self, position, object_type=None):
-        consideredobjects = [o for o in self.objects if o is not target]
+        consideredobjects = self.objects
         if object_type is not None:
              consideredobjects = [o for o in self.objects if (type(o) == object_type)]
 

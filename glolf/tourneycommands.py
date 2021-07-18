@@ -32,10 +32,10 @@ def biggest_power_of_two_less_than(n):
 def biggest_power_of_k_less_than(n, k=2):
     return k ** math.floor(math.log2(n)/math.log2(k))
 
-async def tourney_series(message, 
+async def tourney_series(message,
+                glolfer_names, 
                 wins_required=1,
-                glolfer_names=glolfers,
-                max_turns=max_turns,
+                max_turns=60,
                 round_name = 'a round',
                 match_name = 'the important game',
                 debug=False):
@@ -55,7 +55,7 @@ async def tourney_series(message,
             header = f"Game {game_number} (First to {wins_required}) - {match_name} of {round_name}!"
             
 
-        winners = await newglolfgame(message, glolfer_names=glolfers, header=header,max_turns=max_turns, is_tournament=True, debug=debug)
+        winners = await newglolfgame(message, glolfer_names=glolfer_names, header=header,max_turns=max_turns, is_tournament=True, debug=debug)
         for winner in winners:
             win_counts[winner.name] += 1 # also assumes entrant names are unique. and that whoever wins is a Glolfer or thing with a .name
             if win_counts[winner.name] >= wins_required:
@@ -65,7 +65,7 @@ async def tourney_series(message,
     winning_names = [name for name in win_counts if win_counts[name] >= wins_required]
     if len(winning_names) == 1:
         return winning_names[0]
-    else
+    else:
         winningname = random.choice(winning_names)
         await message.channel.send(f"Tie game! **{winningname.name}** wins the tiebreaking duel to advance to the next round!")
         await asyncio.sleep(5)
@@ -164,14 +164,14 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, debug=False):
             if match_number == total_matches and round_name != "the finals" and total_matches == 1:
                 match_name = "Final match"
             
-            winning_name = await tourney_series(message, wins_required=1,
+            winning_name = await tourney_series(message,
                 glolfer_names=glolfers,
                 round_name=round_name,
                 match_name=match_name,
                 max_turns=max_turns,
                 debug=debug,
                 wins_required=1)
-            move_onto_next_round.append(winningname.name)
+            move_onto_next_round.append(winning_name)
 
         if len(move_onto_next_round) > 1:
 

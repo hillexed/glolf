@@ -10,7 +10,7 @@ from modifications.current_rules import get_permanent_modifiers
 
 from data.scorecards import SingleHoleScoresheet
 
-from clubs.player_subbing_in import GlolferInGlolfCartSubbingIn, SubInNextPlayerOnceSomeoneScoresInAClubGame, NeedsToTagIn
+from clubs.player_subbing_in import SubInNextPlayerOnceSomeoneScoresInAClubGame
 from clubs.clubs import create_competing_club, CompetingClub
 
 

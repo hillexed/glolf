@@ -31,6 +31,10 @@ class ScoreConfetti(OneTurnParticle):
 class SwordfightIndicator(OneTurnParticle):
     displayEmoji = "⚔️"
 
+class GlolfCartExhaust(OneTurnParticle):
+    displayEmoji = "💨"
+    zIndex = 3
+
 class RealityCrack(Entity):
     displayEmoji = "💥"
     showOnBoard = True

@@ -33,11 +33,23 @@ class Glolfer(playerstlats.Player, Entity):
 
         self.club = club
 
+    def get_display_name(self, with_mods_in_parens = False):
+        if self in self.game.objects:
+            return super().get_display_name(with_mods_in_parens=with_mods_in_parens, show_emoji = True)
+        else:
+            return super().get_display_name(with_mods_in_parens=with_mods_in_parens, show_emoji = False)
+
     def set_position(self, position):
         self.position = np.array(position).astype(float)
 
     def get_relevant_modifiers(self):
         return self.game.modifiers + self.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)
+
+    def remove_modifiers_of_type(self, modifierType):
+        for mod in self.modifiers[:]:
+            if type(mod) == modifierType:
+                self.modifiers.remove(mod)
+
 
     def update(self):
         '''

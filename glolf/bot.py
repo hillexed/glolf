@@ -18,7 +18,7 @@ from help import parse_help_command
 
 debug = False
 prefix = 'g!'
-version = '4.1'
+version = '5'
 MAX_GAMES = 10
 
 if len(sys.argv) > 1:

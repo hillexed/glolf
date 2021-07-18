@@ -34,6 +34,8 @@ async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tou
     logger.info(f"Starting game between {glolfer_names} in channel #{message.channel} in server '{message.channel.guild.name}'")
     try:
         if "club" in message.content.split("\n")[0]:
+            if max_turns == 60:
+                max_turns = 120
             game = ClubGame(debug=debug,club_names=glolfer_names,max_turns=max_turns,is_tournament=is_tournament)
         else:
             game = SingleHole(debug=debug,glolfer_names=glolfer_names,max_turns=max_turns,is_tournament=is_tournament)

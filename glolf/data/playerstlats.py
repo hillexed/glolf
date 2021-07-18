@@ -174,12 +174,18 @@ class Player:
         fancystlatname = stlatname.replace("_"," ").title()
         return f"**Today's Verboten Knowledge Stlat:**\n||{fancystlatname}: {stlat:.2f}||"
 
-    def get_display_name(self, with_mods_in_parens = False):
-        if with_mods_in_parens and len(self.modifiers) > 0:
-            modList = ', '.join([mod.displayEmoji for mod in self.modifiers if mod.display_in_mod_list])
-            return f"{self.name} {self.emoji} ({modList})"
+    def get_display_name(self, with_mods_in_parens = False, show_emoji = True):
+        displayed_mod_list = [mod for mod in self.modifiers if mod.display_in_mod_list]
+
+        emojistring = ''
+        if show_emoji:
+            emojistring = f' {self.emoji}'
+
+        if with_mods_in_parens and len(displayed_mod_list) > 0:
+            modList = ', '.join([mod.displayEmoji for mod in displayed_mod_list])
+            return f"{self.name}{emojistring} ({modList})"
         else:
-            return f"{self.name} {self.emoji}"
+            return f"{self.name}{emojistring}"
 
 
 
