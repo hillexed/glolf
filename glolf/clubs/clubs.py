@@ -33,7 +33,7 @@ def create_competing_club(game, club_name):
     # given a club name and a SingleHole, fetch the data from the DB and create a CompetingClub to compete in this game
     club_dict = db.get_club_data(club_name)
     if club_dict is None:
-        raise NoSuchClubError(club_dict)
+        raise NoSuchClubError(club_name)
 
     clubdata = GlolfClubData(*club_dict)
     return CompetingClub(game, clubdata)

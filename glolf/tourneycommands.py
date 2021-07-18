@@ -126,7 +126,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
         await message.channel.send("There's too many games going on right now. To avoid lag, please wait a little bit till some games are done and try again later!")
         return
 
-    if is_club_game:
+    if not is_club_game:
         await message.channel.send(f"{len(glolfer_names)}-person tournament starting...")
     else:
         await message.channel.send(f"{len(glolfer_names)}-club tournament starting...")

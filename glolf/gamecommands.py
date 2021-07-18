@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import random
 logger = logging.getLogger(__name__)
 
 from commandwrappers import disable_if_update_coming, limit_one_game_per_person, too_many_games_active
@@ -23,7 +24,7 @@ async def glolfcommand(message, message_body, debug=False):
     if too_many_games_active():
         await message.channel.send("There's too many games going on right now. To avoid lag, please wait a little bit till some games are done and try again later!")
         return
-
+    print(arguments)
     if 'bo3' in arguments[0]:
         return await best_of_n_glolfgame(message, glolfer_names, wins_required=2, debug=debug)
     if 'bo5' in arguments[0]:
