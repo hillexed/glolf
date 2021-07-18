@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 
 
 from .entity import Entity
-from .NPCscorecards import get_NPC_scorecard
+from data.scorecards import get_NPC_dummy_player
 from .misc import ScoreConfetti
 import utils
 
@@ -43,7 +43,7 @@ class Ball(Entity):
                 scoring_player = self.last_hit_by
                 self.game.send_message(f"**{scoring_player.get_display_name()} scores 🎊! {utils.score_name(self.strokes,self.game.par)}!**")
             else:
-                scoring_player = get_NPC_scorecard("The Ball")
+                scoring_player = get_NPC_dummy_player("The Ball")
                 self.game.send_message(f"**The ball scores itself 🎊! {utils.score_name(self.strokes,self.game.par)}!**")
 
             self.game.increase_score(scoring_player, added_balls_scored=1, added_scored_strokes=self.strokes)

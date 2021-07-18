@@ -11,18 +11,9 @@ from data.players import default_player_names
 from modifications.current_rules import get_permanent_modifiers
 import courses
 
+from data.scorecards import SingleHoleScoresheet, NPCScorecardDummyEntity
 
 
-
-class SingleHoleScoresheet:
-    def __init__(self, player):
-        self.player = player
-        self.scored_strokes = 0
-        self.total_strokes = 0
-        self.balls_scored = 0
-
-    def printed_representation(self):
-        return f"{self.player.get_display_name(with_mods_in_parens=True)}: {self.balls_scored} holes, {self.total_strokes} strokes"
 
 class SingleHole:
     def __init__(self, debug=False, glolfer_names=[], max_turns=60, is_tournament=False):
@@ -63,9 +54,13 @@ class SingleHole:
         newglolfer = entities.Glolfer(self, position=starting_position, playername=playername)
         self.add_player(newglolfer)
 
+    def add_scorecard_if_doesnt_exist(self, scoring_thing):
+        if scoring_thing not in self.scores:
+            self.scores[scoring_thing] = SingleHoleScoresheet(scoring_thing)
+
     def add_player(self, newglolfer):         
         self.objects.append(newglolfer)
-        self.scores[newglolfer] = SingleHoleScoresheet(newglolfer)
+        self.add_scorecard_if_doesnt_exist(newglolfer)
 
     def setup_first_glolfers(self, glolfer_names):
         if len(glolfer_names) == 0:
@@ -116,6 +111,11 @@ class SingleHole:
     def add_object(self, obj):
         # add an object to the game, guaranteeing it won't have update() called on it until next turn
         self.new_objects.append(obj)
+
+    def remove_object(self, obj):
+        if obj not in self.objects:
+            pass # todo: complain
+        self.objects.remove(obj)
 
     def embed_gamestate(self, include_board=True, game_over=False):
         embed=discord.Embed(title="🏌️ Glolf! (alpha)", description="", color=0x50BC43)
@@ -220,29 +220,37 @@ class SingleHole:
             string += '\n'  
         return string
 
-    
+    def get_player_scorecard(self, player):
+        # this is more useful in a club game, where they're stored elsewhere
+        return self.scores[player]
 
     def compute_winners(self, include_NPC_scorecards = False):
         '''
-            The winner is the players who scored the most holes! Otherwise, lowest strokes wins
+            The winner is the entity (which might be a player, a club, or an NPCScorecardDummyEntity) who scored the most holes! Otherwise, lowest strokes wins
         '''
         winners = None
         tie = False
+
+        if len(self.scores) == 0:
+            raise ValueError("No scorecards means it's impossible to compute a winner!")
+
         for player in self.scores:
-            if type(player) != entities.Glolfer and not include_NPC_scorecards: #non-glolfers can't win
+            if (type(player) == NPCScorecardDummyEntity or type(player) == str) and not include_NPC_scorecards: #non-glolfers can't win
                 continue
             if winners is None: # start with the first player in the list
                 winners = [player]
                 tie = False
                 continue
-            if self.scores[player].balls_scored > self.scores[winners[0]].balls_scored:
+            winning_scorecard = self.scores[winners[0]]
+            current_player_scorecard = self.scores[player] 
+            if current_player_scorecard.balls_scored > winning_scorecard.balls_scored:
                 winners = [player] # more holes? winner
                 tie = False
-            elif self.scores[player].balls_scored == self.scores[winners[0]].balls_scored:
-                if self.scores[player].total_strokes < self.scores[winners[0]].total_strokes:
+            elif current_player_scorecard.balls_scored == winning_scorecard.balls_scored:
+                if current_player_scorecard.total_strokes < winning_scorecard.total_strokes:
                     winners = [player] #same holes? lowest strokes wins
                     tie = False
-                elif self.scores[player].total_strokes == self.scores[winners[0]].total_strokes:
+                elif current_player_scorecard.total_strokes == winning_scorecard.total_strokes:
                     winners.append(player) # tie
                     tie = True
         return winners
@@ -255,12 +263,38 @@ class SingleHole:
             return self.custom_winner_name
 
         winners = self.compute_winners(include_NPC_scorecards)
+        if winners is None:
+            return "nobody?"
         if len(winners) == 1:
             return winners[0].get_display_name()
         return "Everybody"
 
     def compute_random_current_winner(self):
         # return the winner if one winner exists, or a randomly-chosen winner if there's a tie
+        # errors if there's no winner
+        return random.choice(self.compute_winners(include_NPC_scorecards = False))
+
+    def compute_random_winning_glolfer_currently_on_field(self):
+        # compute_random_current_winner() might not return an entities.Glolfer. This is guaranteed to.
+        glolfers = [o for o in self.objects if type(o) == entities.Glolfer]
+        winners = None
+        for player in glolfers:
+            if winners is None: # start with the first player in the list
+                winners = [player]
+                continue
+            winning_scorecard = self.get_player_scorecard(winners[0])
+            player_scorecard = self.get_player_scorecard(player) 
+            if player_scorecard.balls_scored > winning_scorecard.balls_scored:
+                winners = [player] # more holes? winner
+            elif player_scorecard.balls_scored == winning_scorecard.balls_scored:
+                if player_scorecard.total_strokes < winning_scorecard.total_strokes:
+                    winners = [player] #same holes? lowest strokes wins
+                elif player_scorecard.total_strokes == winning_scorecard.total_strokes:
+                    winners.append(player) # tie
+        return random.choice(winners)
+
+        # return the winner if one winner exists, or a randomly-chosen winner if there's a tie
+        # errors if there's no winner
         return random.choice(self.compute_winners(include_NPC_scorecards = False))
 
     def end(self, custom_winner_name=None):
@@ -275,7 +309,7 @@ class SingleHole:
         for player in self.scores:
             scorecard = self.scores[player]
             scorecard_string = scorecard.printed_representation()
-            if player in current_winners and self.scores[player].total_strokes > 0 and not self.over:
+            if player in current_winners and scorecard.total_strokes > 0 and not self.over:
                 scorecard_string += " 👀"
             string += f"{scorecard_string} \n"
 
@@ -343,8 +377,8 @@ class SingleHole:
             mod.on_score(scoring_player, ball, hole_position)
 
     def increase_score(self, scoring_player, added_strokes=0, added_balls_scored=0, added_scored_strokes=0):
-        if scoring_player not in self.scores: 
-            self.scores[scoring_player] = SingleHoleScoresheet(scoring_player)
+        
+        self.add_scorecard_if_doesnt_exist(scoring_player)
         self.scores[scoring_player].scored_strokes += added_scored_strokes
         self.scores[scoring_player].balls_scored += added_balls_scored
         self.scores[scoring_player].total_strokes += added_strokes

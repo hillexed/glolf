@@ -30,7 +30,7 @@ class FlyingEagle(Entity):
         
 
     def choose_target(self, triggering_player):
-        target = self.game.compute_random_current_winner()
+        target = self.game.compute_random_winning_glolfer_currently_on_field()
         return target
 
     def update(self):

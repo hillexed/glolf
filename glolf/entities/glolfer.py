@@ -13,9 +13,9 @@ class Glolfer(playerstlats.Player, Entity):
     type = "player"
     displayEmoji = "🏌️" # will be overwritten
     zIndex = 10 # show below players
-    def __init__(self, game, position = [0,0], playername=None, team=None):
+    def __init__(self, game, position = [0,0], playername=None, club=None):
         self.game = game
-        self.position = np.array(position).astype(float)
+        self.set_position(position)
 
         if playername is None:
             self.name = random.choice(players.default_player_names)
@@ -31,7 +31,10 @@ class Glolfer(playerstlats.Player, Entity):
 
         self.modifiers = [] #an array of modification.Modification s
 
-        self.team = team
+        self.club = club
+
+    def set_position(self, position):
+        self.position = np.array(position).astype(float)
 
     def get_relevant_modifiers(self):
         return self.game.modifiers + self.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)
@@ -147,7 +150,7 @@ class Glolfer(playerstlats.Player, Entity):
             self.game.send_message(f"💥 **{self.get_display_name()}'s stroke tears a crack in spacetime! The ball disintegrates! 3-stroke penalty! 💥!**")
             for i in range(25):
                 self.game.add_object(RealityCrack(self.game, self.game.course.random_position_on_course())) #show where you hit
-            self.game.scores[self].total_strokes += 3
+            self.game.increase_score(self, added_strokes = 3)
             ball.reset_at_random_point()
 
     def choose_shot_target_tile():
