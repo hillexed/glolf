@@ -13,6 +13,7 @@ def testgame():
         i += 1
         if i > 1000:
             raise ValueError("Game went on too long!")
+    print(glolfgame.printgamestate())
 
 for i in range(50):
     testgame()

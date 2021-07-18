@@ -122,9 +122,9 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
 
         otherplayer = self.game.get_closest_object(checklocation, entities.Glolfer)
         if self.game.on_same_tile(checklocation, otherplayer) and otherplayer != self.target and otherplayer.club != self.currently_driving_player.club:
-            
-            self.game.send_message(f"**🛺 {self.currently_driving_player.get_display_name()} rams {otherplayer.get_display_name()}!**", True)
-            otherplayer.displayEmoji = '🐏'
+            if random.random() < 0.3:
+                self.game.send_message(f"**🛺 {self.currently_driving_player.get_display_name()} rams {otherplayer.get_display_name()}! There's some big ramifications!**", True)
+                otherplayer.displayEmoji = '🐏'
 
     def draw_dust_trail(self, start, finish):
         # Bresenham's line drawing algorithm, taken from wikipedia
