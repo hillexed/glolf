@@ -15,14 +15,17 @@ class Modification:
     def on_score(self, scoring_player, ball, score_position):
         pass
 
+class GameModification(Modification):
     def update(self):
-        # called by game modifications, not on player modifications
+        # called once every turn, after everything else has updated
         pass
+    
 
 class PlayerModification(Modification):
     displayEmoji = "?"
     type = "permanent"
-    isDead=False
+    isDead = False
+    display_in_mod_list = True
     def __init__(self, game, attached_player):
         self.game = game
         self.player = attached_player

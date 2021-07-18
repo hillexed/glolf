@@ -5,6 +5,10 @@ import numpy as np
 def copyvec(vec):
     return np.copy(vec)
 
+def random_seeded_choice(choices, seed):
+    rng = random.Random(seed)
+    return rng.choice(choices)
+
 def lerp(start,finish,t):
     return start*(1-t) + finish*t
 

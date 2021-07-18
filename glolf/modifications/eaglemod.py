@@ -1,10 +1,10 @@
 import random
 
 import utils
-from .modification import Modification
+from .modification import PlayerModification, GameModification
 import entities
 
-class EagleMaker(Modification):
+class EagleMaker(GameModification):
     def on_score(self, scoring_player, ball, score_position):
         score_name = utils.score_name(ball.strokes,self.game.par) 
         if score_name == "Eagle":
@@ -14,8 +14,7 @@ class EagleMaker(Modification):
             self.game.send_message("The albatross swoops onto the course!")
             self.game.add_object(entities.FlyingAlbatross(self.game, triggering_player=scoring_player))
 
-# todo: make these subclasses of PlayerModification
-class GrabbedByEagle(Modification):
+class GrabbedByEagle(PlayerModification):
     displayEmoji = "🦅"
     isDead = False
     type = "temporary"
@@ -26,7 +25,7 @@ class GrabbedByEagle(Modification):
         current_glolfer_action["action"] = "nothing you're grabbed lol"
 
 
-class AlbatrossAroundNeck(Modification):
+class AlbatrossAroundNeck(PlayerModification):
     displayEmoji = "🦢"
     isDead = False
     type = "temporary"

@@ -3,7 +3,7 @@ import random
 from enum import Enum
 
 import utils
-from .modification import Modification
+from .modification import GameModification
 from entities import Entity, Hole, Glolfer, HittingArrow, ScoreConfetti, SwordfightIndicator
 
 class SWORDFIGHT_OPTIONS(Enum):
@@ -174,7 +174,7 @@ def choose_swordfight_message(winning_move, losing_move, winner, loser):
         return kiss_string
 
 
-class SwordfightingDecree(Modification):
+class SwordfightingDecree(GameModification):
     # handles all logic for swordfights, including inserting into glolfer.update()
 
     starting_hp = 3
@@ -436,7 +436,7 @@ class SwordfightingDecree(Modification):
             self.game.send_message("Wait. There's... no holes? {winner.get_display_name()} is a bit confused.")
 
         if not self.game.is_tournament and random.random() < self.dimensional_travel_chance:
-            if self.game.scores[loser].balls_scored - self.game.scores[winner].balls_scored > 2 and random.random() > winner.stlats.needlethreadableness: #low-needlethreadableness players who are losing
+            if self.game.get_player_scorecard(loser).balls_scored - self.game.get_player_scorecard(winner).balls_scored > 2 and random.random() > winner.stlats.needlethreadableness: #low-needlethreadableness players who are losing
                 # knocked into another game
                 self.add_to_interdimensional_void(loser.name, self.game.id)
                 self.game.objects.remove(loser)
