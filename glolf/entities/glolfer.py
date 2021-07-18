@@ -33,11 +33,19 @@ class Glolfer(playerstlats.Player, Entity):
 
         self.club = club
 
-    def get_display_name(self, with_mods_in_parens = False):
+    def get_display_name(self, with_mods_in_parens = False, show_emoji = True):
+        #displayed_mod_list = [mod for mod in self.player_data.modifications+self.modifiers if mod.display_in_mod_list]
+        displayed_mod_list = [mod for mod in self.modifiers if mod.display_in_mod_list]
+
+        emojistring = ''
         if self in self.game.objects:
-            return super().get_display_name(with_mods_in_parens=with_mods_in_parens, show_emoji = True)
+            emojistring = f' {self.emoji}'
+
+        if with_mods_in_parens and len(displayed_mod_list) > 0:
+            modList = ', '.join([mod.displayEmoji for mod in displayed_mod_list])
+            return f"{self.name}{emojistring} ({modList})"
         else:
-            return super().get_display_name(with_mods_in_parens=with_mods_in_parens, show_emoji = False)
+            return f"{self.name}{emojistring}"
 
     def set_position(self, position):
         self.position = np.array(position).astype(float)

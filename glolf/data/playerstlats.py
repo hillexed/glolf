@@ -164,7 +164,7 @@ class Player:
         stlat_choices.remove("fav_tea")
         stlat_choices.remove("stance")
         stlat_choices.remove("polkadottedness")
-        stlat_choices.remove("sin_rating")
+        #stlat_choices.remove("sin_rating")
         today = date.today()
         rng = random.Random(today) # seed rng with today's date
 
@@ -174,18 +174,15 @@ class Player:
         fancystlatname = stlatname.replace("_"," ").title()
         return f"**Today's Verboten Knowledge Stlat:**\n||{fancystlatname}: {stlat:.2f}||"
 
-    def get_display_name(self, with_mods_in_parens = False, show_emoji = True):
-        displayed_mod_list = [mod for mod in self.modifiers if mod.display_in_mod_list]
-
-        emojistring = ''
-        if show_emoji:
-            emojistring = f' {self.emoji}'
+    def get_display_name(self, with_mods_in_parens = False):
+        # used for g!glolfer display
+        displayed_mod_list = [mod for mod in self.modifications]
 
         if with_mods_in_parens and len(displayed_mod_list) > 0:
-            modList = ', '.join([mod.displayEmoji for mod in displayed_mod_list])
-            return f"{self.name}{emojistring} ({modList})"
+            modList = ', '.join(displayed_mod_list)
+            return f"{self.name} {self.emoji} ({modList})"
         else:
-            return f"{self.name}{emojistring}"
+            return f"{self.name} {self.emoji}"
 
 
 

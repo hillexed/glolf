@@ -164,7 +164,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
 
         wins_required = 1
         if is_club_game:
-            wins_required = 3
+            wins_required = 5
 
         if debug:
             max_turns = 3

@@ -73,7 +73,7 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
 
         self.has_subbed_in = False
 
-        self.game.send_message(f"{self.displayEmoji} {self.currently_driving_player.get_display_name()}, the next member of the {self.currently_driving_player.club.name} drives onto the course to tag in!")
+        self.game.send_message(f"{self.displayEmoji} {self.currently_driving_player.get_display_name()}, the next member of the {self.currently_driving_player.club.name}, drives onto the course to tag in!")
 
     def update(self):
         if self.game.on_same_tile(self, self.target):
