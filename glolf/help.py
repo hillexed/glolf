@@ -64,14 +64,6 @@ Start a 1v1v1 tourney, where each match will have 3 entrants competing and only 
 
 `g!viewclub <clubname>`
 See information about a glolf club someone has created, such as the players in the club, their loft, and their best stlats!
-
-```g!createclub <clubname>
-<club emoji> "<club motto>"
-<person1>
-<person2>
-...
-```
-Create a new glolf club!
 ''', ["invite","all"],)
 
 basics = HelpTopic("glolf basics","ℹ️", '''

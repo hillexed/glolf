@@ -85,7 +85,7 @@ async def on_ready():
     logging.info("The bot is ready!")
 
 def get_command_body(message, command_name_to_remove):
-    return message.content.replace(prefix + command_name_to_remove,"").strip()
+    return message.content.replace(prefix + command_name_to_remove,"")
 
 
 @client.event
@@ -100,7 +100,6 @@ async def on_message(message):
             raise e
 
 async def handle_commands(message):
-
     # temp code to handle the ! -> g! migration
     if not debug:
         if message.content.startswith(prefix.replace("g",'') + "glolfer"):
