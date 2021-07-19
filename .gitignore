@@ -1,3 +1,4 @@
 .env
 __pycache__/
 glolf/.env
+db_data/*

@@ -1,8 +1,11 @@
 import sqlite3
 import json
+import os
+
+DB_DIRECTORY = 'db_data'
 
 def get_db_connection():
-    conn = sqlite3.connect('glolf.sqlite')
+    conn = sqlite3.connect(os.path.join(DB_DIRECTORY,'glolf.sqlite'))
     conn.execute('pragma journal_mode=wal')
     return conn
 

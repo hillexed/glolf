@@ -1,7 +1,12 @@
-version: "4.1"
+version: "5"
 
 services:
   glolf:
     image: "glolf"
     environment:
       - TOKEN=...
+    volumes:
+      - db_data:/root/glolf/db_data
+
+volumes:
+    db_data:

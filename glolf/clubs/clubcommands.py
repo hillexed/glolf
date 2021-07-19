@@ -36,6 +36,14 @@ player3
     if len(club_name) == 0:
         return await message.channel.send('umm what do you want to call the club? put it on the first line')
 
+
+    # check to make sure there's no club with this name already
+    existing_clubdata = db.get_club_data(club_name)
+    if existing_clubdata is not None:
+        return await message.channel.send('umm theres a club with that name already. sorry')
+
+
+
     if command_body.count("\n") < 2:
         return await message.channel.send('on a new line, please give me a team emoji and motto! they should look like this:\n<team emoji> "<motto here>"')
 

@@ -65,8 +65,13 @@ Start a 1v1v1 tourney, where each match will have 3 entrants competing and only 
 `g!viewclub <clubname>`
 See information about a glolf club someone has created, such as the players in the club, their loft, and their best stlats!
 
-`g!createclub <clubname>`
-Create a new glolf club
+```g!createclub <clubname>
+<club emoji> "<club motto>"
+<person1>
+<person2>
+...
+```
+Create a new glolf club!
 ''', ["invite","all"],)
 
 basics = HelpTopic("glolf basics","ℹ️", '''
@@ -74,6 +79,8 @@ basics = HelpTopic("glolf basics","ℹ️", '''
 Glolf is a turn-based simulated absurdist emoji two-dimensional multiplayer battle royale parody of golf. The prequel to blaseball nobody asked for, glolf is set in the alternate universe where Glolf won the Great Blaseball-Glolf Conflict and Polkadot Patterson is a five-moon driver. Hit the most balls :white_circle: into holes :golf: in the fewest strokes to win!
 
 To get started with glolf, start a game with `g!glolf`, or check out your favorite character's stlats with `g!glolfer <name>`! For a list of commands, try `g!help commands`, or react below to continue browsing these help pages. To see everything I can teach you, try `g!help all`!
+
+Glolf is an one-person passion project! If you want to show support I set up a ko-fi at https://ko-fi.com/hillexed  !
 ''', ["basics2","commands", "all", "invite"])
 
 
