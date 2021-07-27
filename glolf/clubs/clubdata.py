@@ -48,7 +48,7 @@ class GlolfClubData(NamedTuple):
             player_string += f"{player.get_display_name()} - {best_stlat_name.title()}: {data.playerstlats.format_stlat_display(best_stlat)}\n"
 
         if len(self.caddy_names) != 0:
-            player_string += "\n**Caddies**"
+            player_string += "\n**Caddies**\n"
             for player_name in self.caddy_names:
                 player = data.players.get_player_from_name(player_name)
                 player_string += player.get_display_name() + '\n'

@@ -12,6 +12,7 @@ async def save_club(message, command_body, client):
 Cheer: "We're cool!" (optional)
 Friends: A, B, C (optional)
 Rivals: A, B, C (optional)
+Loft: 75 (optional)
 player1
 player2
 player3
@@ -20,7 +21,7 @@ caddy1
 caddy2
 '''
 
-    template='''!saveclub <Club Name>
+    template='''g!createclub <Club Name>
 <team emoji> "<motto here>"
 Cheer: "We're cool!" (optional)
 player1
@@ -108,8 +109,8 @@ player3
             return await message.channel.send("There's too many blank lines!")
             
     # sanity checking
-    if len(player_names) > 12:
-        return await message.channel.send("oh umm wow thats too many players to keep track of. can you stick to umm 12 or less")
+    if len(player_names) > 15:
+        return await message.channel.send("oh umm wow thats too many players to keep track of. can you stick to umm 15 or less")
 
     if len(caddy_names) > 12:
         return await message.channel.send("oh umm wow thats too many caddies to keep track of. can you stick to umm 12 or less")
