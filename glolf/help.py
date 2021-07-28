@@ -47,10 +47,13 @@ Access this list with `g!help commands`!
 `g!glolf`
 Start a random game! You can also provide player names on new lines below the command:
 
-```g!glolf
+```g!glolf <options>
 <person1>
 <person2>```
-Start a game between <person1> and <person2>
+Start a game between <person1> and <person2>. Options is a list of options separated by a space. They can include:
+`g!glolf clubs`: Pit glolf club against glolf club in a tag-team club game! Each new line should be the name of an already-created club. Case sensitive.
+`g!glolf bo3`: best of 3. First to two wins, wins. (If there are more than two competitors, the winner is the first to two wins)
+`g!glolf bo5`: Best of 5. Same as above, but the winner is the first to 3 wins.
 
 `g!glolfer <name>`
 View glolfer stats for a player! You can type in any name!
@@ -62,8 +65,18 @@ Start a 1v1 tourney! Each new line after tourney 1v1 will be treated as a player
 `g!tourney 1v1v1`
 Start a 1v1v1 tourney, where each match will have 3 entrants competing and only one advancing to the next round!
 
+`g!tourney 1v1 clubs`: Pit glolf club against glolf club in a tag-team tournament where the best club wins! Each new line should be the name of an already-created club. Case sensitive. Each round is a best of 5.
+
 `g!viewclub <clubname>`
 See information about a glolf club someone has created, such as the players in the club, their loft, and their best stlats!
+
+```g!createclub <clubname>
+<club emoji> "<club motto>"
+<person1>
+<person2>
+...
+```
+Create a new glolf club!
 ''', ["invite","all"],)
 
 basics = HelpTopic("glolf basics","ℹ️", '''
@@ -72,7 +85,7 @@ Glolf is a turn-based simulated absurdist emoji two-dimensional multiplayer batt
 
 To get started with glolf, start a game with `g!glolf`, or check out your favorite character's stlats with `g!glolfer <name>`! For a list of commands, try `g!help commands`, or react below to continue browsing these help pages. To see everything I can teach you, try `g!help all`!
 
-Glolf is an one-person passion project! If you want to show support I set up a ko-fi at https://ko-fi.com/hillexed  !
+Glolf is an one-person passion project! If you want to show support I set up a ko-fi at <https://ko-fi.com/hillexed>  !
 ''', ["basics2","commands", "all", "invite"])
 
 
@@ -147,6 +160,10 @@ Taking Posession of other players' balls is perfectly legal.
 After a player scores in a club game, they must hand off the club to a teammate. Their teammate will drive onto the field in a glolf cart 🛺 to tag in! No guarantees they won't ram anybody, though...
 ''', ["basics2","scorenames"])
 
+#clubs=HelpTopic("Clubs",'<need emoji>','''
+#Players sometimes form clubs. Hitting a ball with a club makes it fly farther!
+#''', ['all'])
+
 gods=HelpTopic("gods","💰",'''The IGA, the Internet Glolf Association, appears to be run by mysterious beings. So far there have been confirmed sightings of a being known as the Manager :moneybag:, an Intern occasionally called the Sliced One :octopus:, and the mysterious and so-far unreachable Support :loop:. Every so often they run the Internet Open, a huge community glolf tournament with Prizes and Consequences. They show up from time to time in https://discord.gg/Qjvr2wMbsu in the #glolf-announcements channel to chat, announce, or threaten.''', ['all'])
 
 # more stuff: eagles 
@@ -194,7 +211,7 @@ async def show_topic(triggering_message, sent_help_message, topic: HelpTopic, cl
         return user == triggering_message.author and str(reaction.emoji) in linked_topics
 
     try:
-        reaction, user = await client.wait_for('reaction_add', timeout=30.0, check=check)
+        reaction, user = await client.wait_for('reaction_add', timeout=60.0, check=check)
         if str(reaction.emoji) in linked_topics:
              # remove all reactions?
             try:    
