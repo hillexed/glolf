@@ -148,7 +148,11 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
         move_onto_next_round = glolfer_names[num_matches_required*glolfers_per_game:]
 
         print(len(competitors_this_round)/glolfers_per_game + len(move_onto_next_round))
-        await message.channel.send(f"{', '.join(move_onto_next_round)} randomly recieve byes and move onto the next round. Let's see who joins them!")
+        content = f"{', '.join(move_onto_next_round)} randomly recieve byes and move onto the next round. Let's see who joins them!"
+        if(len(content) <= 4000):
+            await message.channel.send(content)
+        else:
+            await message.channel.send(f"{len(move_onto_next_round)} contestants (too many to fit in a discord message) randomly recieve byes and move onto the next round. Let's see who joins them!")
 
     # actual tourney time!
     round_num = 0
@@ -204,8 +208,11 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
                 round_descriptor = "Almostfinals results:"
             if len(move_onto_next_round) == glolfers_per_game**2 and round_num != 1:
                 round_descriptor = "Nearfinals results:"
-
-            await message.channel.send(f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in five minutes...")
+            content = f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in five minutes..."
+            if len(content) <= 4000:
+                await message.channel.send(content)
+            else:
+                await message.channel.send(f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on (too many to fit in a discord message). Next round starts in five minutes...")
             if not debug:
                 await asyncio.sleep(60*4.5)
                 await message.channel.send(f"Next round starting in thirty seconds...")
