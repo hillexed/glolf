@@ -37,6 +37,22 @@ def biggest_power_of_two_less_than(n):
 def biggest_power_of_k_less_than(n, k=2):
     return k ** math.floor(math.log2(n)/math.log2(k))
 
+def abbreviate_contestant_list_message(contestants, template, char_limit = 2000):
+    num_contestants_used = 1
+    extra_string = f"... (and {len(contestants) - num_contestants_used} more)"
+    contestant_string = contestants[0]
+
+    for contestant in contestants[1:]:
+        if(len(template.format(contestant_string + ", " + contestant + f"... (and {len(contestants) - num_contestants_used - 1} more)")) <= char_limit):
+            num_contestants_used += 1
+            contestant_string = contestant_string + ", " + contestant
+            extra_string = f"... (and {len(contestants) - num_contestants_used} more)"
+            
+        else:
+            continue
+
+    return template.format(contestant_string + extra_string)
+
 async def tourney_series(message,
                 glolfer_names, 
                 wins_required=1,
@@ -152,7 +168,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
         if(len(content) <= 4000):
             await message.channel.send(content)
         else:
-            await message.channel.send(f"{len(move_onto_next_round)} contestants (too many to fit in a discord message) randomly recieve byes and move onto the next round. Let's see who joins them!")
+            await message.channel.send(abbreviate_contestant_list_message(move_onto_next_round, "{} randomly recieve byes and move onto the next round. Let's see who joins them!"))
 
     # actual tourney time!
     round_num = 0
@@ -212,7 +228,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
             if len(content) <= 4000:
                 await message.channel.send(content)
             else:
-                await message.channel.send(f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on (too many to fit in a discord message). Next round starts in five minutes...")
+                await message.channel.send(abbreviate_contestant_list_message(move_onto_next_round, f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: " + "**{}** Next round starts in five minutes..."))
             if not debug:
                 await asyncio.sleep(60*4.5)
                 await message.channel.send(f"Next round starting in thirty seconds...")
