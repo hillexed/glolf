@@ -40,6 +40,16 @@ def set_data(name, data, tablename="players"):
     conn.commit()
     cursor.close()
 
+def delete_data(name, tablename="players"):
+    # WARNING: TABLENAME IS SQL INJECTABLE
+    version = 1
+    data = json.dumps(data)
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(f"DELETE FROM {tablename} WHERE name=?",(name, ))
+    conn.commit()
+    cursor.close()
+
 
 
 # todo: replace with full sql scripts to avoid the tablename sql injection even though it's internal-only?
@@ -54,6 +64,10 @@ def set_player_data(name, data):
     create_player_table_if_not_made()
     set_data(name, data, tablename="players")
 
+def delete_player_data(name):
+    create_player_table_if_not_made()
+    delete_data(name, tablename="players")
+
 
 def create_club_table_if_not_made():
     create_table_if_not_made("clubs")
@@ -65,3 +79,7 @@ def get_club_data(name):
 def set_club_data(name, data):
     create_club_table_if_not_made()
     set_data(name, data, tablename="clubs")
+
+def delete_club_data(name):
+    create_club_table_if_not_made()
+    return get_data(name, tablename="clubs")

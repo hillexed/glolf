@@ -292,6 +292,7 @@ known_players = {
     "1": player_with_mods_but_random_stats("1",["🤝💖"]),
     "Hands Scoresburg": player_with_mods_but_random_stats("Hands Scoresburg",["🖊️🏄"]),
     "Test Robot": player_with_mods_but_random_stats("Test Robot",["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
+    "Dog Dad": player_with_mods_but_random_stats("Dog Dad",["😵‍💫"]),,
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
 

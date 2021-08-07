@@ -142,6 +142,11 @@ async def handle_commands(message):
     elif user_is_admin(message) and message.content.startswith(prefix + "countservers"):
         await message.channel.send(client.guilds)
 
+    elif user_is_admin(message) and message.content.startswith(prefix + "deleteplayer"):
+        # todo, use db.delete_player_data()
+        pass
+
+
     elif user_is_admin(message) and message.content.startswith(prefix + "voidadd"):
         playername = message.content[len(prefix + "voidadd"):].strip()
         if len(playername) == 0:

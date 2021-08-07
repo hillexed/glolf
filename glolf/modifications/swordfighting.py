@@ -301,8 +301,10 @@ class SwordfightingDecree(GameModification):
         self.new_swordfights = []
 
         if len(self.players_in_interdimensional_void) > 0:
-            player_name, source_game_id = random.choice(self.players_in_interdimensional_void)
+            playerdata = random.choice(self.players_in_interdimensional_void)
+            player_name, source_game_id = playerdata
             if self.game.turn_number == 5 and self.game.id != source_game_id:
+                self.players_in_interdimensional_void.remove(playerdata)
                 self.game.add_player_by_name(self.game.course.random_position_on_course(), player_name)
                 self.game.send_message(f"**💥 {player_name} tumbles out of a crack in reality onto the course!**", print_in_summary=True)
 
