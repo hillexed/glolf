@@ -165,7 +165,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
 
         print(len(competitors_this_round)/glolfers_per_game + len(move_onto_next_round))
         content = f"{', '.join(move_onto_next_round)} randomly recieve byes and move onto the next round. Let's see who joins them!"
-        if(len(content) <= 4000):
+        if(len(content) <= 2000):
             await message.channel.send(content)
         else:
             await message.channel.send(abbreviate_contestant_list_message(move_onto_next_round, "{} randomly recieve byes and move onto the next round. Let's see who joins them!"))
@@ -225,7 +225,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
             if len(move_onto_next_round) == glolfers_per_game**2 and round_num != 1:
                 round_descriptor = "Nearfinals results:"
             content = f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in five minutes..."
-            if len(content) <= 4000:
+            if len(content) <= 2000:
                 await message.channel.send(content)
             else:
                 await message.channel.send(abbreviate_contestant_list_message(move_onto_next_round, f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: " + "**{}** Next round starts in five minutes..."))
