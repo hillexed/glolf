@@ -167,12 +167,16 @@ async def view_club(message, command_body):
     await message.channel.send(club.printTeamInfo())
 
 
-# todo
+
 def deleteclub(message):
     pass
+    
 
 def add_player_to_club(message):
     pass
+
+
+
 
 def declare_rival(message):
     pass

@@ -123,7 +123,7 @@ class Player:
 
     def precision_rating(self):
         # +pettability + splortsmanship +tentacles
-        rating_number = (self.stlats.needlethreadableness*0.5 + self.stlats.finesse + self.stlats.estimation*0.2) * 5/(1+0.2+0.5) - abs(self.stlats.left_handedness)
+        rating_number = ((1-self.stlats.needlethreadableness)*0.5 + self.stlats.finesse + self.stlats.estimation*0.2) * 5/(1+0.2+0.5) - abs(self.stlats.left_handedness)
         return rating_number
 
     def compute_aerodynamics_moons(self):
@@ -175,11 +175,8 @@ class Player:
         return f"**Today's Verboten Knowledge Stlat:**\n||{fancystlatname}: {stlat:.2f}||"
 
     def get_display_name(self, with_mods_in_parens = False):
-        # used for g!glolfer display
-        displayed_mod_list = [mod for mod in self.modifications]
-
-        if with_mods_in_parens and len(displayed_mod_list) > 0:
-            modList = ', '.join(displayed_mod_list)
+        if with_mods_in_parens and len(self.modifiers) > 0:
+            modList = ', '.join([mod.displayEmoji for mod in self.modifiers])
             return f"{self.name} {self.emoji} ({modList})"
         else:
             return f"{self.name} {self.emoji}"
