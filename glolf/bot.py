@@ -31,10 +31,11 @@ if len(sys.argv) > 1:
 
 
 async def get_glolfer_stats(message, arguments):
-    if len(arguments) == 0:
+    playername = arguments.strip()
+    if len(playername) == 0:
         await message.channel.send("Please add a glolfer's name to check their stlats!")
     else:
-        newplayer = players.get_player_from_name(arguments)
+        newplayer = players.get_player_from_name(playername)
         newmessage = f'''**{newplayer.name}**
 Signature: {newplayer.emoji}
 Stance: **{newplayer.stlats.stance}**
@@ -62,9 +63,7 @@ async def add_temp_modification(message, command_body):
         glolfername = command_body.split("\n")[0].strip()
         modification = command_body.split("\n")[1].strip()
 
-        newplayer = players.get_player_from_name(glolfername)
-        newplayer.modifications.append(modification)
-        playerstlats.known_players[glolfername.title()] = newplayer
+        players.add_permanent_modification_to_player(glolfername, modification)
 
         return await message.channel.send(f"Added modification {modification} to player {glolfername}. It'll go away when you restart the bot, so make sure to edit the code!")
 
@@ -134,17 +133,23 @@ async def handle_commands(message):
         return await view_club(message, get_command_body(message, "viewclub"))
 
     elif message.content.startswith(prefix + "admincommands"):
-        return await message.channel.send("!discordid, !addtempmodification, !updatecoming <true/false>, !clear_game_list, !forcequit, !countgames, !void")
+        return await message.channel.send("g!discordid, g!addtempmodification, g!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!doesglolferexist")
 
     elif message.content.startswith(prefix + "discordid"):
         logging.info(message.author.id) # you should only be able to access this if you're an admin
 
     elif user_is_admin(message) and message.content.startswith(prefix + "countservers"):
-        await message.channel.send(client.guilds)
+        servers = client.guilds
+        await message.channel.send(f"{len(servers)}: {[(s.name, s.member_count) for s in servers]}")
 
     elif user_is_admin(message) and message.content.startswith(prefix + "deleteplayer"):
         # todo, use db.delete_player_data()
         pass
+
+    elif user_is_admin(message) and message.content.startswith(prefix + "doesglolferexist"):
+        playername = message.content[len(prefix + "doesglolferexist"):].strip()
+        is_in_db = players.is_player_in_db(playername)
+        await message.channel.send(f"{playername} is {'not' if not is_in_db else ''} in the DB.")
 
 
     elif user_is_admin(message) and message.content.startswith(prefix + "voidadd"):

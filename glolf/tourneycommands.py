@@ -186,7 +186,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
 
             match_name = f"{type_of_round} {match_number}/{total_matches}"
             if match_number == total_matches and round_name != "the finals" and total_matches == 1:
-                match_name = "Final {type_of_round.lower()}"
+                match_name = f"Final {type_of_round.lower()}"
             
             winning_name = await tourney_series(message,
                 glolfer_names=glolfers,
