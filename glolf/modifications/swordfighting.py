@@ -181,6 +181,8 @@ class SwordfightingDecree(GameModification):
     players_in_interdimensional_void = [] # shared among all games
     dimensional_travel_chance = 0.05 # TODO: CHANGE
 
+    inderdimensional_void_clogged = True # if True, players don't leave the interdimensional void after one game
+
 
     def __init__(self, game):
         self.game = game
@@ -304,7 +306,8 @@ class SwordfightingDecree(GameModification):
             playerdata = random.choice(self.players_in_interdimensional_void)
             player_name, source_game_id = playerdata
             if self.game.turn_number == 5 and self.game.id != source_game_id:
-                self.players_in_interdimensional_void.remove(playerdata)
+                if not self.inderdimensional_void_clogged:
+                    self.players_in_interdimensional_void.remove(playerdata)
                 self.game.add_player_by_name(self.game.course.random_position_on_course(), player_name)
                 self.game.send_message(f"**💥 {player_name} tumbles out of a crack in reality onto the course!**", print_in_summary=True)
 

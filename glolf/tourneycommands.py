@@ -49,6 +49,8 @@ async def tourney_series(message,
 
     win_counts = {name:0 for name in glolfer_names} # todo: handle clones of the same name
     series_over = False
+
+    unexpected_winners = []
     
     game_number = 0
     while not series_over:
@@ -63,6 +65,40 @@ async def tourney_series(message,
         winners = await newglolfgame(message, glolfer_names=glolfer_names, header=header,max_turns=max_turns, is_tournament=True, debug=debug)
 
         for winner in winners:
+
+            # It's possible someone not in bracket entered the match and won through interdimensional shenanigans.
+            # If so, The Manager will get involved.
+            if winner.name not in win_counts:
+                # the first time it happens, they get kicked out of the course
+                win_counts[winner.name] = 0
+                unexpected_winners.append(winner.name)
+    
+                managercomment = random.choice([
+''':moneybag: **Oh No! What A Tragedy**
+:moneybag: **Without A Winner**
+:moneybag: **I Suppose The Match Must be Replayed**''',
+''':moneybag: **Oh No! They're Out Of Bounds**
+:moneybag: **Now How Will They Advance**
+:moneybag: **I Suppose The Match Must be Replayed**''', 
+''':moneybag: **We Apologize**
+:moneybag: **For This Unsponsored Content**
+:moneybag: **I Suppose The Match Must be Replayed**''',
+''':moneybag: **As You Can See**
+:moneybag: **Nobody Here Won**
+:moneybag: **A Shame**
+:moneybag: **I Suppose The Match Must be Replayed**'''])
+    
+                await message.channel.send(f"**Ka-thwhack! The Manager launches {winner.name} into the air and out of the course!**\n{managercomment}")
+                await asyncio.sleep(15)
+                continue
+
+            if winner.name in unexpected_winners:
+                # this happens if an unexpected guest wins for a second time
+                managercomment = random.choice([":moneybag: **...**", ":moneybag: **...An Unexpected Chargeback**", ":moneybag: **...**", ":moneybag: **...**"])
+                await message.channel.send(managercomment)
+                await asyncio.sleep(15)
+
+            # actual tourney win logic
             win_counts[winner.name] += 1 # also assumes entrant names are unique. and that whoever wins is a Glolfer or thing with a .name
             if win_counts[winner.name] >= wins_required:
                 series_over = True
@@ -167,7 +203,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
             wins_required = 3
 
         if debug:
-            max_turns = 3
+            max_turns = 10
 
         round_name = compute_round_name(competitors_this_round, move_onto_next_round, glolfers_per_game, round_num)
 
