@@ -1,6 +1,7 @@
 import random, uuid, math
 from typing import NamedTuple
 from datetime import date
+import json
 
 def random_player_emoji(rng):
     humanoid = ["👶","👧","🧒","👦","👩","🧑","👨","👩‍🦱","🧑‍🦱","👨‍🦱","👩‍🦰","🧑‍🦰","👨‍🦰","👱‍♀️",
@@ -77,11 +78,15 @@ class PlayerStlats(NamedTuple):
     sin_rating = None
 
 class Player:
-    def __init__(self, name:str, stlats: PlayerStlats, emoji:str="🏌️", id:str="",modifications=None):
+    def __init__(self, name:str, stlats: PlayerStlats, emoji:str="🏌️", id:str="", feed_entries = None, modifications=None):
         self.name = name
         self.stlats = stlats
         self.emoji = emoji
         self.id = id
+        
+        self.feed_entries = []
+        if feed_entries is not None:
+            self.feed_entries = feed_entries
 
         self.modifications = []
         if modifications is not None:
@@ -175,11 +180,21 @@ class Player:
         return f"**Today's Verboten Knowledge Stlat:**\n||{fancystlatname}: {stlat:.2f}||"
 
     def get_display_name(self, with_mods_in_parens = False):
-        if with_mods_in_parens and len(self.modifiers) > 0:
-            modList = ', '.join([mod.displayEmoji for mod in self.modifiers])
+        if with_mods_in_parens and len(self.modifications) > 0:
+            modList = ', '.join([mod.displayEmoji for mod in self.modifications])
             return f"{self.name} {self.emoji} ({modList})"
         else:
             return f"{self.name} {self.emoji}"
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        # Given a dict with {"id": blah, "stlats":<blah>} from the DB, construct a new Player
+        data["stlats"] = PlayerStlats(*data["stlats"])
+        return cls(**data)
+
+    def to_dict(self):
+        # convert player into a dict, for saving in the DB
+        return self.__dict__
 
 
 
@@ -192,9 +207,9 @@ def generate_random_player_from_name(name="Random Player", emoji="🏌️"):
 
     rng = random.Random(seed)
     if seed:
-        id_ = uuid.uuid3(uuid.NAMESPACE_X500, name=str(seed))
+        id_ = uuid.uuid3(uuid.NAMESPACE_X500, name=str(seed)).hex
     else:
-        id_ = uuid.uuid4()
+        id_ = uuid.uuid4().hex
 
     stlats = generate_random_stlats_from_name(name)
 
@@ -292,7 +307,7 @@ known_players = {
     "1": player_with_mods_but_random_stats("1",["🤝💖"]),
     "Hands Scoresburg": player_with_mods_but_random_stats("Hands Scoresburg",["🖊️🏄"]),
     "Test Robot": player_with_mods_but_random_stats("Test Robot",["Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌","😈"]),
-    "Dog Dad": player_with_mods_but_random_stats("Dog Dad",["😵‍💫"]),,
+    "Dog Dad": player_with_mods_but_random_stats("Dog Dad",["😵‍💫"]),
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
 

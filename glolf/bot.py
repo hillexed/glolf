@@ -52,10 +52,10 @@ Favorite Tea: **{newplayer.stlats.fav_tea}**
 {newplayer.modifications_string()}'''
         await message.channel.send(newmessage)
 
-async def add_temp_modification(message, command_body):
+async def add_modification(message, command_body):
     # Add a modification to the player until the bot restarts. Admin-only
     if len(command_body) == 0:
-        await message.channel.send("Please add a glolfer's name! It's !addtempmodification <glolfer>\n<modification>")
+        await message.channel.send("Please add a glolfer's name! It's g!addmodification <glolfer>\n<modification>")
     else:
         if len(command_body.split("\n")) < 2:
             return await message.channel.send("Please add a glolfer's name, then the modification on a new line.")
@@ -133,7 +133,7 @@ async def handle_commands(message):
         return await view_club(message, get_command_body(message, "viewclub"))
 
     elif message.content.startswith(prefix + "admincommands"):
-        return await message.channel.send("g!discordid, g!addtempmodification, g!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!doesglolferexist")
+        return await message.channel.send("g!discordid, g!addmodification, g!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!doesglolferexist")
 
     elif message.content.startswith(prefix + "discordid"):
         logging.info(message.author.id) # you should only be able to access this if you're an admin
@@ -166,8 +166,8 @@ async def handle_commands(message):
         logging.info(message.author.id) # you should only be able to access this if you're an admin
 
 
-    elif user_is_admin(message) and message.content.startswith(prefix + "addtempmodification"):
-        await add_temp_modification(message, get_command_body(message, "addtempmodification"))
+    elif user_is_admin(message) and message.content.startswith(prefix + "addmodification"):
+        await add_modification(message, get_command_body(message, "addmodification"))
 
     elif user_is_admin(message) and message.content.startswith(prefix + "countgames"):
         await message.channel.send(f"There are {len(get_users_with_games_active())} users with games active right now.")
