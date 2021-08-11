@@ -33,7 +33,7 @@ async def glolfcommand(message, message_body, debug=False):
         return await best_of_n_glolfgame(message, glolfer_names, wins_required=4, debug=debug)
     return await newglolfgame(message, glolfer_names,debug=debug)
 
-async def best_of_n_glolfgame(message, glolfer_names, wins_required=3, max_turns=3, debug=False):
+async def best_of_n_glolfgame(message, glolfer_names, wins_required=3, max_turns=60, debug=False):
 
     winningname=None
 
@@ -63,11 +63,12 @@ async def best_of_n_glolfgame(message, glolfer_names, wins_required=3, max_turns
 
     if len(winning_names) > 1:
         random_winner = random.choice(winning_names)
-        await message.channel.send(f"{random_winner} wins the tiebreaking duel to win the series!")
+        await message.channel.send(f"**{random_winner} wins the tiebreaking duel to win the series!**")
         return random_winner
     else:
-        await message.channel.send(f"{random_winner} wins the series!")
-        return winning_names[0]
+        winning_name = winning_names[0]
+        await message.channel.send(f"**{winning_name} wins the series!**")
+        return winning_name
 
 async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tournament=False, debug=False):
     # start a round of glolf and return the winning players's names

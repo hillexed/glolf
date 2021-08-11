@@ -22,7 +22,6 @@ class ClubGame(SingleHole):
 
         self.modifiers += [SubInNextPlayerOnceSomeoneScoresInAClubGame(self)]
 
-
     def setup_first_glolfers(self, club_names):
         if len(club_names) == 0:
             logger.info(f"Game {self.id}: No clubs!")
@@ -59,7 +58,12 @@ class ClubGame(SingleHole):
                 self.player_scorecards[player] = SingleHoleScoresheet(player)
 
     def get_player_scorecard(self, player):
-        return self.player_scorecards[player]
+        if player in self.player_scorecards:
+            return self.player_scorecards[player]
+        elif player in self.scores and player.club is None: #a player without a club competing against a club
+            return self.scores[player]
+        else:
+            raise ValueError("Player doesn't have a scorecard???")
 
     def print_score(self):
         # Prints total team score, then individual player scores
