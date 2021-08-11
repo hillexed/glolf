@@ -76,17 +76,17 @@ async def tourney_series(message,
                 managercomment = random.choice([
 ''':moneybag: **Oh No! What A Tragedy**
 :moneybag: **Without A Winner**
-:moneybag: **I Suppose The Match Must be Replayed**''',
+:moneybag: **We Suppose The Match Must be Replayed**''',
 ''':moneybag: **Oh No! They're Out Of Bounds**
 :moneybag: **Now How Will They Advance**
-:moneybag: **I Suppose The Match Must be Replayed**''', 
+:moneybag: **We Suppose The Match Must be Replayed**''', 
 ''':moneybag: **We Apologize**
 :moneybag: **For This Unsponsored Content**
-:moneybag: **I Suppose The Match Must be Replayed**''',
+:moneybag: **We Suppose The Match Must be Replayed**''',
 ''':moneybag: **As You Can See**
 :moneybag: **Nobody Here Won**
 :moneybag: **A Shame**
-:moneybag: **I Suppose The Match Must be Replayed**'''])
+:moneybag: **We Suppose The Match Must be Replayed**'''])
     
                 await message.channel.send(f"**Ka-thwhack! The Manager launches {winner.name} into the air and out of the course!**\n{managercomment}")
                 await asyncio.sleep(15)
