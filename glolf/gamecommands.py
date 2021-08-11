@@ -33,7 +33,7 @@ async def glolfcommand(message, message_body, debug=False):
         return await best_of_n_glolfgame(message, glolfer_names, wins_required=4, debug=debug)
     return await newglolfgame(message, glolfer_names,debug=debug)
 
-async def best_of_n_glolfgame(message, glolfer_names, wins_required=3, max_turns=3, debug=False):
+async def best_of_n_glolfgame(message, glolfer_names, wins_required=3, max_turns=60, debug=False):
 
     winningname=None
 
