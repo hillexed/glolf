@@ -60,7 +60,7 @@ class FlyingEagle(Entity):
 
         elif self.is_flying_off:
             # we've grabbed someone
-            self.grabbed_thing.position = self.position
+            self.grabbed_thing.position = utils.copyvec(self.position)
             self.position[1] -= 1 # fly upwards
 
             self.see_if_grabbed_player_frees_themself()
