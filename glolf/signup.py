@@ -47,7 +47,7 @@ async def bet_command(message, message_body, client):
     'Spakistan Sputters',
     'Steamy Irons',
     'Wedge Products',
-    ''
+    'Fairway Maidens'
     ]
     
     for clubname in club_name_list:
