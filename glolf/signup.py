@@ -39,6 +39,7 @@ async def bet_command(message, message_body, client):
     bets = get_bets()
     if userid in bets:
         await message.channel.send(f":horse: Ya got a favorite team already, pardner: the {bets[userid]}")
+        return
 
     clubs = []
 
@@ -48,7 +49,7 @@ async def bet_command(message, message_body, client):
     'Steamy Irons',
     'Wedge Products',
     'Fairway Maidens'
-    ]
+    ] # yup. hardcoded for now
     
     for clubname in club_name_list:
         clubdata = db.get_club_data(clubname)

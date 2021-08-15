@@ -77,6 +77,10 @@ See information about a glolf club someone has created, such as the players in t
 ...
 ```
 Create a new glolf club!
+
+`g!signup`
+Become a fan of one of the glolf clubs competing in the Internet Open!
+
 ''', ["invite","all"],)
 
 basics = HelpTopic("glolf basics","ℹ️", '''
