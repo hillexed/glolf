@@ -2,7 +2,9 @@ import data.players
 
 
 class ReadyToHelp(PlayerModification):
-    displayEmoji = "🦅"
+    # ready to help players in the interdimensional void
+    # also can spread the word and recruit others
+    displayEmoji = "⛑️"
     isDead = False
     description = "This glolfer joined the Rescue Team!"
     join_types = ("reluctantly","eagerly","hestitantly","resolutely","obediently","eagerly","eagerly")

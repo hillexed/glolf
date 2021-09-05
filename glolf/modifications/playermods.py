@@ -60,9 +60,21 @@ class ChampionshipJacket(PlayerModification):
     displayEmoji = "🧥"
     description = "This player has won an Internet Open."
 
+class TrainingMontage(PlayerModification):
+    displayEmoji = "💪"
+    description = "This glolfer has been through a Training Montage"
+
+class CoolPen(PlayerModification):
+    displayEmoji = "🖊️🏄"
+    description = "This glolfer won a Cool Pen in an unofficial tournament."
+
+class PleaseHelpMe(PlayerModification):
+    displayEmoji = "😵‍💫"
+    description = "This glolfer is feeling the effects of the Interdimensional Void."
+
 class Out(PlayerModification):
-    displayEmoji = "🦢"
-    description = "Spacetime stares back."
+    displayEmoji = "😈"
+    description = "Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌. This player has glimpsed what lies beyond."
 
 class Diamonds(PlayerModification):
     displayEmoji = "♦️"
@@ -101,7 +113,7 @@ class LegallyDistinctNutritionalSocks(PlayerModification):
 # todo: use this to make a command that lets you look up mods
 # include eagle mods too
 mods_by_emoji = {}
-for mod in (Attractor, BurstOfSpeed Out, Diamonds, Friendship, OnARoll):
+for mod in (Attractor, BurstOfSpeed, Out, Diamonds, Friendship, OnARoll, PleaseHelpMe, TrainingMontage, ChampionshipJacket):
     if mod.displayEmoji in mods_by_emoji:
         raise ValueError("Two mods have the same {} emoji!".format(mod.displayEmoji))
     mods_by_emoji[mod.displayEmoji] = mod
