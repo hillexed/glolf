@@ -1,3 +1,4 @@
+from file import parse_file_command
 import discord, dotenv
 config = dotenv.dotenv_values(".env")
 
@@ -108,6 +109,8 @@ async def handle_commands(message):
             return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
         if message.content.startswith(prefix.replace("g",'') + "tourney"):
             return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
+        if message.content.startswith(prefix.replace("g",'') + "file"):
+            return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
 
 
     if message.content.startswith(prefix + "glolfer"):
@@ -133,9 +136,15 @@ async def handle_commands(message):
     elif message.content.startswith(prefix + "viewclub"):
         return await view_club(message, get_command_body(message, "viewclub"))
 
+    elif message.content.startswith(prefix + "file"):
+        text = await parse_file_command(message, get_command_body(message, "file"))
+        message.content = text
+        message.attachments = []
+        return await handle_commands(message)
 
     elif message.content.startswith(prefix + "signup"):
         await bet_command(message, get_command_body(message, "signup"), client)
+
 
     elif message.content.startswith(prefix + "admincommands"):
         return await message.channel.send("g!discordid, g!addmodification, g!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!doesglolferexist")
