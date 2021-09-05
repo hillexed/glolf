@@ -320,16 +320,29 @@ def generate_player_from_name(name):
     else:
         return generate_random_player_from_name(name)
 
-def format_stlat_display(starcount: float):
-    num_stars = math.floor(starcount)
-    return_string = "🌕" * num_stars
-    remainder = starcount-num_stars
-    if remainder > 0.75:
-        return return_string + "🌖"
-    elif remainder > 0.5:
-        return return_string + "🌗"
-    elif remainder > 0.25:
-        return return_string + "🌘"
-    else: #remainder <= 0.25
-        return return_string
+def format_stlat_display(mooncount: float):
+    num_stars = math.floor(abs(mooncount))
+    whole_moons = "🌕" * num_stars
+    remainder = abs(mooncount)-num_stars
+    if mooncount > 0:
+        if remainder >= 0.75:
+            return whole_moons + "🌖"
+        elif remainder >= 0.5:
+            return whole_moons + "🌗"
+        elif remainder >= 0.25:
+            return whole_moons + "🌘"
+        else: #remainder < 0.25
+            return whole_moons
+    else:
+        print(remainder)
+        if remainder >= 0.75:
+            return "-🌔"+whole_moons
+        elif remainder >= 0.5:
+            return "-🌓"+whole_moons
+        elif remainder >= 0.25:
+            return "-🌒" + whole_moons
+        else: #remainder < 0.25
+            if num_stars == 0:
+                return "" # no negative sign for zero, otherwise it would just be "-"
+            return "-" + whole_moons
 
