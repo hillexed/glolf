@@ -15,6 +15,7 @@ from gamecommands import glolfcommand
 from commandwrappers import get_users_with_games_active, clear_users_with_games_active, set_update_coming, is_update_coming
 from clubs.clubcommands import save_club, view_club
 from help import parse_help_command
+from signup import bet_command
 
 
 debug = False
@@ -141,9 +142,14 @@ async def handle_commands(message):
         message.attachments = []
         return await handle_commands(message)
 
+    elif message.content.startswith(prefix + "signup"):
+        await bet_command(message, get_command_body(message, "signup"), client)
+
 
     elif message.content.startswith(prefix + "admincommands"):
         return await message.channel.send("g!discordid, g!addmodification, g!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!doesglolferexist")
+
+
 
     elif message.content.startswith(prefix + "discordid"):
         logging.info(message.author.id) # you should only be able to access this if you're an admin

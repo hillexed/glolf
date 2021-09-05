@@ -97,3 +97,23 @@ def set_club_data(name, data):
 def delete_club_data(name):
     create_club_table_if_not_made()
     return get_data(name, tablename="clubs")
+
+
+
+def create_gamedata_table_if_not_made():
+    create_table_if_not_made("gamedata")
+
+def get_game_data(name):
+    create_gamedata_table_if_not_made()
+    return get_data(name, tablename="gamedata")
+
+def set_game_data(name, data):
+    create_gamedata_table_if_not_made()
+    if get_data(name, tablename="gamedata") is None:
+        create_new_entry(name, data, tablename="gamedata")
+    else:
+        update_data(name, data, tablename="gamedata")
+
+def delete_game_data(settingname):
+    create_gamedata_table_if_not_made()
+    return get_data(settingname, tablename="clubs")

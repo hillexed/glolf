@@ -125,6 +125,7 @@ async def tourney_series(message,
     # find winning names
     winning_names = [name for name in win_counts if win_counts[name] >= wins_required]
     if len(winning_names) == 1:
+        await message.channel.send(f"**{winning_names[0]}** wins the series!")
         return winning_names[0]
     else:
         winningname = random.choice(winning_names)
@@ -220,7 +221,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
 
         wins_required = 1
         if is_club_game:
-            wins_required = 3
+            wins_required = 2
 
         if debug:
             max_turns = 10
