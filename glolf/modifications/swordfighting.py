@@ -307,7 +307,7 @@ class SwordfightingDecree(GameModification):
             player_name, source_game_id = playerdata
             if self.game.turn_number == 5 and self.game.id != source_game_id:
 
-                if not self.game.is_tournament or (self.game.is_tournament and random.random() < 0.2):
+                if (not self.game.is_tournament and random.random() < 0.4) or (self.game.is_tournament and random.random() < 0.2):
                     if not self.inderdimensional_void_clogged:
                         self.players_in_interdimensional_void.remove(playerdata)
                     self.game.add_player_by_name(self.game.course.random_position_on_course(), player_name)
