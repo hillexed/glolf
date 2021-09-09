@@ -2,8 +2,14 @@ import db
 import asyncio
 import random
 
+import logging
+logger = logging.getLogger(__name__)
+
 from .clubdata import GlolfClubData
 from data.degrees import generate_degree_based_on_name
+from utils import random_seeded_choice
+
+MAX_CLUB_PLAYERS = 15
 
 async def save_club(message, command_body, client):
 
@@ -45,7 +51,7 @@ player3
 
 
 
-    if command_body.count("\n") < 2:
+    if len(lines) < 2:
         return await message.channel.send('on a new line, please give me a team emoji and motto! they should look like this:\n<team emoji> "<motto here>"')
 
     line2words = lines[1].split(" ")
@@ -62,7 +68,7 @@ player3
         else:
             return await message.channel.send(f"um was that a team with emoji {emoji} and motto {motto}? i don't think i understood that correctly...") 
 
-    if command_body.count("\n") <= 2:
+    if len(lines) < 3:
         return await message.channel.send("umm your club doesnt have any players. thats kinda lonely. give it some players by saying each players name on a new line")
 
     cheer = None
@@ -109,8 +115,8 @@ player3
             return await message.channel.send("There's too many blank lines!")
             
     # sanity checking
-    if len(player_names) > 15:
-        return await message.channel.send("oh umm wow thats too many players to keep track of. can you stick to umm 15 or less")
+    if len(player_names) > MAX_CLUB_PLAYERS:
+        return await message.channel.send(f"oh umm wow thats too many players to keep track of. can you stick to umm {MAX_CLUB_PLAYERS} or less")
 
     if len(caddy_names) > 12:
         return await message.channel.send("oh umm wow thats too many caddies to keep track of. can you stick to umm 12 or less")
@@ -159,16 +165,25 @@ player3
         reaction, user = await client.wait_for('reaction_add', timeout=30.0, check=check)
         if str(reaction.emoji) == '👍':
             db.set_club_data(club_name, new_club_data)
+            logger.info(f"Creating club {club_name}")
             await message.channel.send(f'ok nice looks like a new club has been formed')
         else:
             await message.channel.send(f'oh ok well guess ill go do something else')
     except asyncio.TimeoutError:
         await message.channel.send('umm i didnt hear anything so ill take that as a no. let me know if you want to try saving again')
+        try:    
+            await reactmessage.clear_reactions()
+        except discord.errors.Forbidden:
+            pass
 
 async def view_club(message, command_body):
     club_name = command_body.strip()
+
+    if len(club_name) == 0:
+        return await message.channel.send("umm can you tell me the name of the club you want to see")
+        
+
     clubdata = db.get_club_data(club_name)
-    print(clubdata)
     if clubdata is None:
         return await message.channel.send("umm couldnt find a club with that name sorry")
 
@@ -176,14 +191,158 @@ async def view_club(message, command_body):
     await message.channel.send(club.printTeamInfo())
 
 
+# Club editing
 
-def deleteclub(message):
-    pass
+
+async def get_club_from_first_line_of_message(message, command_body):
+    '''
+        Helper function for editing commands to check for a club and check whether the message sender is in the owner_ids
+        Usage:
+    club = await get_club_from_first_line_of_message(message, command_body)
+    if club is None:
+        return
+    '''
+    lines = command_body.strip().split("\n")
+    club_name = lines[0]
+    clubdata = db.get_club_data(club_name)
+    if clubdata is None:
+        await message.channel.send("umm couldnt find a club with that name. sorry")
+        return None
+
+    club = GlolfClubData(*clubdata)
+
+    message_sender_id = message.author.id
+    if message_sender_id not in club.owner_ids:
+        await message.channel.send("so umm someone else created that club and im a bit worried about messing with it without them asking. umm maybe ask them to do it? yeah")
+        return None
+    return club
+
+def leave_comment(seed="bye"):
+
+    choices = ["shame. i liked em","good riddance","shame. they had heart", "shame. they had no heart", "bittersweet","shame. i kinda liked em", "hope everyones doing ok", "sad to hear it", "oh well", "oh well", "oh well", "oh well", "hope whatever they do next is fun", "best of luck", "best of luck", "could use the rest", "get some rest"]
+
+    return random_seeded_choice(choices, seed=seed)
+
+
+async def delete_club(message, command_body, client):
+    club = await get_club_from_first_line_of_message(message, command_body)
+    if club is None:
+        return
+
+    await message.channel.send(club.printTeamInfo())
+
+    reactmessage = await message.channel.send("ok is this the club you want to delete? ")
+    await reactmessage.add_reaction('👍')
+    await reactmessage.add_reaction('👎')
+
+
+    def check(reaction, user):
+        return user == message.author and str(reaction.emoji) in ('👍', '👎')
+
+    try:
+        reaction, user = await client.wait_for('reaction_add', timeout=30.0, check=check)
+        if str(reaction.emoji) == '👍':
+            db.delete_club_data(club.name)
+            logger.info(f"Deleting club {club.name}")
+            return await message.channel.send(f'ok looks like the club unformed. {leave_comment(club.name)}')
+        else:
+            return await message.channel.send(f'oh ok well guess ill go do something else')
+    except asyncio.TimeoutError:
+        await message.channel.send('umm i didnt hear anything so ill take that as a no. let me know if you want to try deleting again')
+        try:    
+            await reactmessage.clear_reactions()
+        except discord.errors.Forbidden:
+            pass
     
 
-def add_player_to_club(message):
-    pass
+    
+async def add_player_to_club(message, command_body, client):
 
+    lines = command_body.strip().split("\n")
+    club = await get_club_from_first_line_of_message(message, command_body)
+    if club is None:
+        return
+
+    if len(lines) == 1:
+        return await message.channel.send("to use: g!addtoclub <club name>\n<playername>")
+
+    playername = lines[1]
+    if playername in club.player_names:
+        return await message.channel.send("umm i think they're already in the club")
+
+
+    if len(club.player_names) == MAX_CLUB_PLAYERS:
+        return await message.channel.send(f"oh umm wow thats too many players to keep track of. can you stick to umm {MAX_CLUB_PLAYERS} or less")
+
+
+    # add a player to the club. currently unsaved by this point
+    club.player_names.append(playername)
+    await message.channel.send(club.printTeamInfo())
+
+    reactmessage = await message.channel.send("ok heres the club with the new player. everything look good")
+    await reactmessage.add_reaction('👍')
+    await reactmessage.add_reaction('👎')
+
+    def check(reaction, user):
+        return user == message.author and str(reaction.emoji) in ('👍', '👎')
+
+    try:
+        reaction, user = await client.wait_for('reaction_add', timeout=30.0, check=check)
+        if str(reaction.emoji) == '👍':
+            db.set_club_data(club.name, club)
+            logger.info(f"Adding player {playername} to club {club.name}")
+            await message.channel.send(f'ok theyre in')
+        else:
+            await message.channel.send(f'oh ok well guess ill go do something else')
+    except asyncio.TimeoutError:
+        await message.channel.send('umm i didnt hear anything so ill take that as a no. let me know if you want to try adding again')
+        try:    
+            await reactmessage.clear_reactions()
+        except discord.errors.Forbidden:
+            pass
+
+async def remove_player_from_club(message, command_body, client):
+
+    lines = command_body.strip().split("\n")
+    club = await get_club_from_first_line_of_message(message, command_body)
+    if club is None:
+        return
+
+    if len(lines) == 1:
+        return await message.channel.send("to use: g!removefromclub <club name>\n<playername>")
+
+    playername = lines[1]
+    if playername not in club.player_names:
+        return await message.channel.send("umm i think they aren't in the club. does that count as removing")
+
+    if len(club.player_names) == 1:
+        return await message.channel.send("umm cant let you remove a club's only player. clubs need players. i think?")
+
+    # add a player to the club. currently unsaved by this point
+    club.player_names.remove(playername)
+    await message.channel.send(club.printTeamInfo())
+
+    reactmessage = await message.channel.send("ok heres the club without that player. everything look good")
+    await reactmessage.add_reaction('👍')
+    await reactmessage.add_reaction('👎')
+
+    def check(reaction, user):
+        return user == message.author and str(reaction.emoji) in ('👍', '👎')
+
+    try:
+        reaction, user = await client.wait_for('reaction_add', timeout=30.0, check=check)
+        if str(reaction.emoji) == '👍':
+            db.set_club_data(club.name, club)
+            logger.info(f"Removing player {playername} from club {club.name}")
+            await message.channel.send(f'ok umm see ya. {leave_comment(playername)}')
+        else:
+            await message.channel.send(f'oh ok well guess ill go do something else')
+    except asyncio.TimeoutError:
+        await message.channel.send('umm i didnt hear anything so ill take that as a no. let me know if you want to try removing again')
+        try:    
+            await reactmessage.clear_reactions()
+        except discord.errors.Forbidden:
+            pass
 
 
 

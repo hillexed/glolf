@@ -12,7 +12,7 @@ from modifications.swordfighting import SwordfightingDecree
 from tourneycommands import parse_tourney_message
 from gamecommands import glolfcommand
 from commandwrappers import get_users_with_games_active, clear_users_with_games_active, set_update_coming, is_update_coming
-from clubs.clubcommands import save_club, view_club
+from clubs.clubcommands import save_club, view_club, delete_club, add_player_to_club, remove_player_from_club
 from help import parse_help_command
 from signup import bet_command
 
@@ -130,6 +130,12 @@ async def handle_commands(message):
 
     elif message.content.startswith(prefix + "createclub"):
         return await save_club(message, get_command_body(message, "createclub"), client=client)
+    elif message.content.startswith(prefix + "deleteclub"):
+        return await delete_club(message, get_command_body(message, "deleteclub"), client=client)
+    elif message.content.startswith(prefix + "addtoclub"):
+        return await add_player_to_club(message, get_command_body(message, "addtoclub"), client=client)
+    elif message.content.startswith(prefix + "removefromclub"):
+        return await remove_player_from_club(message, get_command_body(message, "removefromclub"), client=client)
     elif message.content.startswith(prefix + "viewclub"):
         return await view_club(message, get_command_body(message, "viewclub"))
 

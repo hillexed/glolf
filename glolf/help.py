@@ -76,7 +76,20 @@ See information about a glolf club someone has created, such as the players in t
 <person2>
 ...
 ```
-Create a new glolf club!
+Create a new glolf club! They can compete in tag-team club games against other clubs.
+
+`g!deleteclub <clubname>`: Delete a club you created.
+
+```g!addtoclub <clubname>
+<playername>
+```
+Add a player to a club you created.
+
+```
+g!removefromclub <clubname>
+<playername>
+```
+Remove a player from a club you created.
 
 `g!signup`
 Become a fan of one of the glolf clubs competing in the Internet Open!
