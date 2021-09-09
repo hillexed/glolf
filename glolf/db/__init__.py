@@ -22,7 +22,7 @@ def get_data(name, tablename="players"):
     # WARNING: TABLENAME IS SQL INJECTABLE. DON'T ALLOW USER SUBMITTED TABLE NAMES
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute(f"SELECT * FROM {tablename} WHERE name=?",(name, ))
+    cursor.execute(f"SELECT * FROM {tablename} WHERE name=?",(name.title(), ))
     db_entry= cursor.fetchone()
     cursor.close()
 
@@ -36,7 +36,7 @@ def create_new_entry(name, data, tablename="players"):
     data = json.dumps(data)
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute(f"INSERT INTO {tablename} VALUES (?, ?, ?)",(name, data, version))
+    cursor.execute(f"INSERT INTO {tablename} VALUES (?, ?, ?)",(name.title(), data, version))
     conn.commit()
     cursor.close()
 
@@ -46,7 +46,7 @@ def update_data(name, data, tablename="players"):
     data = json.dumps(data)
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute(f"UPDATE {tablename} SET data=? WHERE name=?",(data, name))
+    cursor.execute(f"UPDATE {tablename} SET data=? WHERE name=?",(data, name.title()))
     conn.commit()
     cursor.close()
 
@@ -55,7 +55,7 @@ def delete_data(name, tablename="players"):
     version = 1
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute(f"DELETE FROM {tablename} WHERE name=?",(name, ))
+    cursor.execute(f"DELETE FROM {tablename} WHERE name=?",(name.title(), ))
     conn.commit()
     cursor.close()
 
@@ -96,7 +96,7 @@ def set_club_data(name, data):
 
 def delete_club_data(name):
     create_club_table_if_not_made()
-    return get_data(name, tablename="clubs")
+    delete_data(name, tablename="clubs")
 
 
 
