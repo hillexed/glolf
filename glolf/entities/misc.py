@@ -1,7 +1,7 @@
 import collections, random, math
-import numpy as np
 
 import utils
+from utils import Vector
 from .entity import Entity
 
 import logging
@@ -13,7 +13,7 @@ class OneTurnParticle(Entity):
     isDead = False
     zIndex = 20
     def __init__(self, game, position):
-        self.position = np.array(position).astype(float)
+        self.position = Vector(position)
         self.game = game
         self.isDead = False
 
@@ -40,7 +40,7 @@ class RealityCrack(Entity):
     showOnBoard = True
     isDead = False
     def __init__(self, game, position, life=None):
-        self.position = np.array(position).astype(float)
+        self.position = Vector(position)
         self.game = game
         if life is None:
             self.life = random.randrange(5,10)

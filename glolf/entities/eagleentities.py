@@ -1,4 +1,3 @@
-import numpy as np
 import random, math
 import logging
 logger = logging.getLogger(__name__)
@@ -8,6 +7,7 @@ from .entity import Entity
 from .glolfer import Glolfer
 from modifications import eaglemod
 import utils
+from utils.vecmath import Vector
 
 
 class FlyingEagle(Entity):
@@ -22,7 +22,7 @@ class FlyingEagle(Entity):
         # all the way at the right side of the screen, at a random y
         position = [self.game.course.bounds[0]-1, random.randint(0,self.game.course.bounds[1])]
 
-        self.position = np.array(position).astype(float)
+        self.position = Vector(position)
 
         self.grabbed_thing = None
         self.swooped = False
@@ -41,13 +41,13 @@ class FlyingEagle(Entity):
             return
 
         if self.grabbed_thing is None:
-            self.position[0] -= 1 # fly left
+            self.position += Vector((-1, 0)) # fly left
 
             # fly up/down towards target
             if self.target.position[1] < self.position[1]-0.5:
-                self.position[1] -= 1
+                self.position += Vector((0, -1))
             elif self.target.position[1] > self.position[1]+0.5:
-                self.position[1] += 1
+                self.position += Vector((0, 1))
 
             if self.game.object_shares_tile_with(self, Glolfer):
                 # hit!
@@ -61,7 +61,8 @@ class FlyingEagle(Entity):
         elif self.is_flying_off:
             # we've grabbed someone
             self.grabbed_thing.position = utils.copyvec(self.position)
-            self.position[1] -= 1 # fly upwards
+            
+            self.position += Vector((0, -1))# fly upwards
 
             self.see_if_grabbed_player_frees_themself()
         else:

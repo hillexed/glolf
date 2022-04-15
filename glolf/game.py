@@ -1,11 +1,11 @@
 from typing import TypedDict
-import numpy as np
 import copy
 import random
 import logging
 logger = logging.getLogger(__name__)
 
 import utils
+from utils.vecmath import Vector, randomVecOfLength
 import entities
 from data.players import default_player_names
 from modifications.current_rules import get_permanent_modifiers
@@ -30,7 +30,7 @@ class SingleHole:
         self.is_tournament = is_tournament
 
         self.wind = random.choice(("Ominous","Pheasant","Fruity","Monsoon","Trade","Purple","Tasteless","Mechanical","Electric","Four-dimensional","Exact","Differential","Manifold","Change","Aggressively Normal")) #purely decorative for now
-        self.windDirection = np.random.random(2) # [blah,blah] 0-1 each coord
+        self.windDirection = randomVecOfLength(2) # [blah,blah] 0-1 each coord
 
         # parse course
         self.course = courses.get_random_course(self)
@@ -92,7 +92,7 @@ class SingleHole:
         for obj in self.objects + self.modifiers:
             obj.update()
 
-        self.windDirection += np.random.random(2) - np.array((0.5,0.5)) # random walk
+        self.windDirection += randomVecOfLength(2) - Vector((0.5,0.5)) # random walk
 
         # add any new objects
         self.objects += self.new_objects
@@ -321,7 +321,7 @@ class SingleHole:
         if object_type is not None:
              consideredobjects = [o for o in self.objects if (type(o) == object_type)]
 
-        objectsSortedByDistance = sorted(consideredobjects, key=lambda object:np.linalg.norm(object.position-position))
+        objectsSortedByDistance = sorted(consideredobjects, key=lambda object:(object.position-position).norm())
         return objectsSortedByDistance[0]
 
     def object_shares_tile_with(self, target, object_type):
@@ -336,7 +336,7 @@ class SingleHole:
         if object_type is not None:
              consideredobjects = [o for o in consideredobjects if type(o) == object_type]
 
-        objectsSortedByDistance = sorted(consideredobjects, key=lambda object:np.linalg.norm(object.position-target.position))
+        objectsSortedByDistance = sorted(consideredobjects, key=lambda object:(object.position-target.position).norm())
         return objectsSortedByDistance
 
     def get_closest_object(self, target : entities.Entity, object_type=None):
@@ -356,7 +356,7 @@ class SingleHole:
         return False
 
     def has_ball_on_tile(tile_coordinates):
-        ball = get_closest_object_to_position(tile_coordinates + np.array([0.5,0.5]), glolfer.Ball)
+        ball = get_closest_object_to_position(tile_coordinates + Vector(0.5,0.5), glolfer.Ball)
         if ball is None:
             return False
 
@@ -385,13 +385,13 @@ class SingleHole:
 
     def report_hit(self,shooting_player, ball,swing,club,shot_vec):
 
-        if np.linalg.norm(shot_vec) > 6:
+        if shot_vec.norm() > 6:
             length = "really long"
-        elif np.linalg.norm(shot_vec) > 3:
+        elif shot_vec.norm() > 3:
             length = "long"
-        elif np.linalg.norm(shot_vec) > 2:
+        elif shot_vec.norm() > 2:
             length = "medium"
-        elif np.linalg.norm(shot_vec) > 1:
+        elif shot_vec.norm() > 1:
             length = "short"
         else:
             length = "terribly short"

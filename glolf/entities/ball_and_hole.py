@@ -1,4 +1,3 @@
-import numpy as np
 import random, math
 import logging
 logger = logging.getLogger(__name__)
@@ -8,6 +7,7 @@ from .entity import Entity
 from data.scorecards import get_NPC_dummy_player
 from .misc import ScoreConfetti
 import utils
+from utils.vecmath import Vector
 
 class Ball(Entity):
     displayEmoji = "⚪"
@@ -15,7 +15,7 @@ class Ball(Entity):
     type = "ball"
     zIndex = 1 
     def __init__(self, game, position = [0.0,0.0]):
-        self.position = np.array(position).astype(float)
+        self.position = Vector(position)
         self.game = game
         self.times_hit = 0
         self.strokes = 0
@@ -66,5 +66,5 @@ class Hole(Entity):
     type = "hole"
     showOnBoard = True
     def __init__(self, game, position = [0,0]):
-        self.position = np.array(position).astype(float)
+        self.position = Vector(position)
         self.game = game

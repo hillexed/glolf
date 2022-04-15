@@ -1,11 +1,11 @@
-import numpy as np
+from utils.vecmath import Vector
 class Entity():
     displayEmoji = "❓"
     showOnBoard = True
     isDead = False
     zIndex = 0
     def __init__(self, game, position = [0.0,0.0]):
-        self.position = np.array(position).astype(float)
+        self.position = Vector(position)
         self.game = game
 
     def update(self):

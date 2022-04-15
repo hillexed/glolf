@@ -1,9 +1,9 @@
 import math
 import random
-import numpy as np
+from .vecmath import Vector
 
 def copyvec(vec):
-    return np.copy(vec)
+    return Vector(vec)
 
 def random_seeded_choice(choices, seed):
     rng = random.Random(seed)

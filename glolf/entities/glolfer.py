@@ -1,10 +1,10 @@
-import numpy as np
 import math
 import random
 import logging
 logger = logging.getLogger(__name__)
 
 import utils
+from utils.vecmath import Vector
 from data import players, playerstlats
 from .misc import *
 from .ball_and_hole import *
@@ -48,7 +48,7 @@ class Glolfer(playerstlats.Player, Entity):
             return f"{self.name}{emojistring}"
 
     def set_position(self, position):
-        self.position = np.array(position).astype(float)
+        self.position = Vector(position)
 
     def get_relevant_modifiers(self):
         return self.game.modifiers + self.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)
@@ -64,7 +64,11 @@ class Glolfer(playerstlats.Player, Entity):
         Decide what to do each turn!
         Currently the logic is "Move towards the nearest ball - or if you're on the same tile as a ball, hit that ball"
         '''
+        current_action = self.choose_action()
+        self.do_chosen_action(current_action)
 
+
+    def choose_action(self):
         current_action = {
             "action":"move",
             "source":self
@@ -76,9 +80,13 @@ class Glolfer(playerstlats.Player, Entity):
             current_action["target"] = ball
 
         for modifier in self.get_relevant_modifiers():
-            modifier.on_glolfer_update(self, current_action)
+            modifier.on_glolfer_update(self, current_action) # can replace current action
         self.modifiers = [x for x in filter(lambda obj:not obj.isDead, self.modifiers)]
 
+        return current_action
+
+    def do_chosen_action(self, current_action):
+        # carry out action
         if current_action["action"] == "hit":
             self.hit(current_action["target"])
         elif current_action["action"] == "move":
@@ -100,13 +108,13 @@ class Glolfer(playerstlats.Player, Entity):
 
         target_vec = target.position - self.position #todo: pathfinding
 
-        if np.linalg.norm(target_vec) < 0.01:
+        if target_vec.norm() < 0.01:
             return #we're on the target, don't move or we might divide by 0
 
         # create a vector in the direction of the target that's `move_speed` long
         move_speed = self.stlats.nyoomability
-        move_speed = min(move_speed, np.linalg.norm(target_vec)) #don't overshoot the target
-        move_vector = target_vec / np.linalg.norm(target_vec) * move_speed
+        move_speed = min(move_speed, target_vec.norm()) #don't overshoot the target
+        move_vector = target_vec / target_vec.norm() * move_speed
 
         # here's where various different type of movements would go
 
@@ -121,7 +129,7 @@ class Glolfer(playerstlats.Player, Entity):
         target = self.game.get_closest_object(self, Hole)
         target_vector = (target.position - self.position)
 
-        target_distance = np.linalg.norm(target_vector)
+        target_distance = target_vector.norm()
         target_angle = math.atan2(target_vector[1],target_vector[0])
 
         # choose your shot (todo)
@@ -137,12 +145,12 @@ class Glolfer(playerstlats.Player, Entity):
         estimationFactor = min(self.stlats.estimation * 0.2,1)
         attempted_shot_power = utils.lerp(swing.mean_power, target_distance, estimationFactor)
 
-        whack_strength = np.random.normal(attempted_shot_power,strength_variance)
+        whack_strength =  random.normalvariate(attempted_shot_power,strength_variance)
         whack_strength = max(0, whack_strength) #can't have negative power
 
         # ok take a swing!
         # todo: compute topspin and backspin and stuff
-        shot_speed = np.random.normal(whack_strength,strength_variance)
+        shot_speed =  random.normalvariate(whack_strength,strength_variance)
         shot_speed = max(shot_speed, min_speed)
         # max power isn't actually capped because shots overshooting is funny
 
@@ -150,9 +158,9 @@ class Glolfer(playerstlats.Player, Entity):
         target_angle -= self.stlats.left_handedness
         angle_variance = swing.angle_variance*self.stlats.needlethreadableness
         angle_variance = max(0, angle_variance) 
-        shot_angle = np.random.normal(target_angle, angle_variance)   
+        shot_angle =  random.normalvariate(target_angle, angle_variance)   
         
-        shot_direction = np.array([math.cos(shot_angle), math.sin(shot_angle)])
+        shot_direction = Vector((math.cos(shot_angle), math.sin(shot_angle)))
         shot_vec = shot_direction * shot_speed
 
         # to do: wind and weather
@@ -186,9 +194,9 @@ class Glolfer(playerstlats.Player, Entity):
     def choose_swing_type(self, target_vector):
         # currently very simple. swing types defined in entities.py
         
-        if np.linalg.norm(target_vector) > 7:
+        if target_vector.norm() > 7:
             return SwingTypes["drive"]
-        elif np.linalg.norm(target_vector) > 3:
+        elif target_vector.norm() > 3:
             return SwingTypes["chip"]
         else:
             return SwingTypes["putt"]

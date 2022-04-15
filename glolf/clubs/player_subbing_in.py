@@ -1,9 +1,9 @@
 import entities
-import numpy as np
 
 from utils import random_seeded_choice, copyvec
 from modifications.modification import GameModification, PlayerModification
 from entities import GlolfCartExhaust, Entity
+from utils.vecmath import Vector
 import random
 
 class InGlolfCart(PlayerModification):
@@ -69,7 +69,7 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
                 position = [random.randint(0,self.game.course.bounds[0]), 0] # top wall
             else:
                 position = [random.randint(0,self.game.course.bounds[0]), self.game.course.bounds[1]-1] # bottom wall
-        self.position = np.array(position).astype(float)
+        self.position = Vector(position)
 
         self.has_subbed_in = False
 
@@ -97,7 +97,7 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
 
         target_vec = target.position - self.position #todo: pathfinding
 
-        if np.linalg.norm(target_vec) < 0.01:
+        if target_vec.norm() < 0.01:
             return #we're on the target, don't move or we might divide by 0
 
         # create a vector in the direction of the target that's `move_speed` long
@@ -106,8 +106,8 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
         else:
             move_speed = self.currently_driving_player.stlats.ritualism + 3
             
-        move_speed = min(move_speed, np.linalg.norm(target_vec)) #don't overshoot the target
-        move_vector = target_vec / np.linalg.norm(target_vec) * move_speed
+        move_speed = min(move_speed, target_vec.norm()) #don't overshoot the target
+        move_vector = target_vec / target_vec.norm() * move_speed
 
         # here's where various different type of movements would go
 
@@ -118,7 +118,7 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
 
     def check_if_anything_rammed(self, int_position):
 
-        checklocation = entities.Entity(self.game, int_position + np.array([0.5,0.5]))
+        checklocation = entities.Entity(self.game, int_position + Vector((0.5,0.5)))
 
         otherplayer = self.game.get_closest_object(checklocation, entities.Glolfer)
         if self.game.on_same_tile(checklocation, otherplayer) and otherplayer != self.target and otherplayer.club != self.currently_driving_player.club:
@@ -128,6 +128,7 @@ class GlolferInGlolfCartSubbingIn(entities.Entity):
 
     def draw_dust_trail(self, start, finish):
         # Bresenham's line drawing algorithm, taken from wikipedia
+        print(start)
         x0,y0 = start
         x1,y1 = finish
 
