@@ -253,4 +253,3 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
 
     await message.channel.send(f"**{competitors_this_round[0]} wins the tournament!**")
 
-

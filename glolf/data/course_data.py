@@ -197,19 +197,7 @@ fancy_courses = [
 :fog::fog::fog::black_large_square::black_large_square::fog::fog:⛳️:fog::fog::fog:
 :fog::fog::black_large_square::black_large_square::fog::fog::fog::fog::fog::fog::fog:
 ''',
-# highway by zickery
-'''
-:city_sunset::city_dusk::city_dusk::city_dusk::cityscape::cityscape::cityscape::cityscape::cityscape::city_dusk::city_dusk::city_dusk::night_with_stars:
-:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
-:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::golf::white_large_square:
-:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::blue_car::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
-:truck::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::motorcycle::black_large_square:
-:yellow_square::yellow_square::black_large_square::black_large_square::black_large_square::yellow_square::yellow_square::yellow_square::black_large_square::black_large_square::black_large_square::yellow_square::yellow_square:
-:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::bus::black_large_square::black_large_square::black_large_square:
-:black_large_square::black_large_square::black_large_square::race_car::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
-:white_large_square::golf::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square:
-:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::red_car::police_car::black_large_square::black_large_square::black_large_square::black_large_square:
-''',
+
 # gearball by octagenerian redpenguin
 '''
 ⬛⬛⬛⬛:brown_square::orange_square::brown_square:⬛⬛⬛⬛
@@ -314,22 +302,7 @@ fancy_courses = [
 :blue_square::golf::brown_square::brown_square::orange_square::yellow_square::orange_square::brown_square::blue_square::blue_square::green_square:
 :blue_square::blue_square::blue_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::brown_square::brown_square::blue_square:
 ''',
-# house by hal 2000
-'''
-:white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square:
-:white_large_square::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square:
-:window::brown_square::golf::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::chair::desktop::white_large_square:
-:white_large_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::printer::brown_square::brown_square::brown_square::white_large_square:
-:white_large_square::white_large_square::white_large_square::brown_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::brown_square::white_large_square::white_large_square:
-:door::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::white_large_square:
-:door::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::sunflower::white_large_square::white_large_square:
-:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::brown_square::brown_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square:
-:white_large_square::brown_square::frame_photo::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::toilet::roll_of_paper::white_large_square:
-:window::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::window:
-:white_large_square::alarm_clock::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::golf::brown_square::white_large_square:
-:white_large_square::bed::brown_square::brown_square::brown_square::couch::brown_square::white_large_square::brown_square::brown_square::bathtub::white_large_square:
-:white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square:
-''',
+
 # mario 1-1 by syl
 '''
 :blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square::blue_square:
@@ -483,33 +456,7 @@ fancy_courses = [
 :white_large_square::white_large_square::blue_square::blue_square::yellow_square::yellow_square::yellow_square::blue_square::blue_square::blue_square::blue_square:
 ''',
 
-# elsewhere waffle house by Crash!
-'''
-:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
-:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
-:fog::fog::yellow_square::yellow_square::yellow_square::yellow_square::door::yellow_square::yellow_square::yellow_square::fog::fog:
-:fog::fog::yellow_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::yellow_square::fog::fog:
-:fog::fog::window::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::yellow_square::fog::fog:
-:fog::fog::window::brown_square::brown_square::brown_square::golf::brown_square::brown_square::yellow_square::fog::fog:
-:fog::fog::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::door::yellow_square::fog::fog:
-:fog::fog::yellow_square::golf::brown_square::brown_square::brown_square::brown_square::brown_square::yellow_square::fog::fog:
-:fog::fog::yellow_square::control_knobs::control_knobs::control_knobs::waffle::waffle::brown_square::yellow_square::fog::fog:
-:fog::fog::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::door::yellow_square::fog::fog:
-:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
-:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
-''',
 
-#office space by blamperer
-'''
-:file_cabinet::file_cabinet::file_cabinet::file_cabinet::file_cabinet::file_cabinet::brown_square::brown_square::brown_square::door::brown_square::white_large_square:
-:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square:
-:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::telephone::computer::coffee::white_large_square:
-:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::brown_square::golf::white_large_square:
-:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::white_large_square::door::white_large_square::white_large_square:
-:couch::brown_square::golf::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square:
-:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::dart:
-:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::fax:
-''',
 
 # dune eternal by zweihawke
 '''
@@ -709,6 +656,65 @@ disabled_courses = [
 :rainbow_flag::rainbow_flag::black_large_square::black_large_square::black_large_square::purple_square::purple_square::black_large_square::black_large_square::black_large_square::rainbow_flag::rainbow_flag:
 ''',
 
+# elsewhere waffle house by Crash!
+'''
+:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
+:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
+:fog::fog::yellow_square::yellow_square::yellow_square::yellow_square::door::yellow_square::yellow_square::yellow_square::fog::fog:
+:fog::fog::yellow_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::yellow_square::fog::fog:
+:fog::fog::window::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::yellow_square::fog::fog:
+:fog::fog::window::brown_square::brown_square::brown_square::golf::brown_square::brown_square::yellow_square::fog::fog:
+:fog::fog::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::door::yellow_square::fog::fog:
+:fog::fog::yellow_square::golf::brown_square::brown_square::brown_square::brown_square::brown_square::yellow_square::fog::fog:
+:fog::fog::yellow_square::control_knobs::control_knobs::control_knobs::waffle::waffle::brown_square::yellow_square::fog::fog:
+:fog::fog::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::yellow_square::door::yellow_square::fog::fog:
+:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
+:fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog::fog:
+''',
+
+#office space by blamperer
+'''
+:file_cabinet::file_cabinet::file_cabinet::file_cabinet::file_cabinet::file_cabinet::brown_square::brown_square::brown_square::door::brown_square::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::telephone::computer::coffee::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::brown_square::golf::white_large_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::white_large_square::door::white_large_square::white_large_square:
+:couch::brown_square::golf::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::dart:
+:brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::fax:
+''',
+
+# house by hal 2000
+'''
+:white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square:
+:white_large_square::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square:
+:window::brown_square::golf::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::chair::desktop::white_large_square:
+:white_large_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::printer::brown_square::brown_square::brown_square::white_large_square:
+:white_large_square::white_large_square::white_large_square::brown_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::brown_square::white_large_square::white_large_square:
+:door::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::white_large_square:
+:door::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::sunflower::white_large_square::white_large_square:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::brown_square::brown_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square:
+:white_large_square::brown_square::frame_photo::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::toilet::roll_of_paper::white_large_square:
+:window::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::brown_square::window:
+:white_large_square::alarm_clock::brown_square::brown_square::brown_square::brown_square::brown_square::white_large_square::brown_square::golf::brown_square::white_large_square:
+:white_large_square::bed::brown_square::brown_square::brown_square::couch::brown_square::white_large_square::brown_square::brown_square::bathtub::white_large_square:
+:white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::window::white_large_square::white_large_square:
+''',
+
+# highway by zickery
+'''
+:city_sunset::city_dusk::city_dusk::city_dusk::cityscape::cityscape::cityscape::cityscape::cityscape::city_dusk::city_dusk::city_dusk::night_with_stars:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::golf::white_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::blue_car::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:truck::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::motorcycle::black_large_square:
+:yellow_square::yellow_square::black_large_square::black_large_square::black_large_square::yellow_square::yellow_square::yellow_square::black_large_square::black_large_square::black_large_square::yellow_square::yellow_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::bus::black_large_square::black_large_square::black_large_square:
+:black_large_square::black_large_square::black_large_square::race_car::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:
+:white_large_square::golf::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square::white_large_square:
+:black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::red_car::police_car::black_large_square::black_large_square::black_large_square::black_large_square:
+''',
+
 ]
 
 # to do: give each course a name
@@ -740,7 +746,7 @@ special_case_emojis = { #these are emojis which aren't converted to unicode by e
 
 
 def discord_to_unicode_convert(coursedata):
-    course = emoji.emojize(coursedata,use_aliases=True)
+    course = emoji.emojize(coursedata, language='alias')
     for special_case_emoji in special_case_emojis:
         course = course.replace(special_case_emoji, special_case_emojis[special_case_emoji])
     
