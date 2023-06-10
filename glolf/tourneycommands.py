@@ -2,9 +2,12 @@ import re
 import asyncio
 import math
 import random
+from typing import TypedDict
+import time
 
 from commandwrappers import limit_one_game_per_person, disable_if_update_coming, too_many_games_active
 from gamecommands import newglolfgame
+import db
 
 async def parse_tourney_message(message, command_body, debug=False):
     tourneytype = command_body.split("\n")[0].strip()
@@ -62,7 +65,7 @@ async def tourney_series(message,
             header = f"{match_name} of {round_name} - Game {game_number}, {'-'.join(f'{win_counts[name]}' for name in win_counts)} (First to {wins_required})!"
             
 
-        winners = await newglolfgame(message, glolfer_names=glolfer_names, header=header,max_turns=max_turns, is_tournament=True, debug=debug)
+        winners = await newglolfgame(message, glolfer_names=glolfer_names, header=header,max_turns=max_turns, is_tournament=True, debug=debug, debug_skip_delays=True)
 
         for winner in winners:
 
@@ -96,7 +99,6 @@ async def tourney_series(message,
                 # this happens if an unexpected guest wins for a second time
                 managercomment = random.choice([":moneybag: **...**", ":moneybag: **...An Unexpected Chargeback**", ":moneybag: **...**", ":moneybag: **...**"])
                 await message.channel.send(managercomment)
-                await asyncio.sleep(15)
 
             # actual tourney win logic
             win_counts[winner.name] += 1 # also assumes entrant names are unique. and that whoever wins is a Glolfer or thing with a .name
@@ -117,26 +119,183 @@ async def tourney_series(message,
         await asyncio.sleep(5)
         return winningname
 
-def compute_round_name(competitors_this_round, move_onto_next_round, glolfers_per_game, round_num):
+def compute_round_name(num_matches_this_round, glolfers_per_game, round_num):
 
-        total_competitors = len(competitors_this_round) + len(move_onto_next_round) # not sure this is needed
-
-        if len(move_onto_next_round) > 0:
-            # this is right after move_onto_next_round should be []
-            # if it isn't [], we're in the first round of a tourney with a non-power-of-two number of entrants
+        if round_num == 0:
             return "qualifiers"
 
-        if total_competitors == glolfers_per_game:
-            return "the finals"
-        if total_competitors == glolfers_per_game**2 and round_num != 1:
-            return "the almostfinals"
-        if total_competitors == glolfers_per_game**3 and round_num != 1:
-            return "the nearfinals"
+        if num_matches_this_round == 1:
+            return "finals"
+        if num_matches_this_round == glolfers_per_game and round_num != 1:
+            return "almostfinals"
+        if num_matches_this_round == glolfers_per_game**2 and round_num != 1:
+            return "nearfinals"
 
         return f"round {round_num}"
 
 
 battleRoyaleTypeRegex = re.compile("1(v1)+")
+
+class InProgressTourneyData:
+    all_competitors: list[str]
+    this_round_competitors_advancing: list[str] = []
+    matches_yet_to_be_played = [] # list [a,b] , [c,d] list of people in competitors_this_round
+    matches_completed=[] #: list[a,b]
+    current_round_number: int = 0 # 0 = not yet started
+    glolfers_per_game: int = 2
+    wins_required: int = 1
+    is_club_game = False
+    debug = False
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def get_next_match_competitors(self):
+        if len(self.matches_yet_to_be_played) == 0:
+            return []
+        return self.matches_yet_to_be_played[0]
+
+    def is_completed(self):
+        if self.current_round_number > 0 and len(self.matches_yet_to_be_played) == 0 and len(self.this_round_competitors_advancing) <= 1:
+            return True
+        return False
+
+
+    def process_match_result(self, winner_of_match_name: str):
+        assert len(self.matches_yet_to_be_played) != 0 # if so, seed a new round
+
+        current_match = self.get_next_match_competitors()
+    
+        # record winner
+        self.this_round_competitors_advancing.append(winner_of_match_name)
+        
+        self.matches_yet_to_be_played = self.matches_yet_to_be_played[1:]
+        self.matches_completed.append(current_match)
+
+    def to_dict(self):
+        # convert player into a dict, for saving in the DB
+        return self.__dict__
+
+async def fill_next_round_bracket(message, tourneydata):
+
+    if tourneydata.current_round_number == 0:
+        # at the start of a tourney, everyone gets into the first round bracket
+        tourneydata.this_round_competitors_advancing = tourneydata.all_competitors[:]
+
+    players_advancing = tourneydata.this_round_competitors_advancing[:]
+    random.shuffle(players_advancing)
+    tourneydata.this_round_competitors_advancing = []
+
+    competitors_this_round = players_advancing
+
+    # If # of entrants isn't a power of two, we don't have a full bracket, so give some contestants byes
+    full_bracket_size = biggest_power_of_k_less_than(len(competitors_this_round), tourneydata.glolfers_per_game)
+    if not len(competitors_this_round) == full_bracket_size:
+        if tourneydata.glolfers_per_game > 2:
+            return await message.channel.send(f"For this type of tourney I need a power-of-{glolfers_per_game} number of people. You have {len(players_advancing)}") # todo: move to main command so the return quits properly
+        num_matches_required = len(players_advancing) - full_bracket_size
+
+
+        # only some of you compete this round
+        competitors_this_round = players_advancing[0:num_matches_required*tourneydata.glolfers_per_game]
+
+        # the rest get to advance automatically
+        tourneydata.this_round_competitors_advancing = players_advancing[num_matches_required*tourneydata.glolfers_per_game:]
+
+        print(competitors_this_round, tourneydata.this_round_competitors_advancing)
+
+        await message.channel.send(f"{', '.join(tourneydata.this_round_competitors_advancing)} randomly recieve byes and move onto the next round. Let's see who joins them!")
+
+    tourneydata.matches_yet_to_be_played = []
+    tourneydata.matches_completed = []
+
+    for i in range(0, len(competitors_this_round), tourneydata.glolfers_per_game):
+        tourneydata.matches_yet_to_be_played.append(competitors_this_round[i : i + tourneydata.glolfers_per_game])
+    tourneydata.current_round_number += 1
+
+
+def get_tourney_data(tourney_ID):
+    tourneydata = db.get_tourney_data(tourney_ID)
+    if tourneydata is None:
+        return None
+    return InProgressTourneyData(**tourneydata)
+
+async def one_tourney_series(message, tourney_ID, debug=False):
+
+    tourneydata = get_tourney_data(tourney_ID)
+    
+    if len(tourneydata.matches_yet_to_be_played) == 0:
+        # end of a round. begin the next round
+        if len(tourneydata.this_round_competitors_advancing) != 1:
+            await fill_next_round_bracket(message, tourneydata)
+            db.set_tourney_data(tourney_ID, tourneydata.to_dict())
+        else:
+            # this tourney is already over. we probably shouldn't be here, but just in case, have this fallback
+            await message.channel.send(f"**{tourneydata.this_round_competitors_advancing[0]} wins the tournament!**")
+            db.delete_tourney_data(tourney_ID)
+            return
+
+
+
+    current_competitors = tourneydata.get_next_match_competitors()
+
+    # Do one round
+    match_number = len(tourneydata.matches_completed)+1
+    total_matches = len(tourneydata.matches_completed)+len(tourneydata.matches_yet_to_be_played)
+
+    type_of_round = "Match"
+    if tourneydata.wins_required > 1:
+        type_of_round = "Series"
+
+    round_name = compute_round_name(total_matches, tourneydata.glolfers_per_game, tourneydata.current_round_number)
+
+    match_name = f"{type_of_round} {match_number}/{total_matches}"
+    if match_number == total_matches and round_name != "finals" and total_matches == 1:
+        match_name = f"Final {type_of_round.lower()}"
+
+    # compute number of turns for glolf game
+    if tourneydata.is_club_game:
+        max_turns = 100
+    else: # regular people competing
+        max_turns = 60
+        if total_matches >= 2*tourneydata.glolfers_per_game**3:
+            max_turns = 40
+
+    if tourneydata.debug:
+        max_turns = 10
+
+    # make club games a best of 3
+    if tourneydata.is_club_game and tourneydata.wins_required == 1:
+        tourneydata.wins_required = 2
+    
+    winner_name = await tourney_series(message,
+        glolfer_names=current_competitors,
+        round_name=round_name,
+        match_name=match_name,
+        max_turns=max_turns,
+        debug=debug,
+        wins_required=tourneydata.wins_required)
+
+    tourneydata.process_match_result(winner_name)
+
+    
+    if len(tourneydata.matches_yet_to_be_played) == 0:
+        # End of round!
+        if len(tourneydata.this_round_competitors_advancing) > 1:
+            # Announce round results! The new brackets will be computed next time
+            await message.channel.send(f"**{round_name.title()} results:** {len(tourneydata.this_round_competitors_advancing)} contestants move on: **{', '.join(tourneydata.this_round_competitors_advancing)}**.")
+            await fill_next_round_bracket(message, tourneydata)
+        else:
+            await message.channel.send(f"**{tourneydata.this_round_competitors_advancing[0]} wins the tournament!**")
+
+    db.set_tourney_data(tourney_ID, tourneydata.to_dict())
+
+def relative_discord_timestamp(timestring):
+    return f"<t:{timestring}:R>"
+def discord_timestamp(timestring):
+    return f"<t:{timestring}:f>"
+
+
 
 @disable_if_update_coming
 @limit_one_game_per_person
@@ -162,94 +321,69 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
     if too_many_games_active():
         await message.channel.send("There's too many games going on right now. To avoid lag, please wait a little bit till some games are done and try again later!")
         return
+    
+    full_bracket_size = biggest_power_of_k_less_than(len(glolfer_names), glolfers_per_game)
+    if not len(glolfer_names) == full_bracket_size:
+        if glolfers_per_game > 2:
+            return await message.channel.send(f"For this type of tourney I need a power-of-{glolfers_per_game} number of people. You have {len(glolfer_names)}")
 
     if not is_club_game:
         await message.channel.send(f"{len(glolfer_names)}-person tournament starting...")
     else:
         await message.channel.send(f"{len(glolfer_names)}-club tournament starting...")
-    
-    move_onto_next_round = []
 
     random.shuffle(glolfer_names)
 
-    competitors_this_round = glolfer_names[:]
+    tourneydata = InProgressTourneyData(all_competitors=glolfer_names[:], glolfers_per_game=glolfers_per_game, current_round_number=0, debug=debug, is_club_game=False)
 
-    # If # of entrants isn't a power of two, we don't have a full bracket, so give some contestants byes
-    full_bracket_size = biggest_power_of_k_less_than(len(glolfer_names), glolfers_per_game)
-    if not len(glolfer_names) == full_bracket_size:
-        if glolfers_per_game > 2:
-            return await message.channel.send(f"For this type of tourney I need a power-of-{glolfers_per_game} number of people. You have {len(glolfer_names)}")
-        num_matches_required = len(glolfer_names) - full_bracket_size
+    tourney_ID = "test"
 
-        competitors_this_round = glolfer_names[0:num_matches_required*glolfers_per_game]
-        move_onto_next_round = glolfer_names[num_matches_required*glolfers_per_game:]
+    db.set_tourney_data(tourney_ID, tourneydata.to_dict())
+    
+    await run_battle_royale(message, tourney_ID, debug)
 
-        print(len(competitors_this_round)/glolfers_per_game + len(move_onto_next_round))
-        await message.channel.send(f"{', '.join(move_onto_next_round)} randomly recieve byes and move onto the next round. Let's see who joins them!")
 
-    # actual tourney time!
-    round_num = 0
-    while len(competitors_this_round) > 1:
-        round_num+= 1
+@disable_if_update_coming
+async def run_battle_royale(message, tourney_ID, time_between_matches_m=5, debug=False):
 
-        if is_club_game:
-            max_turns = 100
-        else: # regular people competing
-            max_turns = 60
-            if len(competitors_this_round) >= 2*glolfers_per_game**3:
-                max_turns = 40
+    time_between_matches_s = time_between_matches_m*60 # 5 minutes
+    if debug:   
+        time_between_matches_s = 5
 
-        wins_required = 1
-        if is_club_game:
-            wins_required = 2
+    tourneydata = get_tourney_data(tourney_ID)
+    if tourneydata is None:
+        return await message.channel.send("No active tourney with that name. Maybe it finished!")
 
-        if debug:
-            max_turns = 10
+    if tourneydata.is_completed():
+        await message.channel.send(f"Oops, I forgot to announce it. **{tourneydata.this_round_competitors_advancing[0]} wins the tournament!**")
 
-        round_name = compute_round_name(competitors_this_round, move_onto_next_round, glolfers_per_game, round_num)
+    while not tourneydata.is_completed():
+        await one_tourney_series(message, tourney_ID, debug)
+        tourneydata = get_tourney_data(tourney_ID) # reload data so we don't infinite loop
 
-        for index in range(0,len(competitors_this_round)-1,glolfers_per_game):
-            # go down the bracket
-            # competitors
-            glolfers = [competitors_this_round[index+i] for i in range(glolfers_per_game) if index+i < len(competitors_this_round)]
-            await asyncio.sleep(2)
+        if tourneydata.is_completed():
+            break
 
-            match_number = int(index/glolfers_per_game)+1
-            total_matches = int(len(competitors_this_round)/glolfers_per_game)
+        # next, sleep for a while in between the matches
+        next_competitors = tourneydata.get_next_match_competitors()
+        next_match_time = time.time() + time_between_matches_s
 
-            type_of_round = "Match"
-            if wins_required > 1:
-                type_of_round = "Series"
 
-            match_name = f"{type_of_round} {match_number}/{total_matches}"
-            if match_number == total_matches and round_name != "the finals" and total_matches == 1:
-                match_name = f"Final {type_of_round.lower()}"
-            
-            winning_name = await tourney_series(message,
-                glolfer_names=glolfers,
-                round_name=round_name,
-                match_name=match_name,
-                max_turns=max_turns,
-                debug=debug,
-                wins_required=wins_required)
-            move_onto_next_round.append(winning_name)
+        if time_between_matches_s > 60*60: # over one hour delay?
+            # give a 5 minute reminder
 
-        if len(move_onto_next_round) > 1:
+            await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin {relative_discord_timestamp(next_match_time)}, at {discord_timestamp(next_match_time)}")
+            reminder_time_mins = 5
+            await asyncio.sleep(time_between_matches_s - reminder_time_mins*60)
+            await message.channel.send(f"The next match between {' and '.join(next_competitors)}, will begin in {reminder_time_mins} minutes...")
+            await asyncio.sleep(reminder_time_mins*60)
+        if time_between_matches_s > 15*60: # over 15 mins delay
+            await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin {relative_discord_timestamp(next_match_time)}, at {discord_timestamp(next_match_time)}")
+            await asyncio.sleep(time_between_matches_s)
+        else:
+            # very soon
+            await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin in {time_between_matches_s/60} minutes...")
+            await asyncio.sleep(time_between_matches_s)
 
-            round_descriptor = f"Round {round_num} results:"
-            if len(move_onto_next_round) == glolfers_per_game and round_num != 1:
-                round_descriptor = "Almostfinals results:"
-            if len(move_onto_next_round) == glolfers_per_game**2 and round_num != 1:
-                round_descriptor = "Nearfinals results:"
-
-            await message.channel.send(f"**{round_descriptor}** {len(move_onto_next_round)} contestants move on: **{', '.join(move_onto_next_round)}**. Next round starts in five minutes...")
-            if not debug:
-                await asyncio.sleep(60*4.5)
-                await message.channel.send(f"Next round starting in thirty seconds...")
-                await asyncio.sleep(60*0.5)
-
-        competitors_this_round = move_onto_next_round
-        move_onto_next_round = []
-
-    await message.channel.send(f"**{competitors_this_round[0]} wins the tournament!**")
+    db.delete_tourney_data(tourney_ID)
 

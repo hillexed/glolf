@@ -77,9 +77,10 @@ def user_is_admin(message):
 
 
 
+intents = discord.Intents(messages=True, message_content=True)
+intents.reactions = True
 
-
-client = discord.Client()
+client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     logging.info("The bot is ready!")
@@ -108,7 +109,6 @@ async def handle_commands(message):
             return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
         if message.content.startswith(prefix.replace("g",'') + "tourney"):
             return await message.channel.send(f"Glolf uses {prefix} as its prefix now! Try g" + message.content)
-
 
     if message.content.startswith(prefix + "glolfer"):
         await get_glolfer_stats(message, get_command_body(message, "glolfer"))

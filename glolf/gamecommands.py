@@ -70,7 +70,7 @@ async def best_of_n_glolfgame(message, glolfer_names, wins_required=3, max_turns
         await message.channel.send(f"**{winning_name} wins the series!**")
         return winning_name
 
-async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tournament=False, debug=False):
+async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tournament=False, debug=False, debug_skip_delays=False):
     # start a round of glolf and return the winning players's names
 
     glolfgame = await message.channel.send("Beginning game...")
@@ -82,17 +82,22 @@ async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tou
             game = ClubGame(debug=debug,club_names=glolfer_names,max_turns=max_turns,is_tournament=is_tournament)
         else:
             game = SingleHole(debug=debug,glolfer_names=glolfer_names,max_turns=max_turns,is_tournament=is_tournament)
-        await asyncio.sleep(2)
+    
+        if not debug_skip_delays:
+            await asyncio.sleep(2)
         await glolfgame.edit(content=game.printgamestate(header=header))
-        await asyncio.sleep(2)
+        if not debug_skip_delays:
+            await asyncio.sleep(2)
 
         while not game.over:
             delay = game.update()
             await glolfgame.edit(content=game.printgamestate(header=header))
-            await asyncio.sleep(delay)
+            if not debug_skip_delays:
+                await asyncio.sleep(delay)
 
         await glolfgame.edit(content=game.printgamestate(include_board=True,header=header))
-        await asyncio.sleep(10)
+        if not debug_skip_delays:
+            await asyncio.sleep(10)
         await glolfgame.edit(content=game.printgamestate(include_board=False,header=header))
         return game.compute_winners()
 

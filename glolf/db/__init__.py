@@ -116,4 +116,24 @@ def set_game_data(name, data):
 
 def delete_game_data(settingname):
     create_gamedata_table_if_not_made()
-    return get_data(settingname, tablename="clubs")
+    return delete_data(settingname, tablename="gamedata")
+
+
+# for tourneys, so they can survive even if a game crashes
+def create_tourney_table_if_not_made():
+    create_table_if_not_made("in_progress_tourneys")
+
+def get_tourney_data(name):
+    create_tourney_table_if_not_made()
+    return get_data(name, tablename="in_progress_tourneys")
+
+def set_tourney_data(name, data):
+    create_tourney_table_if_not_made()
+    if get_data(name, tablename="in_progress_tourneys") is None:
+        create_new_entry(name, data, tablename="in_progress_tourneys")
+    else:
+        update_data(name, data, tablename="in_progress_tourneys")
+
+def delete_tourney_data(settingname):
+    create_tourney_table_if_not_made()
+    return delete_data(settingname, tablename="in_progress_tourneys")
