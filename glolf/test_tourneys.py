@@ -40,6 +40,6 @@ async def dostuff():
 asyncio.run(dostuff())
 
 
-asyncio.run(battle_royale_glolftourney(message, glolfers_per_game=2, time_between_matches_m=20, is_club_game=False, debug=False))
+asyncio.run(battle_royale_glolftourney(message, glolfers_per_game=2, time_between_matches_m=20, is_club_game=False, debug=True))
 
 #asyncio.run(run_battle_royale(message, "test"))

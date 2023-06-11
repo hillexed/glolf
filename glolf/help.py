@@ -60,7 +60,7 @@ View glolfer stats for a player! You can type in any name!
 
 ```g!tourney 1v1
 <names on new lines>```
-Start a 1v1 tourney! Each new line after tourney 1v1 will be treated as a player name. You need a power-of-two number of entrants to make a tourney.
+Start a 1v1 tourney! Each new line after tourney 1v1 will be treated as a player name. You need a power-of-two number of entrants to make a tourney. You can also add "30m" or "1h" after the "1v1" to increase the delay between games of the tourney.
 
 `g!tourney 1v1v1`
 Start a 1v1v1 tourney, where each match will have 3 entrants competing and only one advancing to the next round!
