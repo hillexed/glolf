@@ -8,12 +8,25 @@ import time
 from commandwrappers import limit_one_game_per_person, disable_if_update_coming, too_many_games_active
 from gamecommands import newglolfgame
 import db
+from data.sponsors import generate_sponsor, apply_corporate_suffix
 
+
+battleRoyaleTypeRegex = re.compile("1(v1)+")
+
+timeBetweenMatchRegex = re.compile("(\d+)([m|h])")
 async def parse_tourney_message(message, command_body, debug=False):
     tourneytype = command_body.split("\n")[0].strip()
 
     if len(tourneytype) == 0:
         return await message.channel.send("What type of tournament? Try 'tourney 1v1'")
+
+    time_between_matches_m = 5 # 5 minutes default, but you can change that with "60m" for 60 minutes
+    minutes_specified = timeBetweenMatchRegex.match(tourneytype)
+    if minutes_specified:
+        # parse time between matches in minutes or hours
+        time_between_matches_m = int(is_battleroyale.group(1))
+        if is_battleroyale.group(2) == "h":
+            time_between_matches_m *= 60
 
     is_battleroyale = battleRoyaleTypeRegex.match(tourneytype)
     if is_battleroyale:
@@ -27,7 +40,11 @@ async def parse_tourney_message(message, command_body, debug=False):
         if 'club' in tourneytype:
             is_club_game = True
 
-        return await battle_royale_glolftourney(message, num_participants_per_game, is_club_game=is_club_game, debug=debug)
+        return await battle_royale_glolftourney(message, num_participants_per_game, is_club_game=is_club_game, time_between_matches_m=time_between_matches_m, debug=debug)
+
+    if tourneytype.startswith("resume"):
+        tourney_sponsor_ID = message[0:len("resume")].strip()
+        return await resume_tourney_command(message, tourney_sponsor_ID, time_between_matches_m, debug=debug)
 
     return await message.channel.send("umm im not sure what that tourney type means. maybe you could try 'tourney 1v1'")
 
@@ -65,7 +82,7 @@ async def tourney_series(message,
             header = f"{match_name} of {round_name} - Game {game_number}, {'-'.join(f'{win_counts[name]}' for name in win_counts)} (First to {wins_required})!"
             
 
-        winners = await newglolfgame(message, glolfer_names=glolfer_names, header=header,max_turns=max_turns, is_tournament=True, debug=debug, debug_skip_delays=True)
+        winners = await newglolfgame(message, glolfer_names=glolfer_names, header=header,max_turns=max_turns, is_tournament=True, debug=debug, debug_skip_delays=debug)
 
         for winner in winners:
 
@@ -134,7 +151,6 @@ def compute_round_name(num_matches_this_round, glolfers_per_game, round_num):
         return f"round {round_num}"
 
 
-battleRoyaleTypeRegex = re.compile("1(v1)+")
 
 class InProgressTourneyData:
     all_competitors: list[str]
@@ -146,6 +162,7 @@ class InProgressTourneyData:
     wins_required: int = 1
     is_club_game = False
     debug = False
+    time_between_matches_m = 5
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
@@ -214,25 +231,25 @@ async def fill_next_round_bracket(message, tourneydata):
     tourneydata.current_round_number += 1
 
 
-def get_tourney_data(tourney_ID):
-    tourneydata = db.get_tourney_data(tourney_ID)
+def get_tourney_data(tourney_sponsor_ID):
+    tourneydata = db.get_tourney_data(tourney_sponsor_ID)
     if tourneydata is None:
         return None
     return InProgressTourneyData(**tourneydata)
 
-async def one_tourney_series(message, tourney_ID, debug=False):
+async def one_tourney_series(message, tourney_sponsor_ID, debug=False):
 
-    tourneydata = get_tourney_data(tourney_ID)
+    tourneydata = get_tourney_data(tourney_sponsor_ID)
     
     if len(tourneydata.matches_yet_to_be_played) == 0:
         # end of a round. begin the next round
         if len(tourneydata.this_round_competitors_advancing) != 1:
             await fill_next_round_bracket(message, tourneydata)
-            db.set_tourney_data(tourney_ID, tourneydata.to_dict())
+            db.set_tourney_data(tourney_sponsor_ID, tourneydata.to_dict())
         else:
             # this tourney is already over. we probably shouldn't be here, but just in case, have this fallback
             await message.channel.send(f"**{tourneydata.this_round_competitors_advancing[0]} wins the tournament!**")
-            db.delete_tourney_data(tourney_ID)
+            db.delete_tourney_data(tourney_sponsor_ID)
             return
 
 
@@ -288,7 +305,7 @@ async def one_tourney_series(message, tourney_ID, debug=False):
         else:
             await message.channel.send(f"**{tourneydata.this_round_competitors_advancing[0]} wins the tournament!**")
 
-    db.set_tourney_data(tourney_ID, tourneydata.to_dict())
+    db.set_tourney_data(tourney_sponsor_ID, tourneydata.to_dict())
 
 def relative_discord_timestamp(timestring):
     return f"<t:{timestring}:R>"
@@ -296,10 +313,9 @@ def discord_timestamp(timestring):
     return f"<t:{timestring}:f>"
 
 
-
 @disable_if_update_coming
 @limit_one_game_per_person
-async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=False, debug=False):
+async def battle_royale_glolftourney(message, glolfers_per_game=2, time_between_matches_m=5, is_club_game=False, debug=False):
     # a tourney where each game has multiple people, but only one can win each game
     # if glolfers_per_game is 2, it's a 1v1, if glolfers_per_game is 3, each game is a 1v1v1, etc
     assert glolfers_per_game > 1
@@ -319,7 +335,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
         return
 
     if too_many_games_active():
-        await message.channel.send("There's too many games going on right now. To avoid lag, please wait a little bit till some games are done and try again later!")
+        await message.channel.send("There's too many games going on right now. To avoid lag, please wait a little bit until some games are done and try again later!")
         return
     
     full_bracket_size = biggest_power_of_k_less_than(len(glolfer_names), glolfers_per_game)
@@ -327,39 +343,51 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, is_club_game=
         if glolfers_per_game > 2:
             return await message.channel.send(f"For this type of tourney I need a power-of-{glolfers_per_game} number of people. You have {len(glolfer_names)}")
 
+    tourney_sponsor_ID = generate_sponsor()
+
     if not is_club_game:
-        await message.channel.send(f"{len(glolfer_names)}-person tournament starting...")
+        await message.channel.send(f"{len(glolfer_names)}-person tournament starting, sponsored by {apply_corporate_suffix(tourney_sponsor_ID).title()}...")
     else:
-        await message.channel.send(f"{len(glolfer_names)}-club tournament starting...")
+        await message.channel.send(f"{len(glolfer_names)}-club tournament starting, sponsored by {apply_corporate_suffix(tourney_sponsor_ID).title()}...")
 
     random.shuffle(glolfer_names)
 
-    tourneydata = InProgressTourneyData(all_competitors=glolfer_names[:], glolfers_per_game=glolfers_per_game, current_round_number=0, debug=debug, is_club_game=False)
+    tourneydata = InProgressTourneyData(all_competitors=glolfer_names[:], glolfers_per_game=glolfers_per_game, current_round_number=0, debug=debug, time_between_matches_m=time_between_matches_m, is_club_game=False)
 
-    tourney_ID = "test"
 
-    db.set_tourney_data(tourney_ID, tourneydata.to_dict())
+    db.set_tourney_data(tourney_sponsor_ID, tourneydata.to_dict())
     
-    await run_battle_royale(message, tourney_ID, debug)
+    await run_battle_royale(message, tourney_sponsor_ID, time_between_matches_m=time_between_matches_m, debug=debug)
 
 
 @disable_if_update_coming
-async def run_battle_royale(message, tourney_ID, time_between_matches_m=5, debug=False):
+@limit_one_game_per_person
+async def resume_tourney_command(message, tourney_sponsor_ID, time_between_matches_m=5, debug=False):
+    # todo: fix bug where you can resume a tourney multiple times, including while the same tourney is running
+    # todo: specify time
+    tourneydata = get_tourney_data(tourney_sponsor_ID)
+    if tourneydata is None:
+        return await message.channel.send("No active tourney with that name. Maybe it finished?")
+    await run_battle_royale(message, tourney_sponsor_ID, time_between_matches_m=time_between_matches_m, debug=debug)
+
+async def run_battle_royale(message, tourney_sponsor_ID, time_between_matches_m=6, debug=False):
+    # repeatedly parse from the DB then run one match/series of a tourney in a loop! 
+    #If it's cancelled due to an error, that's okay, because it's saved in the DB
 
     time_between_matches_s = time_between_matches_m*60 # 5 minutes
     if debug:   
-        time_between_matches_s = 5
+        time_between_matches_s = 60
 
-    tourneydata = get_tourney_data(tourney_ID)
+    tourneydata = get_tourney_data(tourney_sponsor_ID)
     if tourneydata is None:
-        return await message.channel.send("No active tourney with that name. Maybe it finished!")
+        return await message.channel.send("No active tourney with that name. Maybe it finished?")
 
     if tourneydata.is_completed():
         await message.channel.send(f"Oops, I forgot to announce it. **{tourneydata.this_round_competitors_advancing[0]} wins the tournament!**")
 
     while not tourneydata.is_completed():
-        await one_tourney_series(message, tourney_ID, debug)
-        tourneydata = get_tourney_data(tourney_ID) # reload data so we don't infinite loop
+        await one_tourney_series(message, tourney_sponsor_ID, debug)
+        tourneydata = get_tourney_data(tourney_sponsor_ID) # reload data so we don't infinite loop
 
         if tourneydata.is_completed():
             break
@@ -368,22 +396,29 @@ async def run_battle_royale(message, tourney_ID, time_between_matches_m=5, debug
         next_competitors = tourneydata.get_next_match_competitors()
         next_match_time = time.time() + time_between_matches_s
 
+        # figure out how long to wait in between reminders
+        reminder_times_m = [1,5,60]
+        reminder_times_deltas = [1,4,55] #time between reminder_times_m[i],reminder_times_m[i+1]
 
-        if time_between_matches_s > 60*60: # over one hour delay?
-            # give a 5 minute reminder
+        sleep_deltas_s = []
+        remaining_sleep_time_s = time_between_matches_s
+        for time_m in reminder_times_deltas:
+            if remaining_sleep_time_s > time_m*60:
+                remaining_sleep_time_s -= time_m*60
+                sleep_deltas_s.append(time_m*60) #time till next reminder, total remaining
+        sleep_deltas_s.append(remaining_sleep_time_s)
 
-            await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin {relative_discord_timestamp(next_match_time)}, at {discord_timestamp(next_match_time)}")
-            reminder_time_mins = 5
-            await asyncio.sleep(time_between_matches_s - reminder_time_mins*60)
-            await message.channel.send(f"The next match between {' and '.join(next_competitors)}, will begin in {reminder_time_mins} minutes...")
-            await asyncio.sleep(reminder_time_mins*60)
-        if time_between_matches_s > 15*60: # over 15 mins delay
-            await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin {relative_discord_timestamp(next_match_time)}, at {discord_timestamp(next_match_time)}")
-            await asyncio.sleep(time_between_matches_s)
-        else:
-            # very soon
-            await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin in {time_between_matches_s/60} minutes...")
-            await asyncio.sleep(time_between_matches_s)
+        # integrate to find out at each reminder time, how much time is left
+        sleep_info = [(sleep_deltas_s[i], sum(sleep_deltas_s[0:i+1])) for i in range(len(sleep_deltas_s))]
 
-    db.delete_tourney_data(tourney_ID)
+        for time_till_next_reminder_s, time_till_match_s in sleep_info[::-1]:
+            #print(sleep_deltas_s)
+
+            if time_till_match_s > 10*60:
+                await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin {relative_discord_timestamp(next_match_time)}, at {discord_timestamp(next_match_time)}")
+            else:
+                await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin in {int(time_till_match_s/60)} minute{'' if time_till_match_s <= 60 else 's'}...")
+            await asyncio.sleep(time_till_next_reminder_s/60) # TODO: remove this debug 
+
+    db.delete_tourney_data(tourney_sponsor_ID)
 

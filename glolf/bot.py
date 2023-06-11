@@ -144,7 +144,7 @@ async def handle_commands(message):
         await bet_command(message, get_command_body(message, "signup"), client)
 
     elif message.content.startswith(prefix + "admincommands"):
-        return await message.channel.send("g!discordid, g!addmodification, g!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!doesglolferexist")
+        return await message.channel.send("g!discordid, g!addmodification, g!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!doesglolferexist, g!tourney resume <tourney ID>")
 
 
 
