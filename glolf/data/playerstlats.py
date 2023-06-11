@@ -182,9 +182,9 @@ class Player:
     def get_display_name(self, with_mods_in_parens = False):
         if with_mods_in_parens and len(self.modifications) > 0:
             modList = ', '.join([mod.displayEmoji for mod in self.modifications])
-            return f"{self.name} {self.emoji} ({modList})"
+            return f"{self.name} ({self.emoji}) ({modList})"
         else:
-            return f"{self.name} {self.emoji}"
+            return f"{self.name} ({self.emoji})"
 
     @classmethod
     def from_dict(cls, data: dict):
