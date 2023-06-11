@@ -171,7 +171,7 @@ class Player:
         stlat_choices.remove("polkadottedness")
         #stlat_choices.remove("sin_rating")
         today = date.today()
-        rng = random.Random(today) # seed rng with today's date
+        rng = random.Random(today.isoformat()) # seed rng with today's date
 
         stlatname = rng.choice(stlat_choices)
         stlat = getattr(self.stlats, stlatname, ':ghost:')
