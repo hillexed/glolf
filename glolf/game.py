@@ -21,6 +21,7 @@ class SingleHole:
         self.id = random.randrange(1,100000)
 
         self.objects = []
+        self.new_objects = []
         self.scores = {} #glolfer : SingleHoleScore(glolfer)
         self.turn_number = 0
         self.max_turns = max_turns
@@ -48,7 +49,6 @@ class SingleHole:
 
         self.message_queue = []
         self.messages_to_report_in_summary = []
-        self.new_objects = []
 
     def add_player_by_name(self, starting_position, playername):
         newglolfer = entities.Glolfer(self, position=starting_position, playername=playername)
