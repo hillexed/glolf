@@ -93,7 +93,9 @@ class Vector(tuple):
     
     def __rsub__(self, other):
         """ Called if 4 - self for instance """
-        return self.__sub__(other)
+        # Bugfix! The output here needs to be multiplied by -1, otherwise [1,2] - Vector(3,3) computes [3,3] - [1,2], which is wrong.
+        return self.__sub__(other).__mul__(-1)
+
     
     def __iter__(self):
         return self.values.__iter__()
