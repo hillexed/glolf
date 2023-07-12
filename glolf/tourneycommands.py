@@ -367,6 +367,13 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, time_between_
 @limit_one_game_per_person
 async def resume_tourney_command(message, tourney_sponsor_ID, time_between_matches_m=5, debug=False):
     # todo: fix bug where you can resume a tourney multiple times, including while the same tourney is running
+
+    # tourney sponsor IDs are one word, lowercase.
+    tourney_sponsor_ID = tourney_sponsor_ID.lower()
+    #if they entered "sponsor inc." take the first word, "sponsor"
+    if " " in tourney_sponsor_ID:
+        tourney_sponsor_ID = tourney_sponsor_ID.split(" ")[0] 
+    
     tourneydata = get_tourney_data(tourney_sponsor_ID)
     if tourneydata is None:
         return await message.channel.send("No paused tourney with that sponsor. Maybe it finished?")

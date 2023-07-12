@@ -1032,7 +1032,6 @@ def generate_sponsor(rng=random):
     if cutoff_letter in noun and rng.random() < 1:
         index = noun.find(cutoff_letter)
         if index < len(noun)/2:
-            print("noun", noun, index)
             noun = noun[index:] # make a portmanteau
 
     if len(noun) > 2 and "aeiou" not in noun[0:2]: # try to stop long strings of consonants
@@ -1052,3 +1051,7 @@ def generate_sponsor_based_on_name(seed):
 
     rng = random.Random(seed)
     return generate_sponsor(rng)
+
+if __name__ == "__main__":
+  for i in range(10):
+    print(generate_sponsor().title())
