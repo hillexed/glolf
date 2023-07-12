@@ -36,6 +36,13 @@ def add_permanent_modification_to_player(name, modification):
     player.modifications.append(modification)
     save_playerdata(name, player)
 
+def remove_permanent_modification_to_player(name, modification):
+    #Adds a modification to a player. Also saves them in the DB.
+    player = get_player_from_name(name)
+    if modification in player.modifications:
+        player.modifications.remove(modification)
+    save_playerdata(name, player)
+
 def save_playerdata(name, player: Player):
     data = player.to_dict()
     playerdata = db.set_player_data(name, data)

@@ -66,7 +66,26 @@ async def add_modification(message, command_body):
 
         players.add_permanent_modification_to_player(glolfername, modification)
 
-        return await message.channel.send(f"Added modification {modification} to player {glolfername}. It'll go away when you restart the bot, so make sure to edit the code!")
+        return await message.channel.send(f"Added modification {modification} to player {glolfername}. Saved in DB.")
+
+async def remove_modification(message, command_body):
+    # Add a modification to the player until the bot restarts. Admin-only
+    if len(command_body) == 0:
+        await message.channel.send("Please add a glolfer's name! It's g!addmodification <glolfer>\n<modification>")
+    else:
+        if len(command_body.split("\n")) < 2:
+            return await message.channel.send("Please add a glolfer's name, then the modification on a new line.")
+
+        glolfername = command_body.split("\n")[0].strip()
+        modification = command_body.split("\n")[1].strip()
+
+        player = players.get_player_from_name(glolfername)
+        if modification not in player.modifications:
+            return await message.channel.send(f"That modification wasn't in {glolfername}'s modifications. Here's the list of them: {', '.join([str(m) for m in player.modifications])}")
+
+        players.remove_permanent_modification_to_player(glolfername, modification)
+
+        return await message.channel.send(f"Removed modification {modification} from player {glolfername}. Saved in DB.")
 
 def user_is_admin(message):
     if "ADMIN_IDS" in config:
@@ -144,7 +163,7 @@ async def handle_commands(message):
         await bet_command(message, get_command_body(message, "signup"), client)
 
     elif message.content.startswith(prefix + "admincommands"):
-        return await message.channel.send("g!discordid, g!addmodification, g!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!doesglolferexist, g!tourney resume <tourney ID>")
+        return await message.channel.send("g!discordid, g!addmodification, g!removemodification g!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!doesglolferexist, g!tourney resume <tourney ID>")
 
 
 
@@ -181,6 +200,9 @@ async def handle_commands(message):
 
     elif user_is_admin(message) and message.content.startswith(prefix + "addmodification"):
         await add_modification(message, get_command_body(message, "addmodification"))
+
+    elif user_is_admin(message) and message.content.startswith(prefix + "removemodification"):
+        await remove_modification(message, get_command_body(message, "removemodification"))
 
     elif user_is_admin(message) and message.content.startswith(prefix + "countgames"):
         await message.channel.send(f"There are {len(get_users_with_games_active())} users with games active right now.")
