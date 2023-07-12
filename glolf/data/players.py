@@ -30,7 +30,7 @@ def regenerate_player(name):
         return True
     return False
 
-def add_modification_to_player(name, modification):
+def add_permanent_modification_to_player(name, modification):
     #Adds a modification to a player. Also saves them in the DB.
     player = get_player_from_name(name)
     player.modifications.append(modification)
