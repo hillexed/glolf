@@ -30,7 +30,7 @@ class SingleHole:
         self.custom_winner_name = None
         self.is_tournament = is_tournament
 
-        self.wind = random.choice(("Ominous","Pheasant","Fruity","Monsoon","Trade","Purple","Tasteless","Mechanical","Electric","Four-dimensional","Exact","Differential","Manifold","Change","Aggressively Normal")) #purely decorative for now
+        self.wind = random.choice(("Ominous","Pheasant","Fruity","Monsoon","Trade","Purple","Tasteless","Mechanical","Electric","Four-dimensional","Exact","Differential","Manifold","Change","Aggressively Normal", "Increased Lightning")) #purely decorative for now
         self.windDirection = randomVecOfLength(2) # [blah,blah] 0-1 each coord
 
         # parse course
