@@ -20,7 +20,7 @@ class InterestingOffscreenThing(GameModification):
 
     def on_score(self, scoring_player, ball, score_position):
         #if not self.game.is_tournament: return
-        if type(scoring_player) is NPCScorecardDummyEntity:
+        if isinstance(scoring_player,NPCScorecardDummyEntity):
             return
 
         if self.game.get_player_scorecard(scoring_player).balls_scored == 1 and random.random() < 0.2:

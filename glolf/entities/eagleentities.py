@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 
 from .entity import Entity
-from .glolfer import Glolfer
+from .glolfer_ball_and_hole import Glolfer
 from modifications import eaglemod
 import utils
 from utils.vecmath import Vector
@@ -90,7 +90,7 @@ class FlyingEagle(Entity):
 
     def attempt_to_grab(self, player):
         # don't grab an already grabbed player
-        if not self.is_flying_off and not any([type(mod) == eaglemod.GrabbedByEagle for mod in player.modifiers]):
+        if not self.is_flying_off and not player.has_modifiers_of_type(eaglemod.GrabbedByEagle):
             self.grab_player(player)
 
     def grab_player(self, player):
@@ -103,7 +103,7 @@ class FlyingEagle(Entity):
     def release_grabbed_thing(self):
         # removed grabbed modifier
         if self.grabbed_thing is not None:
-            self.grabbed_thing.modifiers = [x for x in filter( lambda mod: type(mod) != eaglemod.GrabbedByEagle, self.grabbed_thing.modifiers)]
+            self.grabbed_thing.remove_modifiers_of_type(eaglemod.GrabbedByEagle)
             self.grabbed_thing = None
 
 
@@ -121,7 +121,7 @@ class FlyingAlbatross(FlyingEagle):
 
     def attempt_to_grab(self, glolfer):
         # don't grab an already grabbed player
-        if not any([type(mod) == eaglemod.GrabbedByEagle for mod in glolfer.modifiers]):
+        if not player.has_modifiers_of_type(eaglemod.GrabbedByEagle):
             self.grab_player(glolfer)
 
     def grab_player(self, player):

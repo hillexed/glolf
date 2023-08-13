@@ -63,7 +63,7 @@ class RealityCrack(Entity):
             self.showOnBoard = True
     
         obj = self.game.get_closest_object(self)
-        if obj is not None and self.game.on_same_tile(obj, self) and self is not obj and type(obj) != RealityCrack:
+        if obj is not None and self.game.on_same_tile(obj, self) and self is not obj and not isinstance(obj, RealityCrack):
             # teleport that object to a different flicker tile
             otherflickers = self.game.get_closest_objects(self, RealityCrack)
             if len(otherflickers) > 0:

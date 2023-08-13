@@ -6,10 +6,11 @@ logger = logging.getLogger(__name__)
 import utils
 from utils.vecmath import Vector
 from data import players, playerstlats
-from .misc import *
-from .ball_and_hole import *
+from entities import *
 
-class Glolfer(playerstlats.Player, Entity):
+from modifications.create_mods_from_saved_data import create_ingame_mod_from_saved_data
+
+class AIGlolfer(Glolfer):
     type = "player"
     displayEmoji = "🏌️" # will be overwritten
     zIndex = 10 # show below players
@@ -29,7 +30,7 @@ class Glolfer(playerstlats.Player, Entity):
         self.displayEmoji = self.player_data.emoji # can be changed if shenanigans happen
         self.stlats = self.player_data.stlats
 
-        self.modifiers = [] #an array of modification.Modification s
+        self.modifiers = [create_ingame_mod_from_saved_data(game, self, mod_data) for mod_data in self.player_data.modifications] #an array of modification.Modification s
 
         self.club = club
 
@@ -53,9 +54,16 @@ class Glolfer(playerstlats.Player, Entity):
     def get_relevant_modifiers(self):
         return self.game.modifiers + self.modifiers # + terrain modifiers based on self.position. self.game.course.get_modifiers(position=self.position)
 
+
+    def has_modifiers_of_type(self, modifierType):
+        for mod in self.modifiers:
+            if isinstance(mod, modifierType):
+                return True
+        return False
+
     def remove_modifiers_of_type(self, modifierType):
         for mod in self.modifiers[:]:
-            if type(mod) == modifierType:
+            if isinstance(mod, modifierType):
                 self.modifiers.remove(mod)
 
 

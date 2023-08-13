@@ -1,4 +1,5 @@
-class Modification:
+class IngameModification:
+    # a modification used ingame
     def __init__(self, game):
         self.game = game
 
@@ -15,13 +16,15 @@ class Modification:
     def on_score(self, scoring_player, ball, score_position):
         pass
 
-class GameModification(Modification):
+class GameModification(IngameModification):
+    # Modifies how the game works. Always active.
     def update(self):
         # called once every turn, after everything else has updated
         pass
     
 
-class PlayerModification(Modification):
+class PlayerModification(IngameModification):
+    # Modifies how a player works.
     displayEmoji = "?"
     type = "permanent"
     isDead = False
