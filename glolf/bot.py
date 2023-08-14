@@ -225,7 +225,7 @@ async def handle_commands(message):
             return await message.channel.send(f"Put the player on a new line")
             
         success = players.regenerate_player(lines[1].strip())
-        await message.channel.send(f"They {'were successfully deleted.' if success else 'weren\'t saved anyways!'}")
+        await message.channel.send(f"They {'were successfully deleted.' if success else 'werent saved anyways!'}")
 
     elif user_is_admin(message) and message.content.startswith(prefix + "doesglolferexist"):
         playername = message.content[len(prefix + "doesglolferexist"):].strip()
