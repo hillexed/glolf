@@ -208,7 +208,7 @@ async def handle_commands(message):
         await bet_command(message, get_command_body(message, "signup"), client)
 
     elif message.content.startswith(prefix + "admincommands"):
-        return await message.channel.send("g!discordid, g!addmodification, g!removemodification g!listmodifications \ng!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!voidadd, g!doesglolferexist, g!tourney resume <tourney ID>, g!downloadentiredb, g!getninthcontestants, g!clearninthcontestants")
+        return await message.channel.send("g!discordid, g!addmodification, g!regenerateplayer, g!removemodification g!listmodifications \ng!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!voidadd, g!doesglolferexist, g!tourney resume <tourney ID>, g!downloadentiredb, g!getninthcontestants, g!clearninthcontestants, g!inventory regenerate (@ someone on new line), g!inventory debug_gift (@ someone on new line)")
 
 
 
@@ -219,9 +219,13 @@ async def handle_commands(message):
         servers = client.guilds
         await message.channel.send(f"{len(servers)}: {[(s.name, s.member_count) for s in servers]}")
 
-    elif user_is_admin(message) and message.content.startswith(prefix + "deleteplayer"):
-        players.regenerate_player()
-        pass
+    elif user_is_admin(message) and message.content.startswith(prefix + "regenerateplayer"):
+        lines = message.content.split("\n")
+        if len(lines) == 1:
+            return await message.channel.send(f"Put the player on a new line")
+            
+        success = players.regenerate_player(lines[1].strip())
+        await message.channel.send(f"They {'were successfully deleted.' if success else 'weren\'t saved anyways!'}")
 
     elif user_is_admin(message) and message.content.startswith(prefix + "doesglolferexist"):
         playername = message.content[len(prefix + "doesglolferexist"):].strip()

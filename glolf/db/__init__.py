@@ -72,9 +72,11 @@ def create_player_table_if_not_made():
 
 def get_player_data(name):
     create_player_table_if_not_made()
+    name = name.title()
     return get_data(name, tablename="players")
 
 def set_player_data(name, data):
+    name = name.title()
     create_player_table_if_not_made()
     if get_data(name, tablename="players") is None:
         create_new_entry(name, data, tablename="players")
@@ -82,9 +84,9 @@ def set_player_data(name, data):
         update_data(name, data, tablename="players")
 
 def delete_player_data(name):
+    name = name.title()
     create_player_table_if_not_made()
     delete_data(name, tablename="players")
-
 
 def create_club_table_if_not_made():
     create_table_if_not_made("clubs")
