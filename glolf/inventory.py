@@ -244,7 +244,7 @@ async def close_deal(sentmessage, client, trigger_user, effect_user):
 :moneybag: Your Merger Comes With An Acquisition!
 :moneybag: Using Your Wonderful Submissions
 :moneybag: We Have Taken Notice Of {glolfer1} and {glolfer2}...
-:moneybag: And Merged Player {glolfername} has Acquired Something New!
+:moneybag: And Merged Player **{glolfername}** has Acquired Something New!
 :moneybag: Now {glolfername} Has Been Entered in the Ninth Internet Open!
 :moneybag: {random.choice(('What A Twist!', 'How Exciting!', 'Truly Unique Talent', 'A Shocking Development', 'What A Twist', 'Better Tune In'))}""")
 
