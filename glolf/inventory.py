@@ -106,7 +106,7 @@ def merge(trigger_item, effect_item):
     return merged_mod_data
 
 
-
+debug = False
 async def inventory_command(message, message_body, client):
     userid = message.author.id
 
@@ -115,11 +115,11 @@ async def inventory_command(message, message_body, client):
     if len(message_body) > 0 and "merge" in message_body:
         return await merge_offer(message, client)
 
-    if len(message_body) > 0 and "regenerate" in message_body:
+    if debug and len(message_body) > 0 and "regenerate" in message_body:
         return db.delete_inventory_data(userid)
 
-    #if len(message_body) > 0 and "debug_getgift" in message_body:
-    #    give_random_gift(userid)
+    if debug and len(message_body) > 0 and "debug_getgift" in message_body:
+        give_random_gift(userid)
 
     return await message.channel.send(represent_inventory_as_string(userid))
 
@@ -138,15 +138,15 @@ async def merge_offer(message, client):
     trigger_item = get_first_item_of_type(user1id, ITEM_TYPE.mod_half_trigger)
     effect_item = get_first_item_of_type(user1id, ITEM_TYPE.mod_half_effect)
 
-    has_trigger = (trigger_item is not None)
-    has_effect = (effect_item is not None)
+    user1_has_trigger = (trigger_item is not None)
+    user1_has_effect = (effect_item is not None)
 
-    if not has_trigger and not has_effect:
+    if not user1_has_trigger and not user1_has_effect:
         return await message.channel.send(":horse: Yer plum outta stock, pardner.")
     
-    if has_trigger and not has_effect:
+    if user1_has_trigger and not user1_has_effect:
         requesting_thing = "a meat stock"
-    if not has_trigger and has_effect:
+    elif not user1_has_trigger and user1_has_effect:
         requesting_thing = "a bone stock"
     else:
         requesting_thing = "a stock"
@@ -160,9 +160,9 @@ async def merge_offer(message, client):
             return False
         user2id = user2.id
         
-        if has_effect and get_first_item_of_type(user2id, ITEM_TYPE.mod_half_trigger) is not None:
+        if user1_has_effect and get_first_item_of_type(user2id, ITEM_TYPE.mod_half_trigger) is not None:
             return True
-        if has_trigger and get_first_item_of_type(user2id, ITEM_TYPE.mod_half_effect) is not None:
+        if user1_has_trigger and get_first_item_of_type(user2id, ITEM_TYPE.mod_half_effect) is not None:
             return True
         return False
 
@@ -175,11 +175,11 @@ async def merge_offer(message, client):
                 pass
 
             user2_trigger = get_first_item_of_type(user2.id, ITEM_TYPE.mod_half_trigger)
-            if has_trigger and user2_trigger is not None:
-                await close_deal(sentmessage, client, trigger_user=user1, effect_user=user2)
-            else:
-                assert has_effect
+            if user1_has_effect and user2_trigger is not None:
                 await close_deal(sentmessage, client, trigger_user=user2, effect_user=user1)
+            else:
+                assert user1_has_trigger
+                await close_deal(sentmessage, client, trigger_user=user1, effect_user=user2)
     except asyncio.TimeoutError:
         try:    
             await sentmessage.clear_reactions()
