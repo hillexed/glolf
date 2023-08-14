@@ -112,8 +112,8 @@ async def inventory_command(message, message_body, client):
     if len(message_body) > 0 and "merge" in message_body:
         return await merge_offer(message, client)
 
-    if len(message_body) > 0 and "debug_getgift" in message_body:
-        give_random_gift(userid)
+    #if len(message_body) > 0 and "debug_getgift" in message_body:
+    #    give_random_gift(userid)
 
     return await message.channel.send(represent_inventory_as_string(userid))
 
@@ -213,7 +213,7 @@ async def close_deal(sentmessage, user1, user2, client, user1_has_trigger, user1
     users_yet_to_thumbs_up = [trigger_user.id, effect_user.id]
     print(users_yet_to_thumbs_up)
     try:
-        for i in range(1): # TODO: CHANGE BACK TO 2
+        for i in range(2):
             reaction, user = await client.wait_for('reaction_add', timeout=60.0, 
                 check=lambda reaction, user: user.id in users_yet_to_thumbs_up and str(reaction.emoji) in ("👍", "👎"))
 
