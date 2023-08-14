@@ -7,6 +7,7 @@ from math import ceil, floor
 import db
 import random
 import json
+import logging
 
 import data.players
 import asyncio
@@ -63,7 +64,7 @@ def represent_inventory_as_string(username):
     return prefix + '\n'.join([format_item(item_data) for item_data in inventory]) + '\n(use `g!inventory merge` to Merge your stocks with others\' help!)'
 
 def format_item(item_data):
-    return f'- {item_emoji(item_data)}\n{item_data["description"]}'
+    return f'- {item_emoji(item_data)}\n    {item_data["description"]}'
 
 def item_emoji(item_data):
     if item_data["type"] in (ITEM_TYPE.mod_half_trigger, ITEM_TYPE.mod_half_effect):
@@ -107,13 +108,12 @@ async def inventory_command(message, message_body, client):
     userid = message.author.id
 
     username = message.author.display_name.lower() # I'd love to use global_name but it doesn't work.
-    print(username)
 
     if len(message_body) > 0 and "merge" in message_body:
         return await merge_offer(message, client)
 
-    #if len(message_body) > 0 and "debug_getgift" in message_body:
-    #    give_random_gift(userid)
+    if len(message_body) > 0 and "debug_getgift" in message_body:
+        give_random_gift(userid)
 
     return await message.channel.send(represent_inventory_as_string(userid))
 
@@ -238,6 +238,8 @@ async def close_deal(sentmessage, user1, user2, client, user1_has_trigger, user1
 
     mod = merge(generate_random_trigger(), generate_random_effect())
     data.players.add_permanent_modification_to_player(glolfername, mod)
+
+    logging.info(mod, trigger_item, trigger_user.id, effect_item, effect_user.id, compute_inventory(trigger_user.id), compute_inventory(effect_user.id))
 
     remove_from_inventory(trigger_user.id, trigger_item)
     remove_from_inventory(effect_user.id, effect_item)
