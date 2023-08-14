@@ -142,8 +142,8 @@ class BallScoresItself(MergedModificationTrigger):
 
     def should_trigger(self, glolfer, current_glolfer_action): # always activates
         if self.activated:
-            return True
             self.activated = False
+            return True
         return False
 
     def on_score(self, scoring_player, ball, hole_position):
@@ -311,7 +311,7 @@ class Overwhelmed(MergedModificationEffect):
     emoji="😩"
     description_secondhalf="this glolfer gets overwhelmed"
     def apply_effect(self, glolfer, current_glolfer_action):
-        if current_glolfer_action["action"] == "move":
+        if current_glolfer_action["action"] in ("move", "hit"):
             current_glolfer_action["action"] = "stuck"
             self.game.send_message(f"{glolfer.get_display_name()} is too {random.choice(('fearful','tired','lonely','overwhelmed','overwhelmed','hollow'))} to move...")
 

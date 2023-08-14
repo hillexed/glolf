@@ -73,3 +73,4 @@ class Glolfer(Entity):
     type = "player"
     displayEmoji = "🏌️" # will be overwritten
     zIndex = 10 # show below players
+    modifications = []

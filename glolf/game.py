@@ -277,7 +277,7 @@ class SingleHole:
 
     def compute_random_winning_glolfer_currently_on_field(self):
         # compute_random_current_winner() might not return an entities.Glolfer. This is guaranteed to.
-        glolfers = [o for o in self.objects if isinstance(o, entities.Glolfer)]
+        glolfers = self.get_all_objects_of_type(entities.Glolfer)
         winners = None
         for player in glolfers:
             if winners is None: # start with the first player in the list
@@ -316,11 +316,13 @@ class SingleHole:
 
         return string
 
+    def get_all_objects_of_type(self, object_type):
+        return [o for o in self.objects if isinstance(o, object_type)]
 
     def get_closest_object_to_position(self, position, object_type=None):
         consideredobjects = self.objects
         if object_type is not None:
-             consideredobjects = [o for o in self.objects if isinstance(o, object_type)]
+             consideredobjects = self.get_all_objects_of_type(object_type)
 
         objectsSortedByDistance = sorted(consideredobjects, key=lambda object:(object.position-position).norm())
         return objectsSortedByDistance[0]
@@ -374,8 +376,14 @@ class SingleHole:
             self.messages_to_report_in_summary.append(message)
 
     def on_score(self, scoring_player, ball, hole_position):
+        # global mods
         for mod in self.modifiers:
             mod.on_score(scoring_player, ball, hole_position)
+
+        #per-player mods
+        for player in self.get_all_objects_of_type(entities.Glolfer):
+            for mod in player.modifiers:
+                mod.on_score(scoring_player, ball, hole_position)
 
     def increase_score(self, scoring_player, added_strokes=0, added_balls_scored=0, added_scored_strokes=0):
         # Not just for putting a ball in hole; also used to add strokes
@@ -405,6 +413,10 @@ class SingleHole:
 
         for obj in self.modifiers:
             obj.on_hit(shooting_player, ball, swing, club, shot_vec)
+
+        for player in self.get_all_objects_of_type(entities.Glolfer):
+            for mod in player.modifiers:
+                mod.on_hit(shooting_player, ball, swing, club, shot_vec)
 
         self.increase_score(shooting_player, added_strokes=1)
 

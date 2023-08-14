@@ -51,6 +51,7 @@ def give_random_gift(userid):
         inventory = []
     inventory.append(generate_random_gift()) # give someone new a welcome gift!
     db.set_inventory_data(userid, json.dumps(inventory))
+    logging.info(f"Gave userid {userid} a random gift")
 
 
 def represent_inventory_as_string(username):
@@ -235,8 +236,6 @@ async def close_deal(sentmessage, client, trigger_user, effect_user):
     mod = merge(trigger_item, effect_item)
     data.players.add_permanent_modification_to_player(glolfername, mod)
 
-    logging.info(mod, trigger_item, trigger_user.id, effect_item, effect_user.id, compute_inventory(trigger_user.id), compute_inventory(effect_user.id))
-
     remove_from_inventory(trigger_user.id, trigger_item)
     remove_from_inventory(effect_user.id, effect_item)
 
@@ -270,7 +269,8 @@ ninth_internet_open_entrants = {"nic":	"sebqey qiz",
 "IntoAMuteCrypt (he/him)": "Robert'); DROP TABLE Students;--",
 "Neutronicxz (he/him)":	"A pack of AA batteries",
 "fraZ0R (Any Pronouns) | ∅": "Topo Palo",
-"goshawksonlyfly": "Malfunctioning Roomba"
+"goshawksonlyfly": "Malfunctioning Roomba",
+"LexaByteNV, Mechordkeepers": "Anxiety Variety",
 }
 
 other_entrants = ("Ryusei Sakuta","Wormichael Zarlinski") + default_player_names
