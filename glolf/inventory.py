@@ -115,6 +115,9 @@ async def inventory_command(message, message_body, client):
     if len(message_body) > 0 and "merge" in message_body:
         return await merge_offer(message, client)
 
+    if len(message_body) > 0 and "regenerate" in message_body:
+        return db.delete_inventory_data(userid)
+
     #if len(message_body) > 0 and "debug_getgift" in message_body:
     #    give_random_gift(userid)
 
@@ -171,7 +174,7 @@ async def merge_offer(message, client):
             except discord.errors.Forbidden:
                 pass
 
-            user2_trigger = get_first_item_of_type(user2id, ITEM_TYPE.mod_half_trigger)
+            user2_trigger = get_first_item_of_type(user2.id, ITEM_TYPE.mod_half_trigger)
             if has_trigger and user2_trigger is not None:
                 await close_deal(sentmessage, client, trigger_user=user1, effect_user=user2)
             else:
@@ -231,7 +234,7 @@ async def close_deal(sentmessage, client, trigger_user, effect_user):
 
     glolfername="mod"
 
-    glolfer1, glolfer2 = choose_glolfer_names(user1, user2)
+    glolfer1, glolfer2 = choose_glolfer_names(trigger_user, effect_user)
     glolfername = merge_names(glolfer1, glolfer2)
     
 
