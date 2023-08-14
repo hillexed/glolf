@@ -258,7 +258,7 @@ async def close_deal(sentmessage, client, trigger_user, effect_user):
 
 
 ninth_internet_open_entrants = {"nic":	"sebqey qiz",
-"syl":"Merriment Blockwall",
+"Syl":"Merriment Blockwall",
 "Bogle":"Hedgey the Hedgehog",
 "The Menagerie (She/They) Rep": "The Worst Person You Know",
 "cheshirecat": "Asphalt Polygamy",
@@ -269,7 +269,8 @@ ninth_internet_open_entrants = {"nic":	"sebqey qiz",
 "Shorkball 🔏(he/they)":"Ace Ukiyo",
 "IntoAMuteCrypt (he/him)": "Robert'); DROP TABLE Students;--",
 "Neutronicxz (he/him)":	"A pack of AA batteries",
-"fraZ0R (Any Pronouns) | ∅": "Topo Palo"
+"fraZ0R (Any Pronouns) | ∅": "Topo Palo",
+"goshawksonlyfly": "Malfunctioning Roomba"
 }
 
 other_entrants = ("Ryusei Sakuta","Wormichael Zarlinski") + default_player_names

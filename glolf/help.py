@@ -51,9 +51,9 @@ Start a random game! You can also provide player names on new lines below the co
 <person1>
 <person2>```
 Start a game between <person1> and <person2>. Options is a list of options separated by a space. They can include:
-`g!glolf clubs`: Pit glolf club against glolf club in a tag-team club game! Each new line should be the name of an already-created club. Case sensitive.
-`g!glolf bo3`: best of 3. First to two wins, wins. (If there are more than two competitors, the winner is the first to two wins)
-`g!glolf bo5`: Best of 5. Same as above, but the winner is the first to 3 wins.
+`g!glolf clubs`: Pit glolf club against glolf club in a tag-team club game! Put one (pre-made) club name per line. Case sensitive.
+`g!glolf bo3`: best of 3. No matter the competitor count, first to two wins, wins.
+`g!glolf bo5`: Best of 5. First to 3 wins wins.
 
 `g!glolfer <name>`
 View glolfer stats for a player! You can type in any name!
@@ -63,12 +63,35 @@ View glolfer stats for a player! You can type in any name!
 Start a 1v1 tourney! Each new line after tourney 1v1 will be treated as a player name. You need a power-of-two number of entrants to make a tourney. You can also add "30m" or "1h" after the "1v1" to increase the delay between games of the tourney.
 
 `g!tourney 1v1v1`
-Start a 1v1v1 tourney, where each match will have 3 entrants competing and only one advancing to the next round!
+Start a 1v1v1 tourney. 3 entrants per game, but only one advances.
 
-`g!tourney 1v1 clubs`: Pit glolf club against glolf club in a tag-team tournament where the best club wins! Each new line should be the name of an already-created club. Case sensitive. Each round is a best of 5.
+`g!tourney 1v1 clubs`: Pit glolf club against glolf club in a tag-team tournament where the best club wins! Put one club name per line. Case sensitive. Each round is a best of 5.
 
 `g!viewclub <clubname>`
 See information about a glolf club someone has created, such as the players in the club, their loft, and their best stlats!
+
+```g!createclub
+g!deleteclub
+g!addtoclub
+g!removefromclub``` Make and manage clubs. See `g!help clubcommands` for more info.
+
+`g!inventory`: Check your inventory! Each user has a different inventory, which starts with some goodies for adding flavor to players. 
+
+`g!signup`
+Become a fan of one of the glolf clubs competing in the Internet Open!
+
+''', ["clubcommands", "invite","all"],)
+
+basics = HelpTopic("glolf basics","ℹ️", '''
+
+Glolf is a turn-based simulated absurdist emoji two-dimensional multiplayer battle royale parody of golf. The prequel to blaseball nobody asked for, glolf is set in the alternate universe where Glolf won the Great Blaseball-Glolf Conflict and Polkadot Patterson is a five-moon driver. Hit the most balls :white_circle: into holes :golf: in the fewest strokes to win!
+
+To get started with glolf, start a game with `g!glolf`, or check out your favorite character's stlats with `g!glolfer <name>`! For a list of commands, try `g!help commands`, or react below to continue browsing these help pages. To see everything I can teach you, try `g!help all`!
+
+Glolf is an one-person passion project! If you want to show support I set up a ko-fi at <https://ko-fi.com/hillexed>  !
+''', ["basics2","commands", "all", "invite"])
+
+clubcommands = HelpTopic("club-related commands","🤝", '''
 
 ```g!createclub <clubname>
 <club emoji> "<club motto>"
@@ -91,19 +114,7 @@ g!removefromclub <clubname>
 ```
 Remove a player from a club you created.
 
-`g!signup`
-Become a fan of one of the glolf clubs competing in the Internet Open!
-
-''', ["invite","all"],)
-
-basics = HelpTopic("glolf basics","ℹ️", '''
-
-Glolf is a turn-based simulated absurdist emoji two-dimensional multiplayer battle royale parody of golf. The prequel to blaseball nobody asked for, glolf is set in the alternate universe where Glolf won the Great Blaseball-Glolf Conflict and Polkadot Patterson is a five-moon driver. Hit the most balls :white_circle: into holes :golf: in the fewest strokes to win!
-
-To get started with glolf, start a game with `g!glolf`, or check out your favorite character's stlats with `g!glolfer <name>`! For a list of commands, try `g!help commands`, or react below to continue browsing these help pages. To see everything I can teach you, try `g!help all`!
-
-Glolf is an one-person passion project! If you want to show support I set up a ko-fi at <https://ko-fi.com/hillexed>  !
-''', ["basics2","commands", "all", "invite"])
+''', ["commands", "all",])
 
 
 basics2 = HelpTopic("glolf basics, continued","🟩", '''
@@ -200,6 +211,7 @@ helptopics = {
 "cracks":cracks,
 "wiki":wiki,
 "invite":invite,
+"clubcommands":clubcommands
 }
 helptopics["all"] = AllHelpTopicsTopic("All Help Topics","*️⃣","",helptopics.keys())
 
@@ -228,7 +240,7 @@ async def show_topic(triggering_message, sent_help_message, topic: HelpTopic, cl
         return user == triggering_message.author and str(reaction.emoji) in linked_topics
 
     try:
-        reaction, user = await client.wait_for('reaction_add', timeout=60.0, check=check)
+        reaction, user = await client.wait_for('reaction_add', timeout=120.0, check=check)
         if str(reaction.emoji) in linked_topics:
              # remove all reactions?
             try:    
