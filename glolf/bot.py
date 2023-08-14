@@ -15,7 +15,7 @@ from commandwrappers import get_users_with_games_active, clear_users_with_games_
 from clubs.clubcommands import save_club, view_club, delete_club, add_player_to_club, remove_player_from_club
 from help import parse_help_command
 from signup import bet_command
-from inventory import inventory_command
+import inventory
 
 import db # debug for ninth internet open
 
@@ -155,9 +155,31 @@ async def handle_commands(message):
         await glolfcommand(message, get_command_body(message, "glolf"), debug=debug)
 
     elif message.content.startswith(prefix + "inventory"):
-        await inventory_command(message, get_command_body(message, "inventory"), client)
+
+        message_body = get_command_body(message, "inventory")
+
+        if user_is_admin(message) and len(message_body) > 0 and "regenerate" in message_body:
+            if "<@" in message_body and ">" in message_body:
+                atted_userID = message_body.split("<@")[1].split(">")[0]
+                db.delete_inventory_data(atted_userID)
+                await message.channel.send("Their inventory is now:"+ inventory.represent_inventory_as_string(atted_userID))
+                return
+            return await message.channel.send("on a new line, @ someone.")
+            
+        if user_is_admin(message) and len(message_body) > 0 and "debug_gift" in message_body:
+            if "<@" in message_body and ">" in message_body:
+                atted_userID = message_body.split("<@")[1].split(">")[0]
+                inventory.give_random_gift(atted_userID)
+            else:
+                inventory.give_random_gift(userID)
+
+        await inventory.inventory_command(message, get_command_body(message, "inventory"), client)
 
     elif user_is_admin(message) and message.content.startswith(prefix + "getninthcontestants"):
+        await message.channel.send("Contestants: \n"+ str(db.get_game_data("ninth_internet_open_contestants")))
+
+    elif user_is_admin(message) and message.content.startswith(prefix + "clearninthcontestants"):
+        db.set_game_data("ninth_internet_open_contestants", [])
         await message.channel.send("Contestants: \n"+ str(db.get_game_data("ninth_internet_open_contestants")))
 
     elif message.content.startswith(prefix + "version"):
@@ -186,7 +208,7 @@ async def handle_commands(message):
         await bet_command(message, get_command_body(message, "signup"), client)
 
     elif message.content.startswith(prefix + "admincommands"):
-        return await message.channel.send("g!discordid, g!addmodification, g!removemodification g!listmodifications \ng!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!voidadd, g!doesglolferexist, g!tourney resume <tourney ID>, g!downloadentiredb, g!getninthcontestants")
+        return await message.channel.send("g!discordid, g!addmodification, g!removemodification g!listmodifications \ng!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!voidadd, g!doesglolferexist, g!tourney resume <tourney ID>, g!downloadentiredb, g!getninthcontestants, g!clearninthcontestants")
 
 
 

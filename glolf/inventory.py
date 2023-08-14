@@ -106,7 +106,7 @@ def merge(trigger_item, effect_item):
     return merged_mod_data
 
 
-debug = False
+debug = True
 async def inventory_command(message, message_body, client):
     userid = message.author.id
 
@@ -114,12 +114,6 @@ async def inventory_command(message, message_body, client):
 
     if len(message_body) > 0 and "merge" in message_body:
         return await merge_offer(message, client)
-
-    if debug and len(message_body) > 0 and "regenerate" in message_body:
-        return db.delete_inventory_data(userid)
-
-    if debug and len(message_body) > 0 and "debug_getgift" in message_body:
-        give_random_gift(userid)
 
     return await message.channel.send(represent_inventory_as_string(userid))
 
