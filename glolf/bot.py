@@ -64,8 +64,18 @@ async def add_modification(message, command_body):
         if len(command_body.split("\n")) < 2:
             return await message.channel.send("Please add a glolfer's name, then the modification on a new line.")
 
+
+        import data.saved_mod_data
+        import json
+
         glolfername = command_body.split("\n")[0].strip()
         modification = command_body.split("\n")[1].strip()
+    
+        try:
+            modification = json.loads(modification)
+            modification = data.saved_mod_data.SavedModificationDataTemplate(**modification)
+        except ValueError as e:
+            return await message.channel.send(f"Error: {e}")
 
         players.add_permanent_modification_to_player(glolfername, modification)
 
@@ -170,12 +180,13 @@ async def handle_commands(message):
             if "<@" in message_body and ">" in message_body:
                 atted_userID = message_body.split("<@")[1].split(">")[0]
                 inventory.give_random_gift(atted_userID)
+                return
             else:
                 inventory.give_random_gift(userID)
 
         await inventory.inventory_command(message, get_command_body(message, "inventory"), client)
 
-    elif user_is_admin(message) and message.content.startswith(prefix + "getninthcontestants"):
+    elif message.content.startswith(prefix + "getninthcontestants"):
         await message.channel.send("Contestants: \n"+ str(db.get_game_data("ninth_internet_open_contestants")))
 
     elif user_is_admin(message) and message.content.startswith(prefix + "clearninthcontestants"):

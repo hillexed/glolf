@@ -18,7 +18,7 @@ FLOWERS=("🌹","🌷")
 ANIMALS=("🦆","🐟") # the salmon swim upstream! Inning -1 begins!
 
 FOLIAGE_TILES = ("🌲","🌳","🌲","🌵")
-TRAP_BALLS = ("🟨","🕸️")
+TRAP_BALLS = ("🟨","🕸️", "🌵")
 
 WATER_TILES = ("🟦","🌊")
 FIRE_TILES = ("🔥","🟧")
