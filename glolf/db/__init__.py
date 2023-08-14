@@ -4,8 +4,14 @@ import os
 
 DB_DIRECTORY = 'db_data'
 
+database_filename = 'glolf.sqlite'
+
+def _get_db_filename():
+    # only used for admin "download database" command
+    return os.path.join(DB_DIRECTORY,database_filename)
+
 def get_db_connection():
-    conn = sqlite3.connect(os.path.join(DB_DIRECTORY,'glolf.sqlite'))
+    conn = sqlite3.connect(os.path.join(DB_DIRECTORY,database_filename))
     conn.execute('pragma journal_mode=wal')
     return conn
 
@@ -137,3 +143,22 @@ def set_tourney_data(name, data):
 def delete_tourney_data(settingname):
     create_tourney_table_if_not_made()
     return delete_data(settingname, tablename="in_progress_tourneys")
+
+
+def create_inventory_table_if_not_made():
+    create_table_if_not_made("inventory")
+
+def get_inventory_data(name):
+    create_inventory_table_if_not_made()
+    return get_data(name, tablename="inventory")
+
+def set_inventory_data(name, data):
+    create_tourney_table_if_not_made()
+    if get_data(name, tablename="inventory") is None:
+        create_new_entry(name, data, tablename="inventory")
+    else:
+        update_data(name, data, tablename="inventory")
+
+def delete_inventory_data(settingname):
+    create_inventory_table_if_not_made()
+    return delete_data(settingname, tablename="inventory")
