@@ -67,8 +67,11 @@ def format_item(item_data):
     return f'- {item_emoji(item_data)}\n    {item_data["description"]}'
 
 def item_emoji(item_data):
-    if item_data["type"] in (ITEM_TYPE.mod_half_trigger, ITEM_TYPE.mod_half_effect):
-        return "🎫"
+
+    if item_data["type"] == ITEM_TYPE.mod_half_trigger:
+        return "🦴"
+    if item_data["type"] == ITEM_TYPE.mod_half_effect:
+        return "🥩"
     return "🎁"
 
 
@@ -81,13 +84,13 @@ def generate_random_gift():
 def generate_random_trigger():
     chosen_ID = choose_random_trigger_ID()
     trigger_emoji = available_triggers[chosen_ID].emoji
-    description = f"The left half of a stock, stamped with a {trigger_emoji} symbol. Useless on its own, but maybe if combined..."
+    description = f"A glass jar of bone stock, stamped with a {trigger_emoji} symbol. Useless on its own, but maybe if combined..."
     return {"type":ITEM_TYPE.mod_half_trigger, "contains": chosen_ID, "description":description}
 
 def generate_random_effect():
     chosen_ID = choose_random_effect_ID()
     trigger_emoji = available_effects[chosen_ID].emoji
-    description = f"The right half of a stock, stamped with a {trigger_emoji} symbol. Useless on its own, but maybe if combined..."
+    description = f"A sealed can of meat stock, stamped with a {trigger_emoji} symbol. Useless on its own, but maybe if combined..."
     return {"type":ITEM_TYPE.mod_half_effect, "contains": chosen_ID, "description":description}
 
 
@@ -112,8 +115,8 @@ async def inventory_command(message, message_body, client):
     if len(message_body) > 0 and "merge" in message_body:
         return await merge_offer(message, client)
 
-    if len(message_body) > 0 and "debug_getgift" in message_body:
-        give_random_gift(userid)
+    #if len(message_body) > 0 and "debug_getgift" in message_body:
+    #    give_random_gift(userid)
 
     return await message.channel.send(represent_inventory_as_string(userid))
 
@@ -139,15 +142,14 @@ async def merge_offer(message, client):
         return await message.channel.send(":horse: Yer plum outta stock, pardner.")
     
     if has_trigger and not has_effect:
-        requesting_thing = "a right stock"
+        requesting_thing = "a meat stock"
     if not has_trigger and has_effect:
-        requesting_thing = "a left stock"
+        requesting_thing = "a bone stock"
     else:
         requesting_thing = "a stock"
 
     offer_msg = f":horse: {user1.display_name} is making a Merger offer! React with 👀 if ya have {requesting_thing} ta explore Merger opportunities!"
     sentmessage = await message.channel.send(offer_msg)
-
     await sentmessage.add_reaction("👀")
 
     def is_potential_deal_partner(reaction, user2):
@@ -168,7 +170,13 @@ async def merge_offer(message, client):
                 await sentmessage.clear_reactions()
             except discord.errors.Forbidden:
                 pass
-            await close_deal(sentmessage, user1, user2, client, has_trigger, has_effect)
+
+            user2_trigger = get_first_item_of_type(user2id, ITEM_TYPE.mod_half_trigger)
+            if has_trigger and user2_trigger is not None:
+                await close_deal(sentmessage, client, trigger_user=user1, effect_user=user2)
+            else:
+                assert has_effect
+                await close_deal(sentmessage, client, trigger_user=user2, effect_user=user1)
     except asyncio.TimeoutError:
         try:    
             await sentmessage.clear_reactions()
@@ -177,20 +185,11 @@ async def merge_offer(message, client):
             pass
     return
 
-async def close_deal(sentmessage, user1, user2, client, user1_has_trigger, user1_has_effect):
+async def close_deal(sentmessage, client, trigger_user, effect_user):
 
     trigger_item = None
     effect_item = None
 
-    trigger_user = None # which user the trigger is coming from
-    effect_user = None
-
-    if user1_has_trigger:
-        trigger_user = user1
-        effect_user = user2
-    else: #presumably user1_has_effect is true here
-        trigger_user = user2
-        effect_user = user1
     trigger_item = get_first_item_of_type(trigger_user.id, ITEM_TYPE.mod_half_trigger)
     effect_item = get_first_item_of_type(effect_user.id, ITEM_TYPE.mod_half_effect)
 
@@ -206,7 +205,7 @@ async def close_deal(sentmessage, user1, user2, client, user1_has_trigger, user1
     effect = available_effects[effect_ID]
     
 
-    await sentmessage.edit(content=f"How bout it? Ya want to merge {trigger_user.display_name}'s {trigger.emoji} left stock and {effect_user.display_name}'s {effect.emoji} right stock? If so, y'all both gotta react with :thumbsup:.")
+    await sentmessage.edit(content=f"How bout it? Ya want to merge {trigger_user.display_name}'s {trigger.emoji} bone stock and {effect_user.display_name}'s {effect.emoji} meat stock? If so, y'all both gotta react with :thumbsup:.")
     await sentmessage.add_reaction("👍")
     await sentmessage.add_reaction("👎")
 
