@@ -102,7 +102,7 @@ def merge(trigger_item, effect_item):
     trigger = available_triggers[trigger_ID]
     effect = available_effects[effect_ID]
     
-    merged_mod_data = MergedModificationDataTemplate(name="Joint Stock Venture", description=merge_descriptions(trigger, effect), emoji=merge_emojis(trigger, effect), trigger_ID=trigger_ID, effect_ID = effect_ID)
+    merged_mod_data = MergedModificationDataTemplate(name="Joint-Stock Venture", description=merge_descriptions(trigger, effect), emoji=merge_emojis(trigger, effect), trigger_ID=trigger_ID, effect_ID = effect_ID)
     return merged_mod_data
 
 
