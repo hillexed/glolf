@@ -138,7 +138,7 @@ async def merge_offer(message, client):
     if not has_trigger and not has_effect:
         return await message.channel.send(":horse: Yer plum outta stock, pardner.")
     
-    if has_trigger and not has_trigger:
+    if has_trigger and not has_effect:
         requesting_thing = "a right stock"
     if not has_trigger and has_effect:
         requesting_thing = "a left stock"
@@ -151,8 +151,8 @@ async def merge_offer(message, client):
     await sentmessage.add_reaction("👀")
 
     def is_potential_deal_partner(reaction, user2):
-        #if user2.id == user1.id:
-        #    return False
+        if user2.id == user1.id:
+            return False
         user2id = user2.id
         
         if has_effect and get_first_item_of_type(user2id, ITEM_TYPE.mod_half_trigger) is not None:
@@ -236,7 +236,7 @@ async def close_deal(sentmessage, user1, user2, client, user1_has_trigger, user1
     glolfername = merge_names(glolfer1, glolfer2)
     
 
-    mod = merge(generate_random_trigger(), generate_random_effect())
+    mod = merge(trigger_item, effect_item)
     data.players.add_permanent_modification_to_player(glolfername, mod)
 
     logging.info(mod, trigger_item, trigger_user.id, effect_item, effect_user.id, compute_inventory(trigger_user.id), compute_inventory(effect_user.id))
