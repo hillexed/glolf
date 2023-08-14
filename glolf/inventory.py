@@ -258,7 +258,7 @@ async def close_deal(sentmessage, client, trigger_user, effect_user):
 
 
 ninth_internet_open_entrants = {"nic":	"sebqey qiz",
-"syl":"Rutabaga Adams",
+"syl":"Merriment Blockwall",
 "Bogle":"Hedgey the Hedgehog",
 "The Menagerie (She/They) Rep": "The Worst Person You Know",
 "cheshirecat": "Asphalt Polygamy",
