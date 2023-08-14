@@ -1,7 +1,7 @@
 from data.players import get_player_from_name
 import db
 from .clubdata import GlolfClubData
-from entities import Glolfer
+from NPCglolfer import AIGlolfer
 import random
 
 class CompetingClub:
@@ -10,7 +10,7 @@ class CompetingClub:
         self.data = data
         self.name = self.data.name
 
-        self.glolfers = [Glolfer(game, playername=player_name, club=self) for player_name in self.data.player_names]
+        self.glolfers = [AIGlolfer(game, playername=player_name, club=self) for player_name in self.data.player_names]
 
     def choose_first_glolfer(self):
         return random.choice(self.glolfers)

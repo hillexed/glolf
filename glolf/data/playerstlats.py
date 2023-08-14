@@ -164,7 +164,21 @@ class Player:
         if len(self.modifications) == 0:
             return ""
         else:
-            return f"**Modifications**:\n{', '.join(self.modifications)}"
+            preamble = "**Modifications**: \n"
+            return preamble + "\n".join([self.modification_string(mod) for mod in self.modifications])
+
+    def modification_string(self, mod_dict):
+        if type(mod_dict) is str:
+            return mod_dict
+        try:
+            template = f'''- {mod_dict['emoji']} {mod_dict['name']}
+   {mod_dict['description']}'''
+        except KeyError as e:
+            print(e)
+            print("danger")
+            template = "- ☢️ Unstable ☢️ \n This Modification is Unstable. Something has gone very wrong in the dated base. DANGER! DANGER! DANGER!"
+
+        return template
 
     def vk_stat_of_the_day(self):
         stlat_choices = list(self.stlats._fields)
@@ -192,14 +206,14 @@ class Player:
     def from_dict(cls, data: dict):
         # Given a dict with {"id": blah, "stlats":<blah>} from the DB, construct a new Player
         data["stlats"] = PlayerStlats(*data["stlats"])
-        data["modifications"] = [mod_dict for mod_dict in data["modifications"]]
+        data["modifications"] = [saved_mod_data.SavedModificationDataTemplate(**mod_dict) for mod_dict in data["modifications"]]
         return cls(**data)
 
     def to_dict(self):
         # convert player into a dict, for saving in the DB
 
         dict = self.__dict__
-        dict["modifications"] = [mod_dict for mod_dict in self.modifications]
+        dict["modifications"] = [mod_dict.to_dict() for mod_dict in self.modifications]
 
         return dict
 
@@ -312,7 +326,7 @@ known_players = {
     "The 12th Herb And Spice": player_with_mods_but_random_stats("The 12th Herb And Spice",[saved_mod_data.championshipJacket]),
     "Caldera Clembons": player_with_mods_but_random_stats("Caldera Clembons",[saved_mod_data.buff]),
     "1": player_with_mods_but_random_stats("1",[saved_mod_data.foxFriendship]),
-    "Hands Scoresburg": player_with_mods_but_random_stats("Hands Scoresburg",["🖊️🏄"]),
+    # "Hands Scoresburg": player_with_mods_but_random_stats("Hands Scoresburg",["🖊️🏄"]), #I've forgotten what this means
     "Test Robot": player_with_mods_but_random_stats("Test Robot",[saved_mod_data.spookyGrandUnchipMod]),
     "Dog Dad": player_with_mods_but_random_stats("Dog Dad",[saved_mod_data.voidTrapped,saved_mod_data.championshipJacket]),
     "Melissa Bop": player_with_mods_but_random_stats("Melissa Bop", [saved_mod_data.nutrisocks])

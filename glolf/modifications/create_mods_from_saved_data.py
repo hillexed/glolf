@@ -1,8 +1,11 @@
+from collections import UserDict
+
 from .modification import PlayerModification
 from .merged_modifications import MergedModification
+from data.saved_mod_data import SavedModificationDataTemplate, MergedModificationDataTemplate
 
-from data.saved_mod_data import SavedModificationDataTemplate
 
+# used ingame
 class CosmeticModification(PlayerModification): #ingame version of cosmetic modification
     display_in_mod_list = False
 
@@ -27,7 +30,6 @@ def test_serialization():
     assert mod.to_dict() == mod2.to_dict()
 
 def test_merges():
-    
     mod = create_ingame_mod_from_saved_data(None, None, {"triggerID": "OnSand", "effectID":"LoosenedGrip", "type": "merged"})
 
 

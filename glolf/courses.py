@@ -1,6 +1,7 @@
 from typing import NamedTuple
 import random
 import re
+from math import floor
 
 
 from data import course_data
@@ -104,6 +105,17 @@ class Course:
 
     def random_position_on_course(self):
         return [random.random()*(self.bounds[0]-0.6), random.random()*(self.bounds[1]-0.6)]
+
+    def is_on_course(self, position):
+        if 0 < position[0] and position[0] < len(self.terrain):
+            if 0 < position[1] and position[1] < len(self.terrain[floor(position[0])]):
+                return True
+        return False
+        
+
+    def get_tile_at(self, position):
+        if self.is_on_course(position): 
+            return self.terrain[floor(position[0])][floor(position[1])]
 
     def parse_course_string(self, course_string):
         lines = course_string.strip().split("\n")

@@ -12,6 +12,7 @@ from modifications.current_rules import get_permanent_modifiers
 import courses
 
 from data.scorecards import SingleHoleScoresheet, NPCScorecardDummyEntity
+from NPCglolfer import AIGlolfer
 
 
 
@@ -51,7 +52,7 @@ class SingleHole:
         self.messages_to_report_in_summary = []
 
     def add_player_by_name(self, starting_position, playername):
-        newglolfer = entities.Glolfer(self, position=starting_position, playername=playername)
+        newglolfer = AIGlolfer(self, position=starting_position, playername=playername)
         self.add_player(newglolfer)
 
     def add_scorecard_if_doesnt_exist(self, scoring_thing):
@@ -70,7 +71,7 @@ class SingleHole:
 
         # place one glolfer at each hole, in order, then any more are random
         placed_glolfers = 0
-        flags = [obj for obj in self.objects if type(obj) == entities.Hole]
+        flags = [obj for obj in self.objects if isinstance(obj, entities.Hole)]
 
         for name in glolfer_names:
             if placed_glolfers < len(flags):
@@ -235,7 +236,7 @@ class SingleHole:
             raise ValueError("No scorecards means it's impossible to compute a winner!")
 
         for player in self.scores:
-            if (type(player) == NPCScorecardDummyEntity or type(player) == str) and not include_NPC_scorecards: #non-glolfers can't win
+            if (isinstance(player, NPCScorecardDummyEntity) or isinstance(player, str)) and not include_NPC_scorecards: #non-glolfers can't win
                 continue
             if winners is None: # start with the first player in the list
                 winners = [player]
@@ -276,7 +277,7 @@ class SingleHole:
 
     def compute_random_winning_glolfer_currently_on_field(self):
         # compute_random_current_winner() might not return an entities.Glolfer. This is guaranteed to.
-        glolfers = [o for o in self.objects if type(o) == entities.Glolfer]
+        glolfers = [o for o in self.objects if isinstance(o, entities.Glolfer)]
         winners = None
         for player in glolfers:
             if winners is None: # start with the first player in the list
@@ -319,7 +320,7 @@ class SingleHole:
     def get_closest_object_to_position(self, position, object_type=None):
         consideredobjects = self.objects
         if object_type is not None:
-             consideredobjects = [o for o in self.objects if (type(o) == object_type)]
+             consideredobjects = [o for o in self.objects if isinstance(o, object_type)]
 
         objectsSortedByDistance = sorted(consideredobjects, key=lambda object:(object.position-position).norm())
         return objectsSortedByDistance[0]
@@ -327,14 +328,14 @@ class SingleHole:
     def object_shares_tile_with(self, target, object_type):
         # returns True if there's an object of type `object_type` on the same tile as `target` 
         for obj in self.objects:
-            if type(obj) == object_type and self.on_same_tile(target, obj):
+            if isinstance(obj, object_type) and self.on_same_tile(target, obj):
                 return True
         return False
 
     def get_closest_objects(self, target, object_type=None):
         consideredobjects = [o for o in self.objects if o is not target]
         if object_type is not None:
-             consideredobjects = [o for o in consideredobjects if type(o) == object_type]
+             consideredobjects = [o for o in consideredobjects if isinstance(o, object_type)]
 
         objectsSortedByDistance = sorted(consideredobjects, key=lambda object:(object.position-target.position).norm())
         return objectsSortedByDistance
@@ -377,11 +378,11 @@ class SingleHole:
             mod.on_score(scoring_player, ball, hole_position)
 
     def increase_score(self, scoring_player, added_strokes=0, added_balls_scored=0, added_scored_strokes=0):
-        
+        # Not just for putting a ball in hole; also used to add strokes
         self.add_scorecard_if_doesnt_exist(scoring_player)
-        self.scores[scoring_player].scored_strokes += added_scored_strokes
+        self.scores[scoring_player].scored_strokes += added_scored_strokes # strokes used to hit the ball
         self.scores[scoring_player].balls_scored += added_balls_scored
-        self.scores[scoring_player].total_strokes += added_strokes
+        self.scores[scoring_player].total_strokes += added_strokes # includes penalty strokes
 
     def report_hit(self,shooting_player, ball,swing,club,shot_vec):
 

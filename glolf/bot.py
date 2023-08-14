@@ -15,11 +15,14 @@ from commandwrappers import get_users_with_games_active, clear_users_with_games_
 from clubs.clubcommands import save_club, view_club, delete_club, add_player_to_club, remove_player_from_club
 from help import parse_help_command
 from signup import bet_command
+from inventory import inventory_command
+
+import db # debug for ninth internet open
 
 
 debug = False
 prefix = 'g!'
-version = '5.3'
+version = '6'
 MAX_GAMES = 10
 
 if len(sys.argv) > 1:
@@ -71,21 +74,36 @@ async def add_modification(message, command_body):
 async def remove_modification(message, command_body):
     # Add a modification to the player until the bot restarts. Admin-only
     if len(command_body) == 0:
-        await message.channel.send("Please add a glolfer's name! It's g!addmodification <glolfer>\n<modification>")
+        await message.channel.send("Please add a glolfer's name! It's g!addmodification <glolfer>\n<modification_number>")
     else:
-        if len(command_body.split("\n")) < 2:
-            return await message.channel.send("Please add a glolfer's name, then the modification on a new line.")
-
         glolfername = command_body.split("\n")[0].strip()
-        modification = command_body.split("\n")[1].strip()
-
         player = players.get_player_from_name(glolfername)
-        if modification not in player.modifications:
-            return await message.channel.send(f"That modification wasn't in {glolfername}'s modifications. Here's the list of them: {', '.join([str(m) for m in player.modifications])}")
 
-        players.remove_permanent_modification_to_player(glolfername, modification)
+        if len(command_body.split("\n")) < 2:
+            return await message.channel.send(f"Please add a glolfer's name, then the modification number (0 for first one, 1 for second one) on a new line. \n here's their modifications: {player.modifications}")
 
-        return await message.channel.send(f"Removed modification {modification} from player {glolfername}. Saved in DB.")
+        args = command_body.split("\n")[1].strip()
+
+        if len(args) == 0:
+            args = "0"
+        modification_number = int(args[0])
+
+        if modification_number > len(player.modifications)-1:
+            return await message.channel.send(f"That modification wasn't in {glolfername}'s modifications. Here's the list of them: {', '.join([str(m) for m in player.modifications])}. Choose 0 for the first modification, 1 for the second one")
+        mod_to_remove = player.modifications[modification_number]
+        players.remove_permanent_modification_to_player(glolfername, mod_to_remove)
+
+        return await message.channel.send(f"Removed modification {mod_to_remove} from player {glolfername}. Saved in DB.")
+
+async def list_mods_debug(message, command_body):
+    # Add a modification to the player until the bot restarts. Admin-only
+    if len(command_body) == 0:
+        await message.channel.send("Please add a glolfer's name! It's g!addmodification <glolfer>\n<modification_number>")
+    else:
+        glolfername = command_body.split("\n")[0].strip()
+        player = players.get_player_from_name(glolfername)
+
+        return await message.channel.send(f"Glolfer {glolfername} has these modifications:\n{player.modifications}")
 
 def user_is_admin(message):
     if "ADMIN_IDS" in config:
@@ -132,10 +150,15 @@ async def handle_commands(message):
     if message.content.startswith(prefix + "glolfer"):
         await get_glolfer_stats(message, get_command_body(message, "glolfer"))
 
-
     elif message.content.startswith(prefix + "glolf"):
         logging.info("glolf detected")
         await glolfcommand(message, get_command_body(message, "glolf"), debug=debug)
+
+    elif message.content.startswith(prefix + "inventory"):
+        await inventory_command(message, get_command_body(message, "inventory"), client)
+
+    elif user_is_admin(message) and message.content.startswith(prefix + "getninthcontestants"):
+        await message.channel.send("Contestants: \n"+ str(db.get_game_data("ninth_internet_open_contestants")))
 
     elif message.content.startswith(prefix + "version"):
         await message.channel.send(str(version))
@@ -163,7 +186,7 @@ async def handle_commands(message):
         await bet_command(message, get_command_body(message, "signup"), client)
 
     elif message.content.startswith(prefix + "admincommands"):
-        return await message.channel.send("g!discordid, g!addmodification, g!removemodification g!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!doesglolferexist, g!tourney resume <tourney ID>")
+        return await message.channel.send("g!discordid, g!addmodification, g!removemodification g!listmodifications \ng!updatecoming <true/false>, g!clear_game_list, g!forcequit, g!countgames, g!void, g!voidadd, g!doesglolferexist, g!tourney resume <tourney ID>, g!downloadentiredb, g!getninthcontestants")
 
 
 
@@ -175,7 +198,7 @@ async def handle_commands(message):
         await message.channel.send(f"{len(servers)}: {[(s.name, s.member_count) for s in servers]}")
 
     elif user_is_admin(message) and message.content.startswith(prefix + "deleteplayer"):
-        # todo, use db.delete_player_data()
+        players.regenerate_player()
         pass
 
     elif user_is_admin(message) and message.content.startswith(prefix + "doesglolferexist"):
@@ -204,6 +227,13 @@ async def handle_commands(message):
     elif user_is_admin(message) and message.content.startswith(prefix + "removemodification"):
         await remove_modification(message, get_command_body(message, "removemodification"))
 
+    elif user_is_admin(message) and message.content.startswith(prefix + "listmodifications"):
+        await list_mods_debug(message, get_command_body(message, "listmodifications"))
+
+
+    elif user_is_admin(message) and message.content.startswith(prefix + "countgames"):
+        await message.channel.send(f"There are {len(get_users_with_games_active())} users with games active right now.")
+
     elif user_is_admin(message) and message.content.startswith(prefix + "countgames"):
         await message.channel.send(f"There are {len(get_users_with_games_active())} users with games active right now.")
 
@@ -225,6 +255,14 @@ async def handle_commands(message):
         await message.channel.send(msg)
         logging.info(msg)
         clear_users_with_games_active()
+
+    # ultra debug
+    elif user_is_admin(message) and message.content.startswith(prefix + "downloadentiredb"):
+        # this might hit the discord message filesize limit but it's an admin command so I don't care
+        from db import _get_db_filename
+        current_time_string = time.asctime(time.localtime()).lower()
+        file = discord.File(_get_db_filename(), filename=f"glolf_{current_time_string.replace(' ','_')}.sqlite")
+        await message.channel.send(f"Here's a copy of the DB at {current_time_string}", file=file)
 
 # now run the bot
 token = config["TOKEN"]

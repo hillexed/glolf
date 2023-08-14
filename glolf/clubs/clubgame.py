@@ -86,7 +86,7 @@ class ClubGame(SingleHole):
         return string
 
     def increase_score(self, scoring_player, added_strokes=0, added_balls_scored=0, added_scored_strokes=0):
-        if type(scoring_player) == entities.Glolfer and scoring_player.club is not None:
+        if isinstance(scoring_player, entities.Glolfer) and scoring_player.club is not None:
             # scoring player is in a club. increase score for the club
             super().increase_score(scoring_player.club, added_strokes, added_balls_scored, added_scored_strokes)
             # increase individual player's score too

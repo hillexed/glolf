@@ -121,7 +121,7 @@ class FlyingAlbatross(FlyingEagle):
 
     def attempt_to_grab(self, glolfer):
         # don't grab an already grabbed player
-        if not player.has_modifiers_of_type(eaglemod.GrabbedByEagle):
+        if not glolfer.has_modifiers_of_type(eaglemod.GrabbedByEagle):
             self.grab_player(glolfer)
 
     def grab_player(self, player):
