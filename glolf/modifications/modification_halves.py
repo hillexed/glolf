@@ -2,13 +2,14 @@ from courses import WATER_TILES
 from entities import FlyingEagle, FlyingAlbatross, Hole, Glolfer
 import random
 
-def increase_stlat_for_rest_of_game(stlats, key, delta):
-    stlats._replace(**{key: getattr(stlats, key)+delta})
-def decrease_stlat_for_rest_of_game(stlats, key, delta):
-    new_val = getattr(stlats, key)+delta
+def increase_stlat_for_rest_of_game(glolfer, key, delta):
+    new_val = getattr(glolfer.stlats, key)+delta
+    glolfer.stlats = glolfer.stlats._replace(**{key: new_val})
+def decrease_stlat_for_rest_of_game(glolfer, key, delta):
+    new_val = getattr(glolfer.stlats, key)-delta
     if new_val < 0:
         new_val = 0.01
-    stlats._replace(**{key: new_val})
+    glolfer.stlats = glolfer.stlats._replace(**{key: new_val})
 
 
 class MergedModificationTrigger:
@@ -128,7 +129,7 @@ class OnFirstBall(MergedModificationTrigger):
         return False
 
     def on_score(self, scoring_player, ball, hole_position):
-        if self.attached_glolfer == scoring_player and self.game.scores[scoring_player].balls_scored == 1:
+        if self.attached_player == scoring_player and self.game.scores[scoring_player].balls_scored == 1:
             self.activated = True
 
 class BallScoresItself(MergedModificationTrigger):
@@ -167,7 +168,7 @@ class Envious(MergedModificationTrigger):
         return False
 
     def on_score(self, scoring_player, ball, hole_position):
-        if self.attached_glolfer != scoring_player:
+        if self.attached_player != scoring_player:
             self.activated = True
 
 class OnScore(MergedModificationTrigger):
@@ -187,7 +188,7 @@ class OnScore(MergedModificationTrigger):
         return False
 
     def on_score(self, scoring_player, ball, hole_position):
-        if self.attached_glolfer == scoring_player:
+        if self.attached_player == scoring_player:
             self.activated = True
 
 class InElectricWind(TriggerInWind):
@@ -216,7 +217,7 @@ class MoreMarbles(MergedModificationEffect):
     emoji="⚪"
     description_secondhalf="this glolfer picks up more Marbles, helping them survive Duels"
     def apply_effect(self, glolfer, current_glolfer_action):
-        increase_stlat_for_rest_of_game(glolfer.stlats, "marbles", 1)
+        increase_stlat_for_rest_of_game(glolfer, "marbles", 1)
         self.game.send_message(f"{glolfer.get_display_name()} picked up an extra Marble!")
 
 class SummonEagle(MergedModificationEffect):
@@ -246,35 +247,35 @@ class MoreWiggle(MergedModificationEffect):
     emoji="🪱"
     description_secondhalf="this glolfer becomes more Wiggly, helping them avoid things like Duels and eagles."
     def apply_effect(self, glolfer, current_glolfer_action):
-        increase_stlat_for_rest_of_game(glolfer.stlats, "wiggle", 0.2)
+        increase_stlat_for_rest_of_game(glolfer, "wiggle", 0.2)
         self.game.send_message(f"{glolfer.get_display_name()} became more Wiggly!")
 
 class MoreChurly(MergedModificationEffect):
     emoji="🤺"
     description_secondhalf="this glolfer becomes Churlier, increasing offensive (🤺) actions during Duels"
     def apply_effect(self, glolfer, current_glolfer_action):
-        increase_stlat_for_rest_of_game(glolfer.stlats, "churliness", 0.5)
+        increase_stlat_for_rest_of_game(glolfer, "churliness", 0.5)
         self.game.send_message(f"{glolfer.get_display_name()} became Churlier!")
 
 class MoreEarly(MergedModificationEffect):
     emoji="🤸"
     description_secondhalf="this glolfer becomes Earlier, increasing defensive (🤸) actions during Duels"
     def apply_effect(self, glolfer, current_glolfer_action):
-        increase_stlat_for_rest_of_game(glolfer.stlats, "earliness", 0.5)
+        increase_stlat_for_rest_of_game(glolfer, "earliness", 0.5)
         self.game.send_message(f"{glolfer.get_display_name()} became Earlier!")
 
 class MoreTwirly(MergedModificationEffect):
     emoji="🩰"
     description_secondhalf="this glolfer becomes Twirlier, increasing acrobatic (🩰) actions during Duels"
     def apply_effect(self, glolfer, current_glolfer_action):
-        increase_stlat_for_rest_of_game(glolfer.stlats, "twirliness", 0.5)
+        increase_stlat_for_rest_of_game(glolfer, "twirliness", 0.5)
         self.game.send_message(f"{glolfer.get_display_name()} became Twirlier!")
 
 class Patched(MergedModificationEffect):
     emoji="🪡"
     description_secondhalf="this glolfer crochets, improving their Needlethreadableness and aim"
     def apply_effect(self, glolfer, current_glolfer_action):
-        increase_stlat_for_rest_of_game(glolfer.stlats, "needlethreadableness", 0.5)
+        increase_stlat_for_rest_of_game(glolfer, "needlethreadableness", 0.5)
         self.game.send_message(f"{glolfer.get_display_name()} Patched up their aim!")
 
 
@@ -282,21 +283,21 @@ class TimeDilation(MergedModificationEffect):
     emoji="🤸"
     description_secondhalf="this glolfer loses track of time, reducing their Earliness and defensive (🤸) actions during Duels"
     def apply_effect(self, glolfer, current_glolfer_action):
-        decrease_stlat_for_rest_of_game(glolfer.stlats, "earliness", 0.5)
+        decrease_stlat_for_rest_of_game(glolfer, "earliness", 0.5)
         self.game.send_message(f"{glolfer.get_display_name()} lost track of time and became less Early!")
 
 class Ironic(MergedModificationEffect):
     emoji="🦾"
     description_secondhalf="this glolfer does pushdowns to boost their Musclitude, increasing their ball-hitting power."
     def apply_effect(self, glolfer, current_glolfer_action):
-        increase_stlat_for_rest_of_game(glolfer.stlats, "musclitude", 0.5)
+        increase_stlat_for_rest_of_game(glolfer, "musclitude", 0.5)
         self.game.send_message(f"{glolfer.get_display_name()} stopped to do some pushups! Their Musclitude improved!")
 
 class GravityLensed(MergedModificationEffect):
     emoji="📏"
     description_secondhalf="this glolfer measures local gravity to increase their Estimation, helping them judge distance"
     def apply_effect(self, glolfer, current_glolfer_action):
-        increase_stlat_for_rest_of_game(glolfer.stlats, "estimation", 0.2)
+        increase_stlat_for_rest_of_game(glolfer, "estimation", 0.2)
         self.game.send_message(f"{glolfer.get_display_name()} put on some gravitational lenses! Their Estimation got better!")
 
 
@@ -304,7 +305,7 @@ class LoosenedGrip(MergedModificationEffect):
     emoji="💥"
     description_secondhalf="this glolfer might loosen their Grip, which has only a slight risk of cracking reality"
     def apply_effect(self, glolfer, current_glolfer_action):
-        decrease_stlat_for_rest_of_game(glolfer.stlats, "finesse", 0.1)
+        decrease_stlat_for_rest_of_game(glolfer, "finesse", 0.1)
         self.game.send_message(f"{glolfer.get_display_name()} loosened their Grip...")
 
 class Overwhelmed(MergedModificationEffect):

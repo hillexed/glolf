@@ -70,7 +70,7 @@ def test_many_mods():
     data.players.regenerate_player(tester1)
     data.players.regenerate_player(tester2)
 
-    for i in range(10):
+    for i in range(30):
         # note: the more you run this, the m
         mod = merge(generate_random_trigger(), generate_random_effect())
         data.players.add_permanent_modification_to_player(tester1, mod)
