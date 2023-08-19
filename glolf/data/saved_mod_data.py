@@ -47,6 +47,6 @@ class MergedModificationDataTemplate(SavedModificationDataTemplate):
 championshipJacket = CosmeticModificationData(emoji="🧥", name="Championship Jacket", description="Bestowed Upon Glolfers Who Win an Internet Open")
 voidTrapped = CosmeticModificationData(emoji="😵‍💫", name="Void-Trapped", description="help me")
 spookyGrandUnchipMod = CosmeticModificationData(emoji="😈", name="Ǫ̷͍̺̘͕̼̣͔̮̤̮̫͓̜͊͆̈́̈̉͌́̈̌͠ͅŭ̷̟̦̹͇̮͚̦̱̹̖̲̟̻͈̳͚̰̀̎͆̌̀t̴̨̨̹͇̬̠̤̳̘̟̩̜̻̳͓́̀͌̍̌", description="Long ago, this glolfer got Out.")
-foxFriendship = CosmeticModificationData(emoji="🤝💖", name="Accepted Friendship", description="A promise not be a good friend and not cause another Afoxalypse")
+foxFriendship = CosmeticModificationData(emoji="🤝💖", name="Accepted Friendship", description="A promise to be a good friend and not cause another Afoxalypse")
 buff = CosmeticModificationData(emoji="💪", name="Buff", description="This glolfer is buff")
 nutrisocks = CosmeticModificationData(emoji="🧦", name="Sponsored by Nutrisocks", description="Nutrition, for your Sole.")
