@@ -295,8 +295,17 @@ def merge_names(name1, name2):
 
     return " ".join(splitnames1[:ceil(len(splitnames1)/2)] + splitnames2[ceil(len(splitnames2)/2):])
     
+def give_gift_to_empty_inventories():
+    # admin command. very laggy because it's done as many individual DB hits instead of one big commit
+    users = db.get_users_with_empty_inventory()
+    for userid in users:
+        give_random_gift(userid)
         
-    
+def give_gift_to_everyone():
+    # admin command. very laggy because it's done as many individual DB hits instead of one big commit
+    users = db.get_all_users_with_any_inventory()
+    for userid in users:
+        give_random_gift(userid)
 
 
 async def merge_apply_test(message):

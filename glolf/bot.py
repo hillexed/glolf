@@ -184,6 +184,14 @@ async def handle_commands(message):
             else:
                 inventory.give_random_gift(userID)
 
+        if user_is_admin(message) and len(message_body) > 0 and "give_gift_to_all_empty" in message_body:
+            inventory.give_gift_to_empty_inventories()
+            return await message.channel.send("Everyone with an empty inventory got a new gift!")
+
+        if user_is_admin(message) and len(message_body) > 0 and "give_gift_to_everyone" in message_body:
+            inventory.give_gift_to_everyone()
+            return await message.channel.send("Everyone with an inventory got a new gift!")
+
         await inventory.inventory_command(message, get_command_body(message, "inventory"), client)
 
     elif message.content.startswith(prefix + "getninthcontestants"):

@@ -164,3 +164,26 @@ def set_inventory_data(name, data):
 def delete_inventory_data(settingname):
     create_inventory_table_if_not_made()
     return delete_data(settingname, tablename="inventory")
+
+def get_users_with_empty_inventory():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT name,data FROM inventory WHERE data='\"[]\"' Or data=''")
+    userdata= cursor.fetchall()
+    cursor.close()
+
+    if userdata is not None:
+        user_ids = [name for name,data in userdata]
+        return user_ids
+
+
+def get_all_users_with_any_inventory():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT name, data FROM inventory")
+    userdata= cursor.fetchall()
+    cursor.close()
+    if userdata is not None:
+        print(userdata)
+        user_ids = [name for name,data in userdata]
+        return user_ids
