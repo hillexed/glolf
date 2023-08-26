@@ -124,8 +124,8 @@ class OnFirstBall(MergedModificationTrigger):
 
     def should_trigger(self, glolfer, current_glolfer_action): # always activates
         if self.activated:
-            return True
             self.activated = False
+            return True
         return False
 
     def on_score(self, scoring_player, ball, hole_position):
@@ -163,8 +163,8 @@ class Envious(MergedModificationTrigger):
     @randomly_trigger(0.15) # balanced by not always activating
     def should_trigger(self, glolfer, current_glolfer_action):
         if self.activated:
-            return True
             self.activated = False
+            return True
         return False
 
     def on_score(self, scoring_player, ball, hole_position):
