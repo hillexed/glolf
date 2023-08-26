@@ -244,7 +244,7 @@ async def close_deal(sentmessage, client, trigger_user, effect_user):
 :moneybag: Using Your Wonderful Submissions
 :moneybag: We Have Taken Notice Of {glolfer1} and {glolfer2}...
 :moneybag: And Merged Player **{glolfername}** has Acquired Something New!
-:moneybag: Now {glolfername} Has Been Entered in the Ninth Internet Open!
+:moneybag: Perhaps Someday A Viewer May Enter {glolfername} In An Internet Open. 
 :moneybag: {random.choice(('What A Twist!', 'How Exciting!', 'Truly Unique Talent', 'A Shocking Development', 'What A Twist', 'Better Tune In'))}""")
 
     contestants = db.get_game_data("ninth_internet_open_contestants")

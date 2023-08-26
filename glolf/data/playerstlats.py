@@ -329,7 +329,8 @@ known_players = {
     # "Hands Scoresburg": player_with_mods_but_random_stats("Hands Scoresburg",["🖊️🏄"]), #I've forgotten what this means
     "Test Robot": player_with_mods_but_random_stats("Test Robot",[saved_mod_data.spookyGrandUnchipMod]),
     "Dog Dad": player_with_mods_but_random_stats("Dog Dad",[saved_mod_data.voidTrapped,saved_mod_data.championshipJacket]),
-    "Melissa Bop": player_with_mods_but_random_stats("Melissa Bop", [saved_mod_data.nutrisocks])
+    "Melissa Bop": player_with_mods_but_random_stats("Melissa Bop", [saved_mod_data.nutrisocks]),
+    "Merriment Roomba": player_with_mods_but_random_stats("Melissa Bop", [saved_mod_data.championshipJacket])
 }
 known_players["Alto"] = known_players["Polkadot Patterson"]
 
