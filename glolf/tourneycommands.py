@@ -21,7 +21,7 @@ async def parse_tourney_message(message, command_body, debug=False):
     if len(tourneytype) == 0:
         return await message.channel.send("What type of tournament? Try 'tourney 1v1'")
 
-    time_between_matches_m = 5 # 5 minutes default, but you can change that with "60m" for 60 minutes
+    time_between_matches_m = None # 5 minutes default, but you can change that with "60m" for 60 minutes
     minutes_specified = timeBetweenMatchRegex.search(tourneytype)
     if minutes_specified:
         # parse time between matches in minutes or hours
@@ -318,7 +318,8 @@ def discord_timestamp(timestring):
 
 @disable_if_update_coming
 @limit_one_game_per_person
-async def battle_royale_glolftourney(message, glolfers_per_game=2, time_between_matches_m=5, is_club_game=False, debug=False):
+async def battle_royale_glolftourney(message, glolfers_per_game=2, time_between_matches_m=None, is_club_game=False, debug=False):
+
     # a tourney where each game has multiple people, but only one can win each game
     # if glolfers_per_game is 2, it's a 1v1, if glolfers_per_game is 3, each game is a 1v1v1, etc
     assert glolfers_per_game > 1
@@ -336,6 +337,10 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, time_between_
     else: # 0 players
         await message.channel.send("To use, please give a list of competitors after the command, each on a separate line.")
         return
+
+
+    if time_between_matches_m is None:
+        time_between_matches_m = 5 # default value
 
     if too_many_games_active():
         await message.channel.send("There's too many games going on right now. To avoid lag, please wait a little bit until some games are done and try again later!")
@@ -365,7 +370,7 @@ async def battle_royale_glolftourney(message, glolfers_per_game=2, time_between_
 
 @disable_if_update_coming
 @limit_one_game_per_person
-async def resume_tourney_command(message, tourney_sponsor_ID, time_between_matches_m=5, debug=False):
+async def resume_tourney_command(message, tourney_sponsor_ID, time_between_matches_m=None, debug=False):
     # todo: fix bug where you can resume a tourney multiple times, including while the same tourney is running
 
     # tourney sponsor IDs are one word, lowercase.
@@ -377,9 +382,14 @@ async def resume_tourney_command(message, tourney_sponsor_ID, time_between_match
     tourneydata = get_tourney_data(tourney_sponsor_ID)
     if tourneydata is None:
         return await message.channel.send("No paused tourney with that sponsor. Maybe it finished?")
+
+    print(time_between_matches_m, tourneydata.time_between_matches_m)
+    if time_between_matches_m is None:
+        time_between_matches_m = tourneydata.time_between_matches_m
+
     await run_battle_royale(message, tourney_sponsor_ID, time_between_matches_m=time_between_matches_m, debug=debug)
 
-async def run_battle_royale(message, tourney_sponsor_ID, time_between_matches_m=6, debug=False):
+async def run_battle_royale(message, tourney_sponsor_ID, time_between_matches_m=5, debug=False):
     # repeatedly parse from the DB then run one match/series of a tourney in a loop! 
     #If it's cancelled due to an error, that's okay, because it's saved in the DB
 
