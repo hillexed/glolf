@@ -74,7 +74,9 @@ async def newglolfgame(message, glolfer_names, header=None, max_turns=60, is_tou
     # start a round of glolf and return the winning players's names
 
     glolfgame = await message.channel.send("Beginning game...")
-    logger.info(f"Starting game between {glolfer_names} in channel #{message.channel} in server '{message.channel.guild.name}'")
+
+    if message.guild is not None:
+        logger.info(f"Starting game between {glolfer_names} in channel #{message.channel.name if message.channel is not None else message.channel} in server '{message.guild.name if message.guild is not None else message.guild}'")
     try:
         if "club" in message.content.split("\n")[0]:
             if max_turns == 60:

@@ -124,7 +124,7 @@ def user_is_admin(message):
 
 
 
-intents = discord.Intents(messages=True, message_content=True)
+intents = discord.Intents(messages=True, message_content=True, guilds=True)
 intents.reactions = True
 
 client = discord.Client(intents=intents)
