@@ -303,7 +303,12 @@ async def one_tourney_series(message, tourney_sponsor_ID, debug=False):
         # End of round!
         if len(tourneydata.this_round_competitors_advancing) > 1:
             # Announce round results! The new brackets will be computed next time
-            await message.channel.send(f"**{round_name.title()} results:** {len(tourneydata.this_round_competitors_advancing)} contestants move on: **{', '.join(tourneydata.this_round_competitors_advancing)}**.")
+            if random.random() < 0.9:
+                await message.channel.send(f"**{round_name.title()} results:** {len(tourneydata.this_round_competitors_advancing)} contestants move on: **{', '.join(tourneydata.this_round_competitors_advancing)}**.")
+            else:
+                # every so often, make the results sponsored
+                await message.channel.send(f"**{round_name.title()} results, sponsored by {tourney_sponsor_ID.title()}:** {len(tourneydata.this_round_competitors_advancing)} contestants move on: **{', '.join(tourneydata.this_round_competitors_advancing)}**.")
+
             await fill_next_round_bracket(message, tourneydata)
         else:
             await message.channel.send(f"**{tourneydata.this_round_competitors_advancing[0]} wins the tournament!**")
@@ -431,10 +436,22 @@ async def run_battle_royale(message, tourney_sponsor_ID, time_between_matches_m=
         for time_till_next_reminder_s, time_till_match_s in sleep_info[::-1]:
             #print(sleep_deltas_s)
 
+            sponsored = False
+            if len(tourneydata.matches_yet_to_be_played) * tourneydata.time_between_matches_m > 60*24*7: # if it'll take more than 5 days
+                # for long tourneys, throw the sponsor in there every so often in case things get cancelled
+                if tourneydata.current_round_number % 2 == 1 and len(tourneydata.this_round_competitors_advancing) % 16 == 3: # not too close to a tourney start but not too far either
+                    sponsored=True
+
             if time_till_match_s > 10*60:
-                await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin {relative_discord_timestamp(next_match_time)}, at {discord_timestamp(next_match_time)}.")
+                if not sponsored:
+                    await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin {relative_discord_timestamp(next_match_time)}, at {discord_timestamp(next_match_time)}.")
+                else:
+                    await message.channel.send(f"This tourney is sponsored by {tourney_sponsor_ID.title()}! Its next match, between {' and '.join(next_competitors)}. It will begin {relative_discord_timestamp(next_match_time)}, at {discord_timestamp(next_match_time)}.")
             else:
-                await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin in {int(time_till_match_s/60)} minute{'' if time_till_match_s <= 60 else 's'}...")
+                if not sponsored:
+                    await message.channel.send(f"The next match, between {' and '.join(next_competitors)}, will begin in {int(time_till_match_s/60)} minute{'' if time_till_match_s <= 60 else 's'}...")
+                else:
+                    await message.channel.send(f"This tourney is sponsored by {tourney_sponsor_ID.title()}! Its next match, between {' and '.join(next_competitors)}, will begin in {int(time_till_match_s/60)} minute{'' if time_till_match_s <= 60 else 's'}...")
             await asyncio.sleep(time_till_next_reminder_s) 
 
     db.delete_tourney_data(tourney_sponsor_ID)
